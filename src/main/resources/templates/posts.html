@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogen Posts</title>
+
+
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.css}">
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/4.0.0-beta.3/css/bootstrap.min.css}"
+          integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<!-- really thin navbar with no padding: p-0 -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+    <div class="container">
+        <a href="index.html" class="navbar-brand">Blogen</a>
+
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navbarNav" class="collapse navbar-collapse">
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown mr-3">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-user"></i>
+                        Welcome Cliff
+                    </a>
+                    <div class="dropdown-menu">
+                        <a th:href="@{profile.html}" class="dropdown-item">
+                            <i class="fa fa-user-circle"></i>
+                            Profile
+                        </a>
+                        <!-- Not going to use settings -->
+                        <!--<a href="settings.html" class="dropdown-item">-->
+                            <!--<i class="fa fa-gear"></i>-->
+                            <!--Settings-->
+                        <!--</a>-->
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{login.html}" class="nav-link">
+                        <i class="fa fa-user-times"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- DASHBOARD HEADER -->
+<header id="main-header" class="py-2 bg-primary text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- TODO this heading will change depend on what posts are being shown, my posts -->
+                <h1><i class="fa fa-pencil"></i>All Posts</h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- FILTER POSTS / SEARCH POSTS -->
+<section id="search-posts" class="py-4 mb-4 bg-light">
+    <div class="container">
+        <div class="row">
+            <!-- POST FILTER -->
+            <div class="col-md-4">
+                <div class="dropdown">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Filter Posts
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="posts.html">All Posts</a>
+                        <a class="dropdown-item" href="posts.html">My Posts</a>
+                        <a class="dropdown-item" href="posts.html">Business</a>
+                        <a class="dropdown-item" href="posts.html">Health & Wellness</a>
+                        <a class="dropdown-item" href="posts.html">Tech Gadgets</a>
+                        <a class="dropdown-item" href="posts.html">Web Development</a>
+                    </div>
+                </div>
+            </div>
+            <!-- NEW POST -->
+            <div class="col-md-4">
+                <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#newPostModal">
+                    <i class="fa fa-plus"></i>New Post
+                </a>
+            </div>
+            <!-- SEARCH -->
+            <div class="col-md-4">
+                <form id="searchPostsForm">
+                    <div class="form-row">
+                        <div class="form-inline ml-auto">
+                            <input type="text" class="form-control" placeholder="Search"/>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- TODO decide which presentation style to use -->
+<!-- POSTS IN MEDIA OBJECTS STYLE -->
+<section id="posts" class="py-2">
+    <div class="container">
+        <div class="row">
+
+            <div class="media mt-3">
+                <img class="d-flex mr-3 align-self-start img-thumbnail" width="100" height="100" src="img/avatar1.jpg">
+                <div class="media-body">
+                    <h5 class="font-weight-bold">Starting to eat healthy</h5>
+                    <h6>By <small>missHealthy</small> in <small class="font-italic">Health & Wellness</small></h6>
+
+                    <p>I kicked off the new year by starting the cabbage diet. I'm in day two and can no longer feel my
+                        hands. Maybe I should switch it up. I hear the the orange juice diet is pretty good.</p>
+                    <!-- data-val contains parent post id -->
+                    <a href="#" class="btn btn-outline-success btn-sm" data-post-id="2" data-cat-id="3"  data-toggle="modal" data-target="#replyPostModal">
+                        Reply
+                    </a>
+                    <a href="#" class="btn btn-outline-danger btn-sm" data-val="1">
+                        Delete
+                    </a>
+                </div>
+            </div>
+
+            <!-- NESTING MEDIA OBJECTS -->
+            <div class="media mt-3">
+                <img class="d-flex mr-3" src="img/avatar2.jpg">
+                <div class="media-body">
+                    <h5 class="font-weight-bold">Loving the echo</h5>
+                    <h6>By <small>rogueTwo</small> in <small class="font-italic">Tech Gadgets</small></h6>
+                    <p>Got one of these Amazon Echo things for Christmas. I don't think I'll leave the house.</p>
+                    <a href="#" class="btn btn-outline-success btn-sm" data-post-id="2" data-cat-id="3" data-toggle="modal" data-target="#replyPostModal">
+                        Reply
+                    </a>
+                    <a href="#" class="btn btn-outline-danger btn-sm" data-val="2">
+                        Delete
+                    </a>
+                    <div class="media mt-3">
+                        <a class="d-flex pr-3" href="#">
+                            <img src="img/avatar3.jpg" class="img-thumbnail" width="100" height="100">
+                        </a>
+                        <div class="media-body">
+                            <h5 class="mt-0">Loving the echo....be careful</h5>
+                            <h6>Tech Gadgets</h6>
+                            Be careful...I don't trust those things. They're always on... :(
+                        </div>
+                    </div>
+
+                    <div class="media mt-3">
+                        <a class="d-flex pr-3" href="#">
+                            <img src="img/avatar4.jpg" class="img-thumbnail" width="100" height="100">
+                        </a>
+                        <div class="media-body">
+                            <h5 class="mt-0">Loving the echo...You're not alone</h5>
+                            <h6>Tech Gadgets</h6>
+                            I'm loving it too. I just played a game of chess on it. :)
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="media mt-3">
+                <img class="d-flex mr-3 align-self-start img-thumbnail" width="100" height="100" src="img/avatar.png">
+                <div class="media-body">
+                    <h5 class="mt-0">Bootstrap 4</h5>
+                    <h6>Web Development</h6>
+                    Finally took the time to dig into this. It's amazing how you can do a lot with so little.
+                </div>
+            </div>
+            
+        </div>
+        <!-- PAGINATION -->
+        <nav class="ml-4 mt-5">
+            <!--TODO build pagination -->
+            <ul class="pagination">
+                <li class="page-item disabled">
+                    <a href="#" class="page-link">Previous</a>
+                </li>
+                <li class="page-item">
+                    <a href="#" class="page-link">1</a>
+                </li>
+                <li class="page-item">
+                    <a href="#" class="page-link">2</a>
+                </li>
+                <li class="page-item">
+                    <a href="#" class="page-link">3</a>
+                </li>
+                <li class="page-item">
+                    <a href="#" class="page-link">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+<!-- POSTS -->
+<!--<section id="posts">-->
+<!--<div class="container">-->
+<!--<div class="row">-->
+<!--<div class="col">-->
+<!--<div class="card">-->
+<!--<div class="card-header">-->
+<!--<h4>Latest Posts</h4>-->
+<!--</div>-->
+<!--<table class="table table-striped">-->
+<!--<thead class="thead-inverse">-->
+<!--<tr>-->
+<!--<th>#</th>-->
+<!--<th>User</th>-->
+<!--<th>Title</th>-->
+<!--<th>Category</th>-->
+<!--<th>Date Posted</th>-->
+<!--<th></th>-->
+<!--</tr>-->
+<!--</thead>-->
+<!--<tbody>-->
+<!--<tr>-->
+<!--<td scope="row">1</td>-->
+<!--<td>-->
+<!--<div class="col">-->
+<!--<h6>YouKnowJohnDoe</h6>-->
+<!--<img class="img-fluid img-thumbnail" src="img/avatar.png" height="50" width="50">-->
+<!--</div>-->
+<!--</td>-->
+<!--<td>-->
+<!--<a href="#" data-toggle="collapse" data-target="#post-text-1">-->
+<!--What is the best way to position block elements...-->
+<!--</a>-->
+<!--<div class="collapse" id="post-text-1">-->
+
+<!--<p>-->
+<!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit eius-->
+<!--libero quisquam nobis explicabo vel non necessitatibus ipsum doloribus-->
+<!--cupiditate voluptate recusandae quo autem error debitis, sed, minima-->
+<!--repellendus commodi.-->
+<!--</p>-->
+<!---->
+<!--</div>-->
+<!--</td>-->
+<!--<td>Web Development</td>-->
+<!--<td>July 12, 2017</td>-->
+<!--<td>-->
+<!--&lt;!&ndash;TODO maybe add functionality to edit a post &ndash;&gt;-->
+<!--&lt;!&ndash;<a href="details.html" class="btn btn-secondary">&ndash;&gt;-->
+<!--&lt;!&ndash;<i class="fa fa-angle-double-right">Details</i>&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
+<!--</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td scope="row">2</td>-->
+<!--<td>-->
+<!--<div class="col">-->
+<!--<h6>sheila</h6>-->
+<!--<img class="img-fluid img-thumbnail" src="img/avatar1.jpg" height="50" width="50">-->
+<!--</div>-->
+<!--</td>-->
+<!--<td>Has anyone used an Amazon Echo or the one with the screen</td>-->
+<!--<td>Tech Gadgets</td>-->
+<!--<td>July 13, 2017</td>-->
+<!--<td></td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td scope="row">3</td>-->
+<!--<td>-->
+<!--<div class="col">-->
+<!--<h6>guster</h6>-->
+<!--<img class="img-fluid img-thumbnail" src="img/avatar2.jpg" height="50" width="50">-->
+<!--</div>-->
+<!--</td>-->
+<!--<td>I need a web framework recommendation for building a product site</td>-->
+<!--<td>Web Development</td>-->
+<!--<td>July 14, 2017</td>-->
+<!--<td></td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td scope="row">4</td>-->
+<!--<td>-->
+<!--<div class="col">-->
+<!--<h6>tron33</h6>-->
+<!--<img class="img-fluid img-thumbnail" src="img/avatar3.jpg" height="50" width="50">-->
+<!--</div>-->
+<!--</td>-->
+<!--<td>What is the best way to form an LLC</td>-->
+<!--<td>Business</td>-->
+<!--<td>July 15, 2017</td>-->
+<!--<td></td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td scope="row">5</td>-->
+<!--<td>-->
+<!--<div class="col">-->
+<!--<h6>sassFan</h6>-->
+<!--<img class="img-fluid img-thumbnail" src="img/avatar4.jpg" height="50" width="50">-->
+<!--</div>-->
+<!--</td>-->
+<!--<td>Can anyone recommend an IDE for Python and Java development</td>-->
+<!--<td>Web Development</td>-->
+<!--<td>July 16, 2017</td>-->
+<!--<td></td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td scope="row">6</td>-->
+<!--<td>-->
+<!--<div class="col">-->
+<!--<h6>missMissy</h6>-->
+<!--<img class="img-fluid img-thumbnail" src="img/avatar.png" height="50" width="50">-->
+<!--</div>-->
+<!--</td>-->
+<!--<td>Whats the best diet to burn fat</td>-->
+<!--<td>Heath & Wellness</td>-->
+<!--<td>July 13, 2017</td>-->
+<!--<td></td>-->
+<!--</tr>-->
+<!--</tbody>-->
+<!--</table>-->
+
+<!--&lt;!&ndash; PAGINATION &ndash;&gt;-->
+<!--<nav class="ml-4">-->
+<!--<ul class="pagination">-->
+<!--<li class="page-item disabled">-->
+<!--<a href="#" class="page-link">Previous</a>-->
+<!--</li>-->
+<!--<li class="page-item">-->
+<!--<a href="#" class="page-link">1</a>-->
+<!--</li>-->
+<!--<li class="page-item">-->
+<!--<a href="#" class="page-link">2</a>-->
+<!--</li>-->
+<!--<li class="page-item">-->
+<!--<a href="#" class="page-link">3</a>-->
+<!--</li>-->
+<!--<li class="page-item">-->
+<!--<a href="#" class="page-link">Next</a>-->
+<!--</li>-->
+<!--</ul>-->
+<!--</nav>-->
+<!---->
+<!--</div>-->
+<!--</div>-->
+
+<!--</div>-->
+<!--</div>-->
+<!--</section>-->
+
+<footer id="main-footer" class="bg-dark text-white mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="lead text-center">Copyright &copy; Blogen 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<!-- REPLY POST MODAL -->
+<div id="replyPostModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Reply to Post</h5>
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- TODO correct action needed here -->
+                <form id="replyPostForm" action="login.html">
+
+                    <!--TODO probably need a hidden field with parent post id -->
+                    <input id="parentId" name="parentId" type="hidden" value=""/>
+                    <input id="categoryId" name="categoryId" type="hidden" value=""/>
+
+                    <div class="form-group">
+                        <label for="post-title">Title</label>
+                        <input id="post-title" name="title" type="text" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="post-category">Category</label>
+                        <select id="post-category" name="category" class="form-control">
+                            <option value="Web Development">Web Development</option>
+                            <option value="Tech Gadgets">Tech Gadgets</option>
+                            <option value="Business">Business</option>
+                            <option value="Health & Wellness">Health & Wellness</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="post-image">Image Link</label>
+                        <input id="post-image" name="image" type="url" class="form-control"/>
+                        <small class="form-text text-muted">Valid URL to an image</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="post-body">Body</label>
+                        <!-- uses ckeditor here -->
+                        <textarea id="post-body" name="body" rows="5" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-row justify-content-end">
+                        <button class="btn btn-secondary mx-2" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Save"/>
+                        <!--<button type="submit" class="btn btn-primary mx-2" data-dismiss="modal">Save</button>-->
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- NEW POST MODAL -->
+<div id="newPostModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">New Post</h5>
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+
+            <div class="modal-body">
+                <!--TODO set action here -->
+                <form id="newPostForm" action="posts.html">
+                    <div class="form-group">
+                        <label for="newPostTitle">Title</label>
+                        <input id="newPostTitle" name="title" type="text" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPostCategory">Category</label>
+                        <select id="newPostCategory" name="category" class="form-control">
+                            <option value="Web Development">Web Development</option>
+                            <option value="Tech Gadgets">Tech Gadgets</option>
+                            <option value="Business">Business</option>
+                            <option value="Health & Wellness">Health & Wellness</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPostImage">Image Link</label>
+                        <input id="newPostImage" name="image" type="url" class="form-control"/>
+                        <small class="form-text text-muted">Valid URL to an image</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPostBody">Body</label>
+                        <!-- uses ckeditor here -->
+                        <textarea id="newPostBody" name="body" rows="5" class="form-control"></textarea>
+                    </div>
+                    <div class="form-row justify-content-end">
+                        <button class="btn btn-secondary mx-2" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Save"/>
+                        <!--<button type="submit" class="btn btn-primary mx-2" data-dismiss="modal">Save</button>-->
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        th:src="@{/webjars/jquery/3.2.1/dist/jquery.slim.min.js}"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        th:src="@{/webjars/popper.js/1.12.9/dist/umd/popper.min.js}"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
+    th:src="@{/webjars/bootstrap/4.0.0-beta.3/js/bootstrap.min.js}"
+    integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+    crossorigin="anonymous"></script>
+
+<script>
+    //sets the parent post Id and categoryId when someone clicks the reply button for a post
+    $('#replyPostModal').on('show.bs.modal', function (event) {
+        var postId = $(event.relatedTarget).data('post-id');
+        var catId = $(event.relatedTarget).data('cat-id');
+        console.log("running replyPostModal post-id:" + postId);
+        console.log("running replyPostModal cat-id:" + catId);
+        $(this).find("#parentId").val(postId);
+        $(this).find("#categoryId").val(catId);
+    });
+</script>
+
+</body>
+</html>

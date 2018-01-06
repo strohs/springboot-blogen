@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Blogen</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.css}">
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/4.0.0-beta.3/css/bootstrap.min.css}"
+          integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+
+</head>
+
+<body class="bg-secondary">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="container">
+        <a href="index.html" class="navbar-brand">Blogen</a>
+
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navbarNav" class="collapse navbar-collapse">
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="login.html" class="nav-link">
+                        <i class="fa fa-user-times"></i>
+                        Login
+                    </a>
+                </li>
+
+                <!-- TODO remove this -->
+                <li class="nav-item">
+                    <a href="admin-index.html" class="nav-link">
+                        <i class="fa fa-user-secret"></i>
+                        Admin
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- WELCOME TO BLOGEN HEAD -->
+<header id="welcome-head-section" class="bg-primary text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <div>
+                    <h1 class="display-4">Welcome To Blogen</h1>
+                    <p class="lead">Share your thoughts on a variety of topics
+                    </p>
+                    <!--<a href="#" class="btn btn-outline-secondary">Find Out More</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN PAGE HEADER -->
+<section id="main-header" class="mt-5 bg-secondary text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md text-md-center">
+                <h4><i class="fa fa-leaf"></i> Latest Blogens</h4>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- CARD COLUMNS -->
+<section id="cards">
+    <div class="card-columns">
+        <div class="card border-dark text-dark">
+            <div class="card-header">Heath & Wellness</div>
+            <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/sports/1" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">Kicking the year off right!!</h4>
+                <p class="card-text">This year I'm taking no prisoners. I'm going to excercise everyday and eat only carrots and steak!!</p>
+                <small>
+                    Posted by <cite title="Source Title">YouKnowJohnDoe</cite>
+                </small>
+            </div>
+        </div>
+
+        <div class="card border-dark text-dark">
+            <div class="card-header">Tech Gadgets</div>
+            <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/technics/2" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">Gadgets all around me</h4>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, ad aut, eum in modi molestias nemo officia pariatur possimus qui quos repudiandae veniam! Ad alias architecto beatae consectetur eos fuga magnam minima nobis non provident quasi recusandae reprehenderit sed, ut voluptate! Dicta ducimus eaque facilis numquam, optio praesentium quaerat voluptatem!</p>
+                <small>
+                    Posted by <cite title="Source Title">megaUser11</cite>
+                </small>
+            </div>
+        </div>
+
+        <div class="card border-dark text-dark">
+            <div class="card-header">Web Development</div>
+            <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/sports/3" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">Start developing with ease...</h4>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa dolorum eaque eos error, excepturi modi nobis recusandae repellendus saepe temporibus.</p>
+                <small>
+                    Posted by <cite title="Source Title">masterBlaster345</cite>
+                </small>
+            </div>
+        </div>
+
+        <div class="card border-dark text-dark">
+            <div class="card-header">Business</div>
+            <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/business/1" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">I'm loving these low cost mutual funds</h4>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab animi aspernatur autem beatae, culpa cupiditate deserunt doloremque eius excepturi facere illum impedit itaque iusto laudantium magnam, necessitatibus nulla optio porro possimus quaerat quibusdam, quos repellendus rerum sed similique soluta tempore.</p>
+                <small>
+                    Posted by <cite title="Source Title">uncleMoneyBags</cite>
+                </small>
+            </div>
+        </div>
+
+
+        <div class="card border-dark text-dark">
+            <div class="card-header">Web Development</div>
+            <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/technics/1" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">Spring Boot is a lifesaver</h4>
+                <p class="card-text">no more configuration nightmares!! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim, molestias, recusandae? Adipisci id magnam maxime mollitia officia ratione saepe sequi? Ab eligendi est molestiae pariatur quas quia sint? Quaerat, velit.</p>
+                <small>
+                    Posted by <cite title="Source Title">javaGuru333</cite>
+                </small>
+            </div>
+        </div>
+
+        <div class="card border-dark text-dark">
+            <div class="card-header">Heath & Wellness</div>
+            <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/sports" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">HIIT</h4>
+                <p class="card-text">HIIT is where it's at. That's all I got to say.</p>
+                <small>
+                    Posted by <cite title="Source Title">theRunningMan</cite>
+                </small>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer id="main-footer" class="bg-dark text-white mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="lead text-center">Copyright &copy; Blogen 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        th:src="@{/webjars/jquery/3.2.1/dist/jquery.slim.min.js}"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        th:src="@{/webjars/popper.js/1.11.1/dist/umd/popper.min.js}"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/4.0.0-beta.3/js/bootstrap.min.js}"
+        integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+        crossorigin="anonymous"></script>
+<!-- Using ckeditor for WYSIWYG editing in our textarea(s) -->
+<!--<script src="https://cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>-->
+<!--<script>-->
+<!--CKEDITOR.replace('editor1');-->
+<!--</script>-->
+</body>
+</html>

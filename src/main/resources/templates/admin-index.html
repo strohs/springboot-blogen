@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogen Admin Area</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.css}">
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/4.0.0-beta.3/css/bootstrap.min.css}"
+          integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<!-- really thin navbar with no padding: p-0 -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+    <div class="container">
+        <a href="index.html" class="navbar-brand">Blogen</a>
+
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navbarNav" class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item px-2">
+                    <a href="admin-index.html" class="nav-link active">Dashboard</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a href="posts.html" class="nav-link">Posts</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a href="categories.html" class="nav-link">Categories</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a href="users.html" class="nav-link">Users</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown mr-3">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa user"></i>
+                        Welcome Cliff
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fa fa-user-circle"></i>
+                            Profile
+                        </a>
+                        <a href="settings.html" class="dropdown-item">
+                            <i class="fa fa-gear"></i>
+                            Settings
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="login.html" class="nav-link">
+                        <i class="fa fa-user-times"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- DASHBOARD HEADER -->
+<header id="main-header" class="py-2 bg-primary text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1><i class="fa fa-gear"></i>Admin Dashboard</h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ACTION BUTTONS -->
+<section id="action" class="py-4 mb-4 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addPostModal">
+                    <i class="fa fa-plus"></i>Add Post
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#addCategoryModal">
+                    <i class="fa fa-plus"></i>Add Category
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="#" class="btn btn-warning btn-block" data-toggle="modal" data-target="#addUserModal">
+                    <i class="fa fa-plus"></i>Add User
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- POSTS -->
+<section id="posts">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Latest Posts</h4>
+                    </div>
+                    <table class="table table-striped">
+                        <thead class="thead-inverse">
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Date Posted</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td scope="row">1</td>
+                            <td>
+                                <div class="col">
+                                    <h6>jjd</h6>
+                                    <img class="img-fluid img-thumbnail" src="img/avatar.png" height="50" width="50">
+                                </div>
+                            </td>
+                            <td>
+                                <a href="#" data-toggle="collapse" data-target="#post-text-1">
+                                    What is the best way to position block elements...
+                                </a>
+                                <div class="collapse" id="post-text-1">
+
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit eius
+                                        libero quisquam nobis explicabo vel non necessitatibus ipsum doloribus
+                                        cupiditate voluptate recusandae quo autem error debitis, sed, minima
+                                        repellendus commodi.
+                                    </p>
+
+                                </div>
+                            </td>
+                            <td>Web Development</td>
+                            <td>July 12, 2017</td>
+                            <td>
+                                <a href="details.html" class="btn btn-secondary">
+                                    <i class="fa fa-angle-double-right">Details</i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row">2</td>
+                            <td>
+                                <div class="col">
+                                    <h6>sheila</h6>
+                                    <img class="img-fluid img-thumbnail" src="img/avatar1.jpg" height="50" width="50">
+                                </div>
+                            </td>
+                            <td>Has anyone used an Amazon Echo or the one with the screen</td>
+                            <td>Tech Gadgets</td>
+                            <td>July 13, 2017</td>
+                            <td><a href="details.html" class="btn btn-secondary">
+                                <i class="fa fa-angle-double-right">Details</i>
+                            </a></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">3</td>
+                            <td>
+                                <div class="col">
+                                    <h6>guster</h6>
+                                    <img class="img-fluid img-thumbnail" src="img/avatar2.jpg" height="50" width="50">
+                                </div>
+                            </td>
+                            <td>I need a web framework recommendation for building a product site</td>
+                            <td>Web Development</td>
+                            <td>July 14, 2017</td>
+                            <td><a href="details.html" class="btn btn-secondary">
+                                <i class="fa fa-angle-double-right">Details</i>
+                            </a></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">4</td>
+                            <td>
+                                <div class="col">
+                                    <h6>tron33</h6>
+                                    <img class="img-fluid img-thumbnail" src="img/avatar3.jpg" height="50" width="50">
+                                </div>
+                            </td>
+                            <td>What is the best way to form an LLC</td>
+                            <td>Business</td>
+                            <td>July 15, 2017</td>
+                            <td><a href="details.html" class="btn btn-secondary">
+                                <i class="fa fa-angle-double-right">Details</i>
+                            </a></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">5</td>
+                            <td>
+                                <div class="col">
+                                    <h6>sassFan</h6>
+                                    <img class="img-fluid img-thumbnail" src="img/avatar4.jpg" height="50" width="50">
+                                </div>
+                            </td>
+                            <td>Can anyone recommend an IDE for Python and Java development</td>
+                            <td>Web Development</td>
+                            <td>July 16, 2017</td>
+                            <td><a href="details.html" class="btn btn-secondary">
+                                <i class="fa fa-angle-double-right">Details</i>
+                            </a></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">6</td>
+                            <td>
+                                <div class="col">
+                                    <h6>missMissy</h6>
+                                    <img class="img-fluid img-thumbnail" src="img/avatar.png" height="50" width="50">
+                                </div>
+                            </td>
+                            <td>Whats the best diet to burn fat</td>
+                            <td>Heath & Wellness</td>
+                            <td>July 13, 2017</td>
+                            <td><a href="details.html" class="btn btn-secondary">
+                                <i class="fa fa-angle-double-right">Details</i>
+                            </a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center bg-primary text-white mb-3">
+                    <div class="card-body">
+                        <h3>Posts</h3>
+                        <h1 class="display-4">
+                            <i class="fa fa-pencil"></i>6
+                        </h1>
+                        <a href="posts.html" class="btn btn-outline-light btn-sm">View</a>
+                    </div>
+                </div>
+                <div class="card text-center bg-success text-white mb-3">
+                    <div class="card-body">
+                        <h3>Categories</h3>
+                        <h1 class="display-4">
+                            <i class="fa fa-folder-open-o"></i>4
+                        </h1>
+                        <a href="categories.html" class="btn btn-outline-light btn-sm">View</a>
+                    </div>
+                </div>
+                <div class="card text-center bg-warning text-white mb-3">
+                    <div class="card-body">
+                        <h3>Users</h3>
+                        <h1 class="display-4">
+                            <i class="fa fa-users"></i>4
+                        </h1>
+                        <a href="users.html" class="btn btn-outline-light btn-sm">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="main-footer" class="bg-dark text-white mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="lead text-center">Copyright &copy; Blogen 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!--<nav class="navbar fixed-bottom navbar-expand navbar-dark bg-dark text-white p-0">-->
+    <!--<div class="container">-->
+        <!--<a class="navbar-brand" href="#">Copyright &copy; Blogen 2017</a>-->
+    <!--</div>-->
+
+<!--</nav>-->
+
+
+<!-- POST MODAL -->
+<div id="addPostModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Add Post</h5>
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+
+            <form id="addPostForm" action="admin-index.html">
+                <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="addPostTitle">Title</label>
+                            <input id="addPostTitle" name="title" type="text" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="addPostCategory">Category</label>
+                            <select id="addPostCategory" name="category" class="form-control">
+                                <option value="Web Development">Web Development</option>
+                                <option value="Tech Gadgets">Tech Gadgets</option>
+                                <option value="Business">Business</option>
+                                <option value="Health & Wellness">Health & Wellness</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="addPostImage">Image Link</label>
+                            <input id="addPostImage" name="image" type="url" class="form-control"/>
+                            <small class="form-text text-muted">Valid URL to an image</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="postBody">Body</label>
+                            <!-- possibly use ckeditor here -->
+                            <textarea id="postBody" name="body" rows="5" class="form-control"></textarea>
+                        </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Save Changes"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- CATEGORY MODAL -->
+<div id="addCategoryModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Add Category</h5>
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="addCategoryForm">
+                    <div class="form-group">
+                        <label for="category-category">Category</label>
+                        <input id="category-category" name="category" type="text" class="form-control"/>
+                    </div>
+                    <!-- NOTE: Example of moving form buttons within the <form> tag rather than using modal-footer -->
+                    <div class="form-row justify-content-end">
+                        <button class="btn btn-secondary mx-2" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-success" value="Save Changes"/>
+                    </div>
+                </form>
+            </div>
+
+            <!--<div class="modal-footer">-->
+            <!--<button class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+            <!--<button class="btn btn-success" data-dismiss="modal">Save Changes</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+
+<!-- USER MODAL -->
+<div id="addUserModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title">Add User</h5>
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+
+
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input id="firstName" name="first" type="text" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">First Name</label>
+                            <input id="lastName" name="last" type="text" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input id="email" name="email" type="email" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input id="password" name="password" type="password" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordConfirm">Confirm Password</label>
+                            <input id="passwordConfirm" name="passwordConfirm" type="password" class="form-control"/>
+                        </div>
+
+                        <div class="form-row justify-content-end">
+                            <button class="btn btn-secondary mx-2" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="Save Changes"/>
+                        </div>
+                    </form>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        th:src="@{/webjars/jquery/3.2.1/dist/jquery.slim.min.js}"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        th:src="@{/webjars/popper.js/1.11.1/dist/umd/popper.min.js}"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/4.0.0-beta.3/js/bootstrap.min.js}"
+        integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+        crossorigin="anonymous"></script>
+<!-- Using ckeditor for WYSIWYG editing in our textarea(s) -->
+<!--<script src="https://cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>-->
+<!--<script>-->
+    <!--CKEDITOR.replace('editor1');-->
+<!--</script>-->
+</body>
+</html>
