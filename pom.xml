@@ -76,6 +76,13 @@
             <version>${org.mapstruct.version}</version>
         </dependency>
 
+		<!-- so we can use java.time and store dates in hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>5.0.12.Final</version>
+		</dependency>
+
 		<!-- WEBJARS Dependencies -->
 		<dependency>
 			<groupId>org.webjars</groupId>
