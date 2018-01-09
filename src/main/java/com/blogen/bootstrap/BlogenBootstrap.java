@@ -3,8 +3,10 @@ package com.blogen.bootstrap;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
+import com.blogen.domain.UserPrefs;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
+import com.blogen.repositories.UserPrefsRepository;
 import com.blogen.repositories.UserRepository;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,14 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
 
     private CategoryRepository categoryRepository;
     private UserRepository userRepository;
+    private UserPrefsRepository userPrefsRepository;
     private PostRepository postRepository;
 
     @Autowired
-    public BlogenBootstrap( CategoryRepository categoryRepository, UserRepository userRepository, PostRepository postRepository ) {
+    public BlogenBootstrap( CategoryRepository categoryRepository, UserRepository userRepository,
+                            UserPrefsRepository userPrefsRepository, PostRepository postRepository ) {
         this.categoryRepository = categoryRepository;
+        this.userPrefsRepository = userPrefsRepository;
         this.userRepository = userRepository;
         this.postRepository = postRepository;
     }
@@ -49,27 +54,46 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
         categoryRepository.save( tech );
         categoryRepository.save( health );
 
+        //BUILD USER PREFS
+        UserPrefsBuilder upb = new UserPrefsBuilder( "avatar1.jpg" );
+        UserPrefs upJohn = upb.build();
+        userPrefsRepository.save( upJohn );
+
+        upb = new UserPrefsBuilder( "avatar2.jpg" );
+        UserPrefs upAdmin = upb.build();
+        userPrefsRepository.save( upAdmin );
+
+        upb = new UserPrefsBuilder( "avatar3.jpg" );
+        UserPrefs upMaggie = upb.build();
+        userPrefsRepository.save( upMaggie );
+
+        upb = new UserPrefsBuilder( "avatar4.jpg");
+        UserPrefs upWilliam = upb.build();
+        userPrefsRepository.save( upWilliam );
+
+
         //BUILD USERS
         //administrator
-        UserBuilder ub = new UserBuilder( "theAdmin","Carl","Sagan","admin@blogen.org","adminpassword" );
+        UserBuilder ub = new UserBuilder( "theAdmin","Carl","Sagan","admin@blogen.org","adminpassword",upAdmin );
         User admin = ub.build();
         userRepository.save( admin );
 
         //JohnDoe
-        ub = new UserBuilder( "johndoe","John","Doe","jdoe@gmail.com","password" );
+        ub = new UserBuilder( "johndoe","John","Doe","jdoe@gmail.com","password", upJohn );
         User john = ub.build();
         userRepository.save( john );
 
         //Maggie McGill
-        ub = new UserBuilder( "mgill","Maggie","McGill","gilly@yahoo.com","password");
+        ub = new UserBuilder( "mgill","Maggie","McGill","gilly@yahoo.com","password", upMaggie );
         User maggie = ub.build();
         userRepository.save( maggie );
 
         //William Wallace
-        ub = new UserBuilder( "scotsman","William","Wallace","scotty@hotmail.com","password");
+        ub = new UserBuilder( "scotsman","William","Wallace","scotty@hotmail.com","password", upWilliam );
         User william = ub.build();
         userRepository.save( william );
 
+        // BUILD POSTS
         //
         //build posts for John - 1 Parent post with 3 child posts
         PostBuilder pb = new PostBuilder( john, tech, null, "johns tech post" );
@@ -79,7 +103,7 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
         Post child2 = pb.addChildPost( maggie, "maggies replay to tech post" );
         Post child3 = pb.addChildPost( william,"wills reply to johns post" );
         Post child4 = pb.addChildPost( william,"wills reply to his reply" );
-        postRepository.saveAndFlush( parent );
+        postRepository.save( parent );
 
         //
         //build posts for william - 2 parent posts

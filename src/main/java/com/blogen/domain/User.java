@@ -27,11 +27,18 @@ public class User {
 
     private String email;
 
-
     @Column(nullable = false, unique = true)
     private String userName;
 
     private String password;
 
+    @OneToOne
+    private UserPrefs userPrefs;
+
+    public UserPrefs addUserPrefs( UserPrefs userPrefs ) {
+        this.userPrefs = userPrefs;
+        userPrefs.setUser( this );
+        return userPrefs;
+    }
 
 }
