@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,14 +39,14 @@ public class Post {
     @OneToOne
     private Category category;
 
-    private Instant created = Instant.now();
+    private LocalDateTime created = LocalDateTime.now();
 
     //this is the "one" side of the relationship
     @ManyToOne( cascade = CascadeType.ALL )
     private Post parent;
 
     //many side is the, "child side" and owner of the relationship, Usually this is the side with the foreign key.
-    @OneToMany( mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany( mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true )
     private List<Post> children = new ArrayList<>();
 
 
