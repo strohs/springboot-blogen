@@ -31,7 +31,6 @@ public class PostMapperTest {
     private static final String  USER2_USERNAME = "wallace";
 
     private static final Long     PARENT_POST_ID = 1L;
-    private static final Long     PARENT_POST_PARENT_ID = null;
     private static final LocalDateTime PARENT_POST_CREATED = LocalDateTime.of( 2017,1,1,10,10,10 );
     private static final String   PARENT_POST_CREATED_FORMAT = "Sun Jan 01, 2017 10:10 AM";
     private static final String   PARENT_POST_TEXT = "sample text for blogen";

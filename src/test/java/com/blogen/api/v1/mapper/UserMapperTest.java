@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 
 /**
@@ -67,5 +69,19 @@ public class UserMapperTest {
         assertThat( user.getUserName(), equalTo( USERNAME ) );
         assertThat( user.getEmail(), equalTo( EMAIL ) );
         assertThat( user.getPassword(), equalTo( PASSWORD ) );
+    }
+
+    @Test
+    public void userDtoToUser_withNullId_shouldSetUserIdToNull() {
+        //given
+        UserDTO userDTO = new UserDTO( ID, FIRSTNAME,LASTNAME,USERNAME,EMAIL,PASSWORD );
+        userDTO.setId( null );
+
+        //when
+        User user = userMapper.userDtoToUser( userDTO );
+
+        //then
+        assertNotNull( user );
+        assertThat( user.getId(), is( nullValue() ));
     }
 }
