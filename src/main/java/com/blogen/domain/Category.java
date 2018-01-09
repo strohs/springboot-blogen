@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 /**
- * Model class for the Category of a Post
+ * Domain Model for the Category of a Post
  * @author Cliff
  */
 @Data

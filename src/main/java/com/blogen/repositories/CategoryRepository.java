@@ -11,5 +11,8 @@ import java.util.Set;
  */
 public interface CategoryRepository extends JpaRepository<Category,Long> {
 
+    Category findByName( String name );
 
+    //this query type should automatically wrap the name variable in "%"
+    List<Category> findByNameIgnoreCaseContaining(String name);
 }
