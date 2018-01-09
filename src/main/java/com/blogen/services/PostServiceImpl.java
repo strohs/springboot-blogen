@@ -1,10 +1,13 @@
 package com.blogen.services;
 
 import com.blogen.domain.Post;
+import com.blogen.domain.User;
 import com.blogen.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Service for performing CRUD operations on Posts
@@ -21,14 +24,29 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getAllPosts( User user ) {
+        return null;
+    }
+
+    @Override
+    public List<Post> getAllParentPosts( User user ) {
+        return null;
+    }
+
+    @Override
     public Post getPost( Long id ) {
         return postRepository.findOne( id );
     }
 
     @Override
+    public Post updatePost( Post oldPost, Post newPost ) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public void deletePost( Post post ) {
-        if ( !isParentPost( post ) ) {
+        if ( !post.isParentPost( ) ) {
             //post to delete is a child post, need to get the parent post object and remove the child from it.
             Post parent = post.getParent();
             parent.removeChild( post );
@@ -42,13 +60,5 @@ public class PostServiceImpl implements PostService {
         postRepository.delete( id );
     }
 
-    /**
-     * A blogen post is either a parent post or a child of a parent post.
-     * check if a post is a parent post. A parent post will have a parent_id == null;
-     * @param post - the post to check for parent status
-     * @return true if post is a parent post
-     */
-    private boolean isParentPost( Post post ) {
-        return post.getParent() == null;
-    }
+
 }

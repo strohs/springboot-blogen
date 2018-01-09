@@ -11,17 +11,17 @@ import java.util.List;
  */
 public interface PostService {
 
-//    //get ALL posts made by a user including child post
-//    List<Post> getAllPosts( User user );
-//
-//    //get all parent posts for a user
-//    List<Post> getAllParentPosts( User user );
-//
+    //get ALL posts made by a user (including child posts)
+    List<Post> getAllPosts( User user );
+
+    //get all parent posts for a user
+    List<Post> getAllParentPosts( User user );
+
     //get a Post by ID
     Post getPost( Long id );
-//
-//    //update a Post with data from the newPost
-//    Post updatePost( Post oldPost, Post newPost );
+
+    //update a Post with data from the newPost
+    Post updatePost( Post oldPost, Post newPost );
 
     //delete a Post, shouldn't matter if parent or child post
     void deletePost( Post post );

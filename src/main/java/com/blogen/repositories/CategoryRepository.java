@@ -15,4 +15,6 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
 
     //this query type should automatically wrap the name variable in "%"
     List<Category> findByNameIgnoreCaseContaining(String name);
+
+    
 }

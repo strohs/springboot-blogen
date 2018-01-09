@@ -62,6 +62,15 @@ public class Post {
         if ( isRemoved ) child.setParent( null );
     }
 
+    /**
+     * A blogen post is either a parent post or a child of a parent post.
+     * A parent post will have a parent_id == null;
+     *
+     * @return true if post is a parent post
+     */
+    public boolean isParentPost() {
+        return this.parent == null;
+    }
 
     @Override
     public String toString() {
@@ -70,9 +79,10 @@ public class Post {
                 ", uuid=" + uuid +
                 ", text='" + text + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", user=" + user +
-                ", category=" + category +
+                ", userName=" + user.getUserName() +
+                ", category=" + category.getName() +
                 ", created=" + created +
+                ", childPostCount=" + children.size() +
                 '}';
     }
 

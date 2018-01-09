@@ -98,7 +98,7 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
         //build posts for John - 1 Parent post with 3 child posts
         PostBuilder pb = new PostBuilder( john, tech, null, "johns tech post" );
         Post parent = pb.build();
-        postRepository.save( parent );
+        //postRepository.save( parent );
         Post child1 = pb.addChildPost( john, "child post1 for tech" );
         Post child2 = pb.addChildPost( maggie, "maggies replay to tech post" );
         Post child3 = pb.addChildPost( william,"wills reply to johns post" );
@@ -119,21 +119,18 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
         //build posts for maggie - 3 parent posts with 2 child posts each
         pb = new PostBuilder( maggie, business,"http://lorempixel.com/400/200/business/1", "maggies post about business" );
         parent = pb.build();
-        postRepository.save( parent );
         child1 = pb.addChildPost( john, "johns reply to maggies business post" );
         child2 = pb.addChildPost( maggie, "maggies reply to johns reply" );
         postRepository.save( parent );
 
         pb = new PostBuilder( maggie,health,"http://lorempixel.com/400/200/sports/3","maggies parent post about health" );
         parent = pb.build();
-        postRepository.save( parent );
         child1 = pb.addChildPost( william, "william first reply to maggies health post" );
         child2 = pb.addChildPost( william, "william second reply to maggies health post" );
         postRepository.save( parent );
 
         pb = new PostBuilder( maggie, webDev,"http://lorempixel.com/400/200/technics/3","maggies parent post about webdev" );
         parent = pb.build();
-        postRepository.save( parent );
         child1 = pb.addChildPost( william, "william reply to maggies webdev post" );
         child2 = pb.addChildPost( admin, "admins reply to maggies webdev post" );
         postRepository.save( parent );
