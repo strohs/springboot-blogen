@@ -1,4 +1,4 @@
-package com.blogen.api.v1.mapper;
+package com.blogen.api.v1.mappers;
 
 import com.blogen.api.v1.model.UserDTO;
 import com.blogen.domain.User;

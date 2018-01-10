@@ -1,10 +1,11 @@
 package com.blogen.domain;
 
-import lombok.*;
-import lombok.extern.log4j.Log4j;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,6 @@ import java.util.UUID;
  * Model for a blogen Post.
  * @author Cliff
  */
-@Log4j
 @Getter
 @Setter
 @NoArgsConstructor

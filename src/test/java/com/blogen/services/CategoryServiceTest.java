@@ -1,6 +1,6 @@
 package com.blogen.services;
 
-import com.blogen.api.v1.mapper.CategoryMapper;
+import com.blogen.api.v1.mappers.CategoryMapper;
 import com.blogen.api.v1.model.CategoryDTO;
 import com.blogen.domain.Category;
 import com.blogen.repositories.CategoryRepository;
@@ -9,16 +9,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit Tests for the {@link CategoryService}

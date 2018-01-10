@@ -1,4 +1,4 @@
-package com.blogen.api.v1.mapper;
+package com.blogen.api.v1.mappers;
 
 import com.blogen.api.v1.model.UserPrefsDTO;
 import com.blogen.domain.UserPrefs;
@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 /**
- * MapStruct mapper for mapping between {@link com.blogen.domain.UserPrefs} and {@link com.blogen.api.v1.model.UserPrefsDTO}
+ * MapStruct mappers for mapping between {@link com.blogen.domain.UserPrefs} and {@link com.blogen.api.v1.model.UserPrefsDTO}
  *
  * User: Cliff
  */

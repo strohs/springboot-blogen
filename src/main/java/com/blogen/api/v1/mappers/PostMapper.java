@@ -1,4 +1,4 @@
-package com.blogen.api.v1.mapper;
+package com.blogen.api.v1.mappers;
 
 import com.blogen.api.v1.model.PostDTO;
 import com.blogen.domain.Post;
@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
- * MapStruct mapper for mapping data between {@link com.blogen.domain.Post} and {@link com.blogen.api.v1.model.PostDTO}
+ * MapStruct mappers for mapping data between {@link com.blogen.domain.Post} and {@link com.blogen.api.v1.model.PostDTO}
  *
  * @author Cliff
  */
@@ -20,7 +20,6 @@ public interface PostMapper {
     @Mapping( source = "user.id", target = "userId")
     @Mapping( source = "user.userName", target = "userName")
     @Mapping( target = "created", dateFormat = "EEE MMM dd, yyyy hh:mm a")
-
     PostDTO postToPostDto( Post post );
 
     //TODO decide if this would actually be needed in the REST API

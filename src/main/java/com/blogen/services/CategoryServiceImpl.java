@@ -1,6 +1,6 @@
 package com.blogen.services;
 
-import com.blogen.api.v1.mapper.CategoryMapper;
+import com.blogen.api.v1.mappers.CategoryMapper;
 import com.blogen.api.v1.model.CategoryDTO;
 import com.blogen.domain.Category;
 import com.blogen.repositories.CategoryRepository;

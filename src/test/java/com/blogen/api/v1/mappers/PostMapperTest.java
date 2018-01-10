@@ -1,4 +1,4 @@
-package com.blogen.api.v1.mapper;
+package com.blogen.api.v1.mappers;
 
 import com.blogen.api.v1.model.PostDTO;
 import com.blogen.domain.Category;
@@ -7,7 +7,6 @@ import com.blogen.domain.User;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 import static org.hamcrest.CoreMatchers.is;
