@@ -26,6 +26,8 @@ public class Post {
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     private Long id;
 
+    private String title;
+
     private String text;
 
     private String imageUrl;
@@ -78,6 +80,7 @@ public class Post {
         return "Post{" +
                 "id=" + id +
                 ", uuid=" + uuid +
+                ", title=" + title +
                 ", text='" + text + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", userName=" + user.getUserName() +

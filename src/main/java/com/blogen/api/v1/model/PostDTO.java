@@ -24,6 +24,8 @@ public class PostDTO {
 
     private String userName;
 
+    private String title;
+
     private String text;
 
     private String imageUrl;

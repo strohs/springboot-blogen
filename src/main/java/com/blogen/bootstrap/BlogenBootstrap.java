@@ -28,6 +28,9 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
     private UserPrefsRepository userPrefsRepository;
     private PostRepository postRepository;
 
+    private static final String IMG_SERVICE = "http://lorempixel.com/400/200";
+    private static final String IMG_SERVICE_GREY = "http://lorempixel.com/g/400/200";
+
     @Autowired
     public BlogenBootstrap( CategoryRepository categoryRepository, UserRepository userRepository,
                             UserPrefsRepository userPrefsRepository, PostRepository postRepository ) {
@@ -36,6 +39,7 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
         this.userRepository = userRepository;
         this.postRepository = postRepository;
     }
+
 
 
     public void initData() {
@@ -71,6 +75,10 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
         UserPrefs upWilliam = upb.build();
         userPrefsRepository.save( upWilliam );
 
+        upb = new UserPrefsBuilder( "avatar5.jpg");
+        UserPrefs upElizabeth = upb.build();
+        userPrefsRepository.save( upElizabeth );
+
 
         //BUILD USERS
         //administrator
@@ -93,47 +101,95 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
         User william = ub.build();
         userRepository.save( william );
 
+        //Elizabeth Reed
+        ub = new UserBuilder( "lizIsEverywhere","Elizabeth","Reed","liz@gmail.com","password", upElizabeth);
+        User elizabeth = ub.build();
+        userRepository.save( elizabeth );
+
         // BUILD POSTS
         //
         //build posts for John - 1 Parent post with 3 child posts
-        PostBuilder pb = new PostBuilder( john, tech, null, "johns tech post" );
+        PostBuilder pb = new PostBuilder( john, tech, null,"Love this tech", "johns tech post" );
         Post parent = pb.build();
         //postRepository.save( parent );
-        Post child1 = pb.addChildPost( john, "child post1 for tech" );
-        Post child2 = pb.addChildPost( maggie, "maggies replay to tech post" );
-        Post child3 = pb.addChildPost( william,"wills reply to johns post" );
-        Post child4 = pb.addChildPost( william,"wills reply to his reply" );
+        Post child1 = pb.addChildPost( john,"Love it too", "child post1 for tech" );
+        Post child2 = pb.addChildPost( maggie,"Not so fast", "maggies replay to tech post" );
+        Post child3 = pb.addChildPost( william,"Here today gone tomorrow","wills reply to johns post" );
+        Post child4 = pb.addChildPost( william,"no no no","wills reply to his reply" );
         postRepository.save( parent );
 
         //
         //build posts for william - 2 parent posts
-        pb = new PostBuilder( william, health,null,"health and wellness tip" );
+        pb = new PostBuilder( william, health,null,"Start lifting today","health and wellness tip" );
         parent = pb.build();
         postRepository.save( parent );
 
-        pb = new PostBuilder( william, business, "http://lorempixel.com/400/200/business/1", "business post" );
+        pb = new PostBuilder( william, business, "http://lorempixel.com/400/200/business/1","Try these stocks", "business post" );
         parent = pb.build();
         postRepository.save( parent );
 
         //
         //build posts for maggie - 3 parent posts with 2 child posts each
-        pb = new PostBuilder( maggie, business,"http://lorempixel.com/400/200/business/1", "maggies post about business" );
+        pb = new PostBuilder( maggie, business,"http://lorempixel.com/400/200/business/1","Bitcoin or bust", "maggies post about business" );
         parent = pb.build();
-        child1 = pb.addChildPost( john, "johns reply to maggies business post" );
-        child2 = pb.addChildPost( maggie, "maggies reply to johns reply" );
+        child1 = pb.addChildPost( john,"probably buying it", "johns reply to maggies business post" );
+        child2 = pb.addChildPost( maggie,"beware the bubble", "maggies reply to johns reply" );
         postRepository.save( parent );
 
-        pb = new PostBuilder( maggie,health,"http://lorempixel.com/400/200/sports/3","maggies parent post about health" );
+        pb = new PostBuilder( maggie,health,"http://lorempixel.com/400/200/sports/3","Eat these healthy foods","maggies parent post about health" );
         parent = pb.build();
-        child1 = pb.addChildPost( william, "william first reply to maggies health post" );
-        child2 = pb.addChildPost( william, "william second reply to maggies health post" );
+        child1 = pb.addChildPost( william,"sounds gross", "william first reply to maggies health post" );
+        child2 = pb.addChildPost( william, "on second thought...","william second reply to maggies health post" );
         postRepository.save( parent );
 
-        pb = new PostBuilder( maggie, webDev,"http://lorempixel.com/400/200/technics/3","maggies parent post about webdev" );
+        pb = new PostBuilder( maggie, webDev,"http://lorempixel.com/400/200/technics/3","Is PHP dead?","maggies parent post about webdev" );
         parent = pb.build();
-        child1 = pb.addChildPost( william, "william reply to maggies webdev post" );
-        child2 = pb.addChildPost( admin, "admins reply to maggies webdev post" );
+        child1 = pb.addChildPost( william,"I doubt it", "william reply to maggies webdev post" );
+        child2 = pb.addChildPost( admin, "We don't use it here","admins reply to maggies webdev post" );
         postRepository.save( parent );
+
+        //
+        //Build Posts for elizabeth (10 parent posts for her)
+        pb = new PostBuilder( elizabeth, business, IMG_SERVICE, "Invest now","these stocks are at all time lows and ready to rise" );
+        parent = pb.build();
+        postRepository.save( parent );
+
+        pb = new PostBuilder( elizabeth, health, IMG_SERVICE_GREY, "Proper Diet trumps all","No matter what excercise you do, just remember you can never out-train a poor diet" );
+        parent = pb.build();
+        postRepository.save( parent );
+
+        pb = new PostBuilder( elizabeth, tech, IMG_SERVICE, "About Alexa","Does anyone own one of these? Is it any good?" );
+        parent = pb.build();
+        postRepository.save( parent );
+
+        pb = new PostBuilder( elizabeth, webDev, IMG_SERVICE_GREY, "Bootstrap 4","Hey you all. Would it be worth my time to learn Bootstrap 4?" );
+        parent = pb.build();
+        postRepository.save( parent );
+
+        pb = new PostBuilder( elizabeth, business, IMG_SERVICE, "Buying gold","I wanna buy some gold. Can someone point me in the right direction" );
+        parent = pb.build();
+        postRepository.save( parent );
+
+        pb = new PostBuilder( elizabeth, health, IMG_SERVICE_GREY, "HIIT Training","Forget about running for hours on end. High Intensity Interval Training can give you all the benefits in half the time" );
+        parent = pb.build();
+        postRepository.save( parent );
+
+        pb = new PostBuilder( elizabeth, tech, IMG_SERVICE, "Toys that teach Programming","My nephew is showing an interest in programming. Can anyone recommend something for a ten year old?" );
+        parent = pb.build();
+        postRepository.save( parent );
+
+        pb = new PostBuilder( elizabeth, webDev, IMG_SERVICE_GREY, "Clojure Script","You guys need to try this http://clojure.org, It saved me hours of web dev work" );
+        parent = pb.build();
+        postRepository.save( parent );
+
+        pb = new PostBuilder( elizabeth, tech, IMG_SERVICE, "Samsung Galaxy 8","This phone is the greatest. Nice screen, good battery life, and tons of apps!" );
+        parent = pb.build();
+        postRepository.save( parent );
+
+        pb = new PostBuilder( elizabeth, webDev, IMG_SERVICE_GREY, "Spring Framework 5","I hear webFlux is all the rage in Spring Framework. Does anyone have first hand experience?" );
+        parent = pb.build();
+        postRepository.save( parent );
+        
 
         //there should now be sixteen posts in total - six parent posts and ten child posts
     }

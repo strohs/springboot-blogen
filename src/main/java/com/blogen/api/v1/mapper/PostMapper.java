@@ -20,6 +20,7 @@ public interface PostMapper {
     @Mapping( source = "user.id", target = "userId")
     @Mapping( source = "user.userName", target = "userName")
     @Mapping( target = "created", dateFormat = "EEE MMM dd, yyyy hh:mm a")
+
     PostDTO postToPostDto( Post post );
 
     //TODO decide if this would actually be needed in the REST API

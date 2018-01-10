@@ -30,6 +30,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PostRepositoryIT {
+    private static final int PARENT_POST_TOTAL = 16;
 
     private static final Long PARENT_POST_ID_WITH_CHILDREN = 1L;
     private static final Long CHILD1_POST_ID = 2L;
@@ -68,7 +69,7 @@ public class PostRepositoryIT {
 
     @Test
     public void findAllParentPosts() {
-        int PARENT_POST_TOTAL = 6;
+
         List<Post> parentPosts = postRepository.findAllByParentNull();
 
         assertNotNull( parentPosts );
@@ -78,7 +79,7 @@ public class PostRepositoryIT {
     @Test
     @Transactional
     public void parentPostShouldHaveFourChildPosts() {
-        //this post should have four children
+
         int CHILD_COUNT = 4;
 
         Post parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
