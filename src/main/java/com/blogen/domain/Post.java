@@ -33,6 +33,7 @@ public class Post {
     //a quick and hacky way to generate a unique id for a post
     private String uuid = UUID.randomUUID().toString();
 
+    //the user who created this post
     @ManyToOne
     private User user;
 
