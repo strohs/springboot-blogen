@@ -43,6 +43,8 @@ public class PostRepositoryIT {
     private static final Long CHILD5_POST_ID = 15L;
     private static final Long CHILD6_POST_ID = 16L;
 
+    private static final Long USER_WITH_THREE_PARENT_POSTS = 3L;
+
     @Autowired
     UserRepository userRepository;
 
@@ -192,6 +194,17 @@ public class PostRepositoryIT {
 
         parent = postRepository.findOne( PARENT_POST_ID_NO_CHILDREN );
         assertThat( parent.getChildren().size(), is(1) );
+    }
+
+    @Test
+    @Transactional
+    public void findAllParentPostsByUserId_ShouldFindThreeParentPosts() {
+        List<Post> posts = postRepository.findAllByUser_IdAndParentNull( USER_WITH_THREE_PARENT_POSTS );
+
+        assertNotNull( posts );
+        assertThat( posts.size(), is( 3 ) );
+        assertThat( posts.get( 0 ).getUser().getId(), is( USER_WITH_THREE_PARENT_POSTS) );
+        posts.forEach( System.out::println );
     }
 
 

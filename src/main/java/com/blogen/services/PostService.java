@@ -1,5 +1,6 @@
 package com.blogen.services;
 
+import com.blogen.api.v1.model.PostDTO;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
 
