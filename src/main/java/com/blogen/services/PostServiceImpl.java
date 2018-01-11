@@ -111,4 +111,6 @@ public class PostServiceImpl implements PostService {
         Post savedPost = postRepository.saveAndFlush( parent );
         return postCommandMapper.postToPostCommand( savedPost );
     }
+
+    //TODO updating/patching a post will require a manual merge of some fields, 
 }
