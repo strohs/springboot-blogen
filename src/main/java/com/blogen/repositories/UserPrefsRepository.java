@@ -4,10 +4,11 @@ import com.blogen.domain.UserPrefs;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- *
+ * Repository for CRUD ops on {@link UserPrefs} data
  *
  * User: Cliff
  */
 public interface UserPrefsRepository extends JpaRepository<UserPrefs,Long> {
+
 
 }

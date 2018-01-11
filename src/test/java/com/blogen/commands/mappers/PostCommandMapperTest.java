@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.number.OrderingComparison.lessThan;
 import static org.junit.Assert.*;
 
 /**
@@ -50,7 +51,7 @@ public class PostCommandMapperTest {
     private static final String CHILD_TEXT = "Child Some text";
     private static final String CHILD_IMAGE_URL = "http://child.foo.com";
 
-    PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
+    private PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
 
 
     @Test
@@ -60,6 +61,8 @@ public class PostCommandMapperTest {
         User user = buildUser( USER_ID, USER_NAME, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL,USER_PASSWORD );
         user.setUserPrefs( up );
         Post parent = buildPost( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, cat, user, null);
+        Post child = buildPost( CHILD_ID, CHILD_TITLE, CHILD_TEXT, CHILD_IMAGE_URL, cat, user, parent );
+        parent.addChild( child );
 
         PostCommand postCommand = postCommandMapper.postToPostCommand( parent );
 
@@ -67,25 +70,55 @@ public class PostCommandMapperTest {
         assertThat( postCommand.getCategoryId(), is( CAT_ID) );
         assertThat( postCommand.getUserId(), is( USER_ID ));
         assertThat( postCommand.getUserName(), is(USER_NAME ));
-        assertThat( postCommand.getImageUrl(), is(POST_IMAGE_URL) );
-        assertThat( postCommand.getParentId(), is( nullValue() ) );
+        assertThat( postCommand.getImageUrl(), is(POST_IMAGE_URL));
+        assertThat( postCommand.getParentId(), is( nullValue() ));
         assertThat( postCommand.getText(), is(POST_TEXT));
         assertThat( postCommand.getTitle(), is(POST_TITLE));
+        assertThat( postCommand.getChildren().size(), is(1) );
+        assertThat( postCommand.getChildren().get( 0 ).getId(), is(CHILD_ID));
+        assertThat( postCommand.getChildren().get( 0 ).getParentId(), is(POST_ID));
+        assertThat( postCommand.getChildren().get( 0 ).getTitle(), is(CHILD_TITLE));
+        assertThat( postCommand.getChildren().get( 0 ).getText(), is(CHILD_TEXT));
+        assertThat( postCommand.getChildren().get( 0 ).getCategoryId(), is(CAT_ID));
+        assertThat( postCommand.getChildren().get( 0 ).getUserId(), is(USER_ID));
+        assertThat( postCommand.getChildren().get( 0 ).getUserName(), is(USER_NAME) );
     }
 
     @Test
-    @Ignore
-    public void postCommandToPost() {
-        CategoryCommand cc = buildCategoryCommand( CAT_ID,CAT_NAME );
+    public void parentPostCommandToPost_shouldMapCorrectly() {
+        CategoryCommand cc = buildCategoryCommand( CAT_ID, CAT_NAME );
         PostCommand pc = buildPostCommand( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, CAT_ID, USER_ID, USER_NAME, null );
 
         Post post = postCommandMapper.postCommandToPost( pc );
 
         assertThat( post.getId(), is(POST_ID));
-        assertThat( post.getParent(), is(nullValue()) );
+        assertThat( post.getParent(), is( nullValue()) );
         //Post.User will be null
         assertThat( post.getText(), is(POST_TEXT) );
         assertThat( post.getTitle(), is(POST_TITLE) );
+        assertThat( post.getImageUrl(), is(POST_IMAGE_URL) );
+        assertThat( post.getCategory().getId(), is( CAT_ID) );
+        assertThat( post.getUser().getUserName(), is(USER_NAME) );
+        assertThat( post.getUser().getId(), is(USER_ID) );
+        assertThat( post.getChildren().size(), is(0));
+    }
+
+    @Test
+    @Ignore
+    //child posts and parent posts map the same way...for now
+    public void childPostCommandToPost_shouldMapCorrectly() {
+        CategoryCommand cc = buildCategoryCommand( CAT_ID, CAT_NAME );
+        PostCommand childPc = buildPostCommand( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, CAT_ID, USER_ID, USER_NAME, POST_PARENT_ID );
+
+        Post child = postCommandMapper.postCommandToPost( childPc );
+        assertThat( child.getId(), is(POST_ID));
+        assertThat( child.getParent(), is( nullValue() ) );
+        assertThat( child.getImageUrl(), is(POST_IMAGE_URL) );
+        assertThat( child.getCategory().getId(), is(CAT_ID));
+        assertThat( child.getUser().getId(), is(USER_ID));
+        assertThat( child.getUser().getUserName(), is(USER_NAME) );
+        assertThat( child.getTitle(), is(POST_TITLE) );
+        assertThat( child.getText(), is(POST_TEXT) );
     }
 
 

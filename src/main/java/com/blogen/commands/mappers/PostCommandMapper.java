@@ -1,7 +1,9 @@
 package com.blogen.commands.mappers;
 
 import com.blogen.commands.PostCommand;
+import com.blogen.domain.Category;
 import com.blogen.domain.Post;
+import com.blogen.domain.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -23,8 +25,23 @@ public interface PostCommandMapper {
     @Mapping( target = "categoryId", source = "category.id")
     PostCommand postToPostCommand( Post post );
 
-    //todo make sure we will never need to do conversion from postCommand->Post. The data we will need should be submitted with the HTML Form
-    //TODO may need to write custom mapping logic
-    Post postCommandToPost( PostCommand postCommand );
+
+    //@Mapping( target = "parent.id", source = "parentId")
+    //@Mapping( target = "category.id", source = "categoryId")
+    //@Mapping( target = "user.id", source = "userId")
+    //@Mapping( target = "user.userName", source = "userName")
+    default Post postCommandToPost( PostCommand postCommand ) {
+        Post post = new Post();
+        post.setId( postCommand.getId() );
+        post.setCategory( new Category() );
+        post.getCategory().setId( postCommand.getCategoryId() );
+        post.setUser( new User() );
+        post.getUser().setUserName( postCommand.getUserName() );
+        post.getUser().setId( postCommand.getUserId() );
+        post.setImageUrl( postCommand.getImageUrl() );
+        post.setTitle( postCommand.getTitle() );
+        post.setText( postCommand.getText() );
+        return post;
+    }
 
 }

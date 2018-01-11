@@ -44,14 +44,14 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
 
     public void initData() {
         //BUILD CATEGORIES
-        //Category all = CategoryBuilder.build( "All Categories" );
+        Category all = CategoryBuilder.build( "All Categories" );
         //Category my = CategoryBuilder.build( "My Categories" );
         Category business = CategoryBuilder.build( "Business" );
         Category webDev = CategoryBuilder.build( "Web Development" );
         Category tech = CategoryBuilder.build( "Tech Gadgets" );
         Category health = CategoryBuilder.build( "Health & Fitness");
 
-        //categoryRepository.save( all );
+        categoryRepository.save( all );
        // categoryRepository.save( my );
         categoryRepository.save( business );
         categoryRepository.save( webDev );

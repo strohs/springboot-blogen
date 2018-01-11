@@ -24,5 +24,5 @@ public interface PostRepository extends JpaRepository<Post,Long> {
      * @param userId - user.id to search for
      * @return a List of parent posts, posted by the specified user id
      */
-   List<Post> findAllByUser_IdAndParentNull( Long userId );
+   List<Post> findAllByUser_IdAndParentNullOrderByCreatedDesc( Long userId );
 }

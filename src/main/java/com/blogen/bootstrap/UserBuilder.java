@@ -21,6 +21,17 @@ public class UserBuilder {
         user.addUserPrefs( userPrefs );
     }
 
+    public UserBuilder( Long id, String userName, String firstName, String lastName, String email, String password, UserPrefs userPrefs ) {
+        user = new User();
+        user.setId( id );
+        user.setUserName( userName );
+        user.setFirstName( firstName );
+        user.setLastName( lastName );
+        user.setEmail( email );
+        user.setPassword( password );
+        user.addUserPrefs( userPrefs );
+    }
+
     public void setUserPrefs( UserPrefs userPrefs ) {
         user.addUserPrefs( userPrefs );
     }

@@ -1,6 +1,7 @@
 package com.blogen.services;
 
 import com.blogen.api.v1.model.PostDTO;
+import com.blogen.commands.PostCommand;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
 
@@ -29,4 +30,6 @@ public interface PostService {
 
     //delete a specific post by id
     void deletePostById( Long id );
+
+    PostCommand savePostCommand( PostCommand pc );
 }

@@ -17,7 +17,7 @@ public class PostCommand {
 
     Long id;
 
-    //parentId will be empty "" if this is a Parent Post
+    //parentId will be null if this is a Parent Post, otherwise it will be set to the actual parent ID
     Long parentId;
 
     String title;
@@ -36,6 +36,8 @@ public class PostCommand {
 
     //the username of the user making the posting
     String userName;
+
+    List<PostCommand> children = new ArrayList<>();
 
     //holds the current page of Post data being viewed on the page. Default to page 1
     //TODO decide how to map this and on what object. May need new command object.

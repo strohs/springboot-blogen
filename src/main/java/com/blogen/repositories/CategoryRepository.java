@@ -11,7 +11,10 @@ import java.util.Set;
  */
 public interface CategoryRepository extends JpaRepository<Category,Long> {
 
+
     Category findByName( String name );
+
+    List<Category> findByIdOrderByIdAsc(Long id);
 
     //this query type should automatically wrap the name variable in "%"
     List<Category> findByNameIgnoreCaseContaining(String name);

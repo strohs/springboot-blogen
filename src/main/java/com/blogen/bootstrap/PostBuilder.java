@@ -21,6 +21,16 @@ public class PostBuilder {
         post.setText( text );
     }
 
+    public PostBuilder( Long id, User user, Category category, String imageUrl, String title, String text ) {
+        post = new Post();
+        post.setId( id );
+        post.setUser( user );
+        post.setCategory( category );
+        post.setImageUrl( imageUrl );
+        post.setTitle( title );
+        post.setText( text );
+    }
+
     public Post addChildPost( User user, String title, String text ) {
         Post child = new Post();
         child.setUser( user );

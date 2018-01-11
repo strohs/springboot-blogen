@@ -1,6 +1,8 @@
 package com.blogen.repositories;
 
 import com.blogen.bootstrap.BlogenBootstrap;
+import com.blogen.commands.PostCommand;
+import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
@@ -57,6 +59,8 @@ public class PostRepositoryIT {
 
     @Autowired
     PostRepository postRepository;
+
+    PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
 
     @Before
     public void setUp() throws Exception {
@@ -138,7 +142,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void deletingChildPostShouldNotDeleteParent() {
+    public void deletingOneChildPostShouldNotDeleteParent() {
         Post parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
         Post child = postRepository.findOne( CHILD1_POST_ID );
 
@@ -169,7 +173,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void addingAChildPostToAParentPostWithChildrenShouldSucceed() {
+    public void addingOneChildPostToAParentPostWithChildrenShouldSucceed() {
         Category cat = categoryRepository.findOne( 3L );
         User user = userRepository.findOne( 1L );
         Post child = buildPost( user, cat, "child text","http://foo.com" );
@@ -200,12 +204,82 @@ public class PostRepositoryIT {
     @Test
     @Transactional
     public void findAllParentPostsByUserId_ShouldFindThreeParentPosts() {
-        List<Post> posts = postRepository.findAllByUser_IdAndParentNull( USER_WITH_THREE_PARENT_POSTS );
+        List<Post> posts = postRepository.findAllByUser_IdAndParentNullOrderByCreatedDesc( USER_WITH_THREE_PARENT_POSTS );
 
         assertNotNull( posts );
         assertThat( posts.size(), is( 3 ) );
         assertThat( posts.get( 0 ).getUser().getId(), is( USER_WITH_THREE_PARENT_POSTS) );
         posts.forEach( System.out::println );
+    }
+
+    @Test
+    @Transactional
+    public void saveNewParentPost() {
+        PostCommand postCommand = new PostCommand();
+        postCommand.setParentId( null );
+        postCommand.setUserId( 2L );
+        postCommand.setUserName( "johndoe" );
+        postCommand.setCategoryId( 3L );
+        postCommand.setImageUrl( "http://pexels.com" );
+        postCommand.setText( "new post text" );
+        postCommand.setTitle( "New Title" );
+
+        Post detachedPost = postCommandMapper.postCommandToPost( postCommand );
+        Category cat = categoryRepository.findOne( detachedPost.getCategory().getId() );
+        User user = userRepository.findOne( detachedPost.getUser().getId() );
+        detachedPost.setCategory( cat );
+        detachedPost.setUser( user );
+        Post savedPost = postRepository.save( detachedPost );
+        System.out.println("New post id:" + savedPost.getId() );
+
+        assertNotNull( savedPost );
+        assertThat( savedPost.getId(), is( notNullValue()));
+        assertThat( savedPost.getParent(), is(nullValue()));
+        assertThat( savedPost.getText(), is("new post text") );
+        assertThat( savedPost.getTitle(), is("New Title"));
+        assertThat( savedPost.getImageUrl(), is("http://pexels.com"));
+        assertThat( savedPost.getUser().getId(), is(2L));
+        assertThat( savedPost.getUser().getUserName(), is("johndoe"));
+        assertThat( savedPost.getCategory().getId(), is(3L));
+    }
+
+    @Test
+    @Transactional
+    public void saveChildPost() {
+        Long userId = 5L;
+        Long parentId = 17L;
+        Long categoryId = 4L;
+        String imageUrl = "http://lorempixel.com";
+        String postText = "child post text";
+        String postTitle = "Child Title";
+        PostCommand postCommand = new PostCommand();
+        postCommand.setParentId( parentId );
+        postCommand.setUserId( userId );
+        postCommand.setCategoryId( categoryId );
+        postCommand.setImageUrl( imageUrl );
+        postCommand.setText( postText );
+        postCommand.setTitle( postTitle );
+
+        Post detachedPost = postCommandMapper.postCommandToPost( postCommand );
+        assertThat( detachedPost.getId(), is( nullValue()));
+        Category cat = categoryRepository.findOne( detachedPost.getCategory().getId() );
+        User user = userRepository.findOne( detachedPost.getUser().getId() );
+        detachedPost.setCategory( cat );
+        detachedPost.setUser( user );
+        //get Parent Post
+        Post parent = postRepository.findOne( postCommand.getParentId() );
+        parent.addChild( detachedPost );
+        postRepository.saveAndFlush( parent );
+
+        Post savedPost = postRepository.findOne( 17L );
+
+        assertThat( savedPost.getChildren().size(), is(1));
+        assertThat( savedPost.getChildren().get( 0 ).getId(), is( notNullValue()) );
+        assertThat( savedPost.getChildren().get(0).getUser().getId(), is(userId) );
+        assertThat( savedPost.getChildren().get(0).getCategory().getId(), is(categoryId) );
+        assertThat( savedPost.getChildren().get(0).getParent().getId(), is(parentId) );
+        assertThat( savedPost.getChildren().get(0).getText(), is(postText) );
+
     }
 
 
@@ -218,4 +292,6 @@ public class PostRepositoryIT {
         child.setUser( user );
         return child;
     }
+
+    
 }
