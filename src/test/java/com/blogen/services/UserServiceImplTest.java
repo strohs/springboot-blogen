@@ -79,17 +79,18 @@ public class UserServiceImplTest {
     //TODO test case for when user name like, is NOT found, should throw exception
 
     @Test
-    public void shouldReturnTwoUsers_whenGetAllUsers() {
+    public void shouldReturnThreeUsers_whenGetAllUsers() {
         User user1 = buildUser( USER1_ID, USER1_USERNAME );
         User user2 = buildUser( USER2_ID, USER2_USERNAME );
-        List<User> users = Arrays.asList( user1, user2 );
+        User user3 = buildUser( USER3_ID, USER3_USERNAME );
+        List<User> users = Arrays.asList( user1, user2, user3 );
 
         given( userRepository.findAll() ).willReturn( users );
 
         List<UserCommand> commands = userService.getAllUsers();
 
         then( userRepository ).should().findAll();
-        assertThat( commands.size(), is(2));
+        assertThat( commands.size(), is(3));
         
     }
 
