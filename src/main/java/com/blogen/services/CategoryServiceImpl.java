@@ -2,6 +2,8 @@ package com.blogen.services;
 
 import com.blogen.api.v1.mappers.CategoryMapper;
 import com.blogen.api.v1.model.CategoryDTO;
+import com.blogen.commands.CategoryCommand;
+import com.blogen.commands.mappers.CategoryCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,12 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private CategoryRepository categoryRepository;
-    private CategoryMapper categoryMapper;
+    private CategoryCommandMapper categoryCommandMapper;
 
     @Autowired
-    public CategoryServiceImpl( CategoryRepository categoryRepository, CategoryMapper categoryMapper ) {
+    public CategoryServiceImpl( CategoryRepository categoryRepository, CategoryCommandMapper categoryCommandMapper ) {
         this.categoryRepository = categoryRepository;
-        this.categoryMapper = categoryMapper;
+        this.categoryCommandMapper = categoryCommandMapper;
     }
 
     /**
@@ -33,10 +35,10 @@ public class CategoryServiceImpl implements CategoryService {
      * @return a List of CategoryDTOS
      */
     @Override
-    public List<CategoryDTO> getAllCategories() {
+    public List<CategoryCommand> getAllCategories() {
          return categoryRepository.findAll()
                  .stream()
-                 .map( categoryMapper::categoryToCategoryDto )
+                 .map( categoryCommandMapper::categoryToCategoryCommand )
                  .collect( Collectors.toList());
     }
 
@@ -46,8 +48,8 @@ public class CategoryServiceImpl implements CategoryService {
      * @return a {@link CategoryDTO} containing the Category data
      */
     @Override
-    public CategoryDTO getCategoryByName( String name ) {
-        return categoryMapper.categoryToCategoryDto( categoryRepository.findByName( name ) );
+    public CategoryCommand getCategoryByName( String name ) {
+        return categoryCommandMapper.categoryToCategoryCommand( categoryRepository.findByName( name ) );
     }
 
     /**
@@ -56,10 +58,10 @@ public class CategoryServiceImpl implements CategoryService {
      * @return a List of {@link CategoryDTO} containing the subString in their name property
      */
     @Override
-    public List<CategoryDTO> getCategoryByNameLike( String subStr ) {
+    public List<CategoryCommand> getCategoryByNameLike( String subStr ) {
         return categoryRepository.findByNameIgnoreCaseContaining( subStr )
                 .stream()
-                .map( categoryMapper::categoryToCategoryDto )
+                .map( categoryCommandMapper::categoryToCategoryCommand )
                 .collect( Collectors.toList());
     }
 }

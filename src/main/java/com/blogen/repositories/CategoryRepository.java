@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 
  * @author Cliff
  */
 public interface CategoryRepository extends JpaRepository<Category,Long> {
@@ -14,7 +15,7 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
 
     Category findByName( String name );
 
-    List<Category> findByIdOrderByIdAsc(Long id);
+    //default findAll should order by id asc
 
     //this query type should automatically wrap the name variable in "%"
     List<Category> findByNameIgnoreCaseContaining(String name);

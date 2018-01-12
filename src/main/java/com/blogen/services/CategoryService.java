@@ -1,6 +1,6 @@
 package com.blogen.services;
 
-import com.blogen.api.v1.model.CategoryDTO;
+import com.blogen.commands.CategoryCommand;
 import com.blogen.domain.Category;
 
 import java.util.List;
@@ -19,14 +19,14 @@ public interface CategoryService {
      * get all the Blogen Categories in the database.
      * @return a list of {@link Category}, containing all the categories in the database
      */
-    List<CategoryDTO> getAllCategories();
+    List<CategoryCommand> getAllCategories();
 
     /**
      * get a specific {@link Category} object
      * @param name - the name of the Category.name to search for
      * @return the {@link Category} containing the specified name
      */
-    CategoryDTO getCategoryByName( String name );
+    CategoryCommand getCategoryByName( String name );
 
     /**
      * get Categories with a name that is similar to the passed in name. This method will use a simple SQL
@@ -34,7 +34,7 @@ public interface CategoryService {
      * @param name the {@link Category} name to search for, should not contain wildcard characters (e.g. %)
      * @return a list of Categories that match the passed in name
      */
-    List<CategoryDTO> getCategoryByNameLike( String name );
+    List<CategoryCommand> getCategoryByNameLike( String name );
 
 
 }
