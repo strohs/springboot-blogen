@@ -26,7 +26,7 @@ public class PostCommand {
 
     String imageUrl;
 
-    Long categoryId;
+    String categoryName;
 
     //this should already be formatted by PostCommandMapper
     String created;
@@ -43,6 +43,7 @@ public class PostCommand {
     //TODO decide how to map this and on what object. May need new command object.
     //int currentPage = 1;
 
+
     @Override
     public String toString() {
         return "Post{" +
@@ -53,8 +54,9 @@ public class PostCommand {
                 ", imageUrl='" + imageUrl + '\'' +
                 ", userId=" + getUserId() +
                 ", userName=" + getUserName() +
-                ", category=" + categoryId +
+                ", category=" + categoryName +
                 ", created=" + created +
+                ", childrenSize=" + children.size() +
                 '}';
     }
 }

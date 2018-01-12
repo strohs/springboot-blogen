@@ -67,7 +67,7 @@ public class PostCommandMapperTest {
         PostCommand postCommand = postCommandMapper.postToPostCommand( parent );
 
         assertThat( postCommand.getId(), is(POST_ID) );
-        assertThat( postCommand.getCategoryId(), is( CAT_ID) );
+        assertThat( postCommand.getCategoryName(), is( CAT_NAME) );
         assertThat( postCommand.getUserId(), is( USER_ID ));
         assertThat( postCommand.getUserName(), is(USER_NAME ));
         assertThat( postCommand.getImageUrl(), is(POST_IMAGE_URL));
@@ -79,7 +79,7 @@ public class PostCommandMapperTest {
         assertThat( postCommand.getChildren().get( 0 ).getParentId(), is(POST_ID));
         assertThat( postCommand.getChildren().get( 0 ).getTitle(), is(CHILD_TITLE));
         assertThat( postCommand.getChildren().get( 0 ).getText(), is(CHILD_TEXT));
-        assertThat( postCommand.getChildren().get( 0 ).getCategoryId(), is(CAT_ID));
+        assertThat( postCommand.getChildren().get( 0 ).getCategoryName(), is(CAT_NAME));
         assertThat( postCommand.getChildren().get( 0 ).getUserId(), is(USER_ID));
         assertThat( postCommand.getChildren().get( 0 ).getUserName(), is(USER_NAME) );
     }
@@ -87,7 +87,7 @@ public class PostCommandMapperTest {
     @Test
     public void parentPostCommandToPost_shouldMapCorrectly() {
         CategoryCommand cc = buildCategoryCommand( CAT_ID, CAT_NAME );
-        PostCommand pc = buildPostCommand( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, CAT_ID, USER_ID, USER_NAME, null );
+        PostCommand pc = buildPostCommand( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, CAT_NAME, USER_ID, USER_NAME, null );
 
         Post post = postCommandMapper.postCommandToPost( pc );
 
@@ -97,7 +97,7 @@ public class PostCommandMapperTest {
         assertThat( post.getText(), is(POST_TEXT) );
         assertThat( post.getTitle(), is(POST_TITLE) );
         assertThat( post.getImageUrl(), is(POST_IMAGE_URL) );
-        assertThat( post.getCategory().getId(), is( CAT_ID) );
+        assertThat( post.getCategory().getName(), is( CAT_NAME) );
         assertThat( post.getUser().getUserName(), is(USER_NAME) );
         assertThat( post.getUser().getId(), is(USER_ID) );
         assertThat( post.getChildren().size(), is(0));
@@ -108,13 +108,13 @@ public class PostCommandMapperTest {
     //child posts and parent posts map the same way...for now
     public void childPostCommandToPost_shouldMapCorrectly() {
         CategoryCommand cc = buildCategoryCommand( CAT_ID, CAT_NAME );
-        PostCommand childPc = buildPostCommand( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, CAT_ID, USER_ID, USER_NAME, POST_PARENT_ID );
+        PostCommand childPc = buildPostCommand( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, CAT_NAME, USER_ID, USER_NAME, POST_PARENT_ID );
 
         Post child = postCommandMapper.postCommandToPost( childPc );
         assertThat( child.getId(), is(POST_ID));
         assertThat( child.getParent(), is( nullValue() ) );
         assertThat( child.getImageUrl(), is(POST_IMAGE_URL) );
-        assertThat( child.getCategory().getId(), is(CAT_ID));
+        assertThat( child.getCategory().getName(), is(CAT_NAME));
         assertThat( child.getUser().getId(), is(USER_ID));
         assertThat( child.getUser().getUserName(), is(USER_NAME) );
         assertThat( child.getTitle(), is(POST_TITLE) );
@@ -134,13 +134,13 @@ public class PostCommandMapperTest {
         return post;
     }
 
-    private PostCommand buildPostCommand( Long id, String title, String text, String image, Long catId, Long userId, String userName, Long parentId ) {
+    private PostCommand buildPostCommand( Long id, String title, String text, String image, String catName, Long userId, String userName, Long parentId ) {
         PostCommand pc = new PostCommand();
         pc.setId( id );
         pc.setTitle( title );
         pc.setText( text );
         pc.setImageUrl( image );
-        pc.setCategoryId( catId );
+        pc.setCategoryName( catName );
         pc.setUserId( userId );
         pc.setUserName( userName );
         pc.setParentId( parentId );

@@ -8,16 +8,19 @@ import com.blogen.domain.User;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service for performing CRUD operations on Posts
  * @author Cliff
  */
+@Log4j
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -25,55 +28,62 @@ public class PostServiceImpl implements PostService {
     private UserRepository userRepository;
     private CategoryRepository categoryRepository;
 
-    private PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
+    private PostCommandMapper postCommandMapper;
 
     @Autowired
-    public PostServiceImpl( PostRepository postRepository, UserRepository userRepository, CategoryRepository categoryRepository ) {
+    public PostServiceImpl( PostRepository postRepository, UserRepository userRepository,
+                            CategoryRepository categoryRepository, PostCommandMapper postCommandMapper ) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.postCommandMapper = postCommandMapper;
     }
 
-    @Override
-    public List<Post> getAllPosts( User user ) {
-        return null;
-    }
+
 
     @Override
-    public List<Post> getAllParentPosts( User user ) {
-        return null;
-    }
-
-    @Override
-    public Post getPost( Long id ) {
-        return postRepository.findOne( id );
-    }
-
-    @Override
-    public Post updatePost( Post oldPost, Post newPost ) {
-        return null;
+    @Transactional
+    public List<PostCommand> getAllPostsByUser( Long id ) {
+        List<Post> posts = postRepository.findAllByUser_IdAndParentNullOrderByCreatedDesc( id );
+        return posts.stream()
+                .map( (Post p) -> postCommandMapper.postToPostCommand( p ))
+                .collect( Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void deletePost( Post post ) {
-        if ( !post.isParentPost( ) ) {
-            //post to delete is a child post, need to get the parent post object and remove the child from it.
-            Post parent = post.getParent();
-            parent.removeChild( post );
-        }
-        postRepository.delete( post );
+    public List<PostCommand> getAllPosts() {
+        List<Post> posts = postRepository.findAllByParentNull();
+        return posts.stream()
+                .map( (Post p) -> postCommandMapper.postToPostCommand( p ) )
+                .collect( Collectors.toList());
     }
 
     @Override
-    public void deletePostById( Long id ) {
-        //todo if we end up using this method, will need to add child post detection logic
-        postRepository.delete( id );
+    public PostCommand getPost( Long id ) {
+        Post post = postRepository.findOne( id );
+        return postCommandMapper.postToPostCommand( post );
+
+    }
+
+    @Override
+    @Transactional
+    public void deletePost( PostCommand pc ) {
+        if ( isParentPost( pc ) ) {
+            //delete the parent post
+            postRepository.delete( pc.getId() );
+        } else {
+            //post to delete is a child post, need to get the parent post object and remove the child from it.
+            Post parent = postRepository.findOne( pc.getParentId() );
+            Post child = postRepository.findOne( pc.getId() );
+            parent.removeChild( child );
+            postRepository.delete( child.getId() );
+        }
     }
 
     @Override
     public PostCommand savePostCommand( PostCommand pc ) {
-        if ( pc.getParentId() == null ) {
+        if ( isParentPost( pc ) ) {
             return saveNewParentPostCommand( pc );
         } else {
             return saveNewChildPostCommand( pc );
@@ -109,8 +119,40 @@ public class PostServiceImpl implements PostService {
         Post parent = postRepository.findOne( pc.getParentId() );
         parent.addChild( detachedPost );
         Post savedPost = postRepository.saveAndFlush( parent );
+        //the parent PostCommand of the child that was saved is returned
         return postCommandMapper.postToPostCommand( savedPost );
     }
 
-    //TODO updating/patching a post will require a manual merge of some fields, 
+    @Override
+    @Transactional
+    public PostCommand updatePostCommand( PostCommand pc ) {
+        Post detachedPost = postCommandMapper.postCommandToPost( pc );
+        Post postToUpdate = postRepository.findOne( pc.getId() );
+        //merge the updated fields from the web form
+        mergePosts( detachedPost, postToUpdate );
+        postToUpdate.setCategory( categoryRepository.findByName( pc.getCategoryName() ));
+
+        Post savedPost = postRepository.saveAndFlush( postToUpdate );
+        return postCommandMapper.postToPostCommand( savedPost );
+    }
+
+    /**
+     * helper method for merging the fields of a post that can be changed on a web-form
+     * @param source
+     * @param target
+     */
+    private void mergePosts( Post source, Post target ) {
+        target.setImageUrl( source.getImageUrl() );
+        target.setTitle( source.getTitle() );
+        target.setText( source.getText() );;
+    }
+
+    /**
+     * Tests this post to see if it is a parent post. A parent post will have a parentId = null, otherwise this is
+     * a child post.
+     * @return true if this is a parent post, else return false (indicating a child post)
+     */
+    private boolean isParentPost( PostCommand command ) {
+        return command.getParentId() == null;
+    }
 }

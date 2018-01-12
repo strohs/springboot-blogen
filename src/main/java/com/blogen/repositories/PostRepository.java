@@ -20,7 +20,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
    List<Post> findAllByParentNull();
 
     /**
-     * find all parent posts with the specified user.id
+     * find all parent posts CREATED by a user with the specified user.id
      * @param userId - user.id to search for
      * @return a List of parent posts, posted by the specified user id
      */

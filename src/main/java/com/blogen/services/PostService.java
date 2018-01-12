@@ -13,23 +13,22 @@ import java.util.List;
  */
 public interface PostService {
 
-    //get ALL posts made by a user (including child posts)
-    List<Post> getAllPosts( User user );
+    //get all posts CREATED by a user (including child posts)
+    List<PostCommand> getAllPostsByUser( Long id );
 
-    //get all parent posts for a user
-    List<Post> getAllParentPosts( User user );
+    //get all blogen posts
+    List<PostCommand> getAllPosts();
 
     //get a Post by ID
-    Post getPost( Long id );
+    PostCommand getPost( Long id );
 
-    //update a Post with data from the newPost
-    Post updatePost( Post oldPost, Post newPost );
+    //save a new Post (parent or child)
+    PostCommand savePostCommand( PostCommand command );
 
-    //delete a Post, shouldn't matter if parent or child post
-    void deletePost( Post post );
+    //update an existing post
+    PostCommand updatePostCommand( PostCommand command );
 
-    //delete a specific post by id
-    void deletePostById( Long id );
+    //delete a post
+    void deletePost( PostCommand command );
 
-    PostCommand savePostCommand( PostCommand pc );
 }

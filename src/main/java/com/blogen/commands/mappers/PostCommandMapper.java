@@ -22,7 +22,7 @@ public interface PostCommandMapper {
     @Mapping( target = "parentId", source = "parent.id")
     @Mapping( target = "userId", source = "user.id")
     @Mapping( target = "userName", source = "user.userName")
-    @Mapping( target = "categoryId", source = "category.id")
+    @Mapping( target = "categoryName", source = "category.name")
     PostCommand postToPostCommand( Post post );
 
 
@@ -34,15 +34,18 @@ public interface PostCommandMapper {
         Post post = new Post();
         post.setId( postCommand.getId() );
         post.setCategory( new Category() );
-        post.getCategory().setId( postCommand.getCategoryId() );
+        post.getCategory().setName( postCommand.getCategoryName() );
         post.setUser( new User() );
         post.getUser().setUserName( postCommand.getUserName() );
         post.getUser().setId( postCommand.getUserId() );
         post.setImageUrl( postCommand.getImageUrl() );
         post.setTitle( postCommand.getTitle() );
         post.setText( postCommand.getText() );
+        //postCommand.parentId is checked in the service layer
         return post;
     }
+
+
 
 
 }

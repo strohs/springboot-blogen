@@ -219,13 +219,13 @@ public class PostRepositoryIT {
         postCommand.setParentId( null );
         postCommand.setUserId( 2L );
         postCommand.setUserName( "johndoe" );
-        postCommand.setCategoryId( 3L );
+        postCommand.setCategoryName( "Business" );
         postCommand.setImageUrl( "http://pexels.com" );
         postCommand.setText( "new post text" );
         postCommand.setTitle( "New Title" );
 
         Post detachedPost = postCommandMapper.postCommandToPost( postCommand );
-        Category cat = categoryRepository.findOne( detachedPost.getCategory().getId() );
+        Category cat = categoryRepository.findByName( detachedPost.getCategory().getName() );
         User user = userRepository.findOne( detachedPost.getUser().getId() );
         detachedPost.setCategory( cat );
         detachedPost.setUser( user );
@@ -240,7 +240,7 @@ public class PostRepositoryIT {
         assertThat( savedPost.getImageUrl(), is("http://pexels.com"));
         assertThat( savedPost.getUser().getId(), is(2L));
         assertThat( savedPost.getUser().getUserName(), is("johndoe"));
-        assertThat( savedPost.getCategory().getId(), is(3L));
+        assertThat( savedPost.getCategory().getName(), is("Business"));
     }
 
     @Test
@@ -248,21 +248,22 @@ public class PostRepositoryIT {
     public void saveChildPost() {
         Long userId = 5L;
         Long parentId = 17L;
-        Long categoryId = 4L;
+        Long categoryId = 3L;
         String imageUrl = "http://lorempixel.com";
         String postText = "child post text";
         String postTitle = "Child Title";
+        String catName = "Business";
         PostCommand postCommand = new PostCommand();
         postCommand.setParentId( parentId );
         postCommand.setUserId( userId );
-        postCommand.setCategoryId( categoryId );
+        postCommand.setCategoryName( catName );
         postCommand.setImageUrl( imageUrl );
         postCommand.setText( postText );
         postCommand.setTitle( postTitle );
 
         Post detachedPost = postCommandMapper.postCommandToPost( postCommand );
         assertThat( detachedPost.getId(), is( nullValue()));
-        Category cat = categoryRepository.findOne( detachedPost.getCategory().getId() );
+        Category cat = categoryRepository.findByName( detachedPost.getCategory().getName() );
         User user = userRepository.findOne( detachedPost.getUser().getId() );
         detachedPost.setCategory( cat );
         detachedPost.setUser( user );
@@ -276,7 +277,7 @@ public class PostRepositoryIT {
         assertThat( savedPost.getChildren().size(), is(1));
         assertThat( savedPost.getChildren().get( 0 ).getId(), is( notNullValue()) );
         assertThat( savedPost.getChildren().get(0).getUser().getId(), is(userId) );
-        assertThat( savedPost.getChildren().get(0).getCategory().getId(), is(categoryId) );
+        assertThat( savedPost.getChildren().get(0).getCategory().getName(), is(catName) );
         assertThat( savedPost.getChildren().get(0).getParent().getId(), is(parentId) );
         assertThat( savedPost.getChildren().get(0).getText(), is(postText) );
 
