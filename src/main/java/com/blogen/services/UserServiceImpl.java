@@ -6,6 +6,7 @@ import com.blogen.domain.User;
 import com.blogen.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,5 +61,18 @@ public class UserServiceImpl implements UserService {
         return users.stream()
                 .map( userCommandMapper::userToUserCommand )
                 .collect( Collectors.toList());
+    }
+
+    /**
+     * save the updated user information stored in the passed in UserCommand
+     * @param command - contains the user data to be saved
+     * @return a UserCommand object containing the saved data
+     */
+    @Override
+    @Transactional
+    public UserCommand saveUserCommand( UserCommand command ) {
+        User userToSave = userCommandMapper.userCommandToUser( command );
+        User savedUser = userRepository.save( userToSave );
+        return userCommandMapper.userToUserCommand( savedUser );
     }
 }

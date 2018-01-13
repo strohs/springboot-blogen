@@ -16,4 +16,6 @@ public interface UserService {
     List<UserCommand> getUserByNameLike( String name );
 
     List<UserCommand> getAllUsers();
+
+    UserCommand saveUserCommand( UserCommand command );
 }

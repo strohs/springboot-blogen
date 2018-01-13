@@ -1,8 +1,10 @@
 package com.blogen.services;
 
 import com.blogen.commands.UserCommand;
+import com.blogen.commands.UserPrefsCommand;
 import com.blogen.commands.mappers.UserCommandMapper;
 import com.blogen.domain.User;
+import com.blogen.domain.UserPrefs;
 import com.blogen.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +18,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 
@@ -32,6 +35,8 @@ public class UserServiceImplTest {
     private static final String USER1_USERNAME = "johndoe";
     private static final String USER2_USERNAME = "janedoe";
     private static final String USER3_USERNAME = "william456";
+    private static final Long   USER_PREFS_ID = 55L;
+    private static final String USER_PREFS_AVATAR = "avatar1.jpg";
 
     private UserService userService;
 
@@ -94,11 +99,52 @@ public class UserServiceImplTest {
         
     }
 
+    @Test
+    public void shouldSaveUser_whenSaveUserCommand() throws Exception {
+        UserPrefsCommand upc = buildUserPrefsCommand( USER_PREFS_ID, USER_PREFS_AVATAR );
+        UserCommand commandToSave = buildUserCommand( USER1_ID, USER3_USERNAME, upc );
+        User savedUser = buildUser( USER1_ID, USER3_USERNAME );
+        savedUser.setUserPrefs( buildUserPrefs( USER_PREFS_ID, USER_PREFS_AVATAR ) );
+
+        given( userRepository.save( any( User.class ) )).willReturn( savedUser );
+
+        UserCommand savedCommand = userService.saveUserCommand( commandToSave );
+
+        then( userRepository).should().save( any( User.class ) );
+        assertThat( savedCommand.getId(), is( USER1_ID ));
+        assertThat( savedCommand.getUserName(), is(USER3_USERNAME) );
+        assertThat( savedCommand.getUserPrefs().getId(), is( USER_PREFS_ID) );
+        assertThat( savedCommand.getUserPrefs().getAvatarImage(),is(USER_PREFS_AVATAR) );
+
+    }
+
 
     private User buildUser( Long id, String userName ) {
         User user = new User();
         user.setId( id );
         user.setUserName( userName );
         return user;
+    }
+
+    private UserPrefs buildUserPrefs( Long id, String avatarName ) {
+        UserPrefs prefs = new UserPrefs();
+        prefs.setId( id );
+        prefs.setAvatarImage( avatarName );
+        return prefs;
+    }
+
+    private UserCommand buildUserCommand( Long id, String userName, UserPrefsCommand userPrefs ) {
+        UserCommand command = new UserCommand();
+        command.setId( id );
+        command.setUserName( userName );
+        command.setUserPrefs( userPrefs );
+        return command;
+    }
+
+    private UserPrefsCommand buildUserPrefsCommand( Long id, String avatarName ) {
+        UserPrefsCommand prefs = new UserPrefsCommand();
+        prefs.setId( id );
+        prefs.setAvatarImage( avatarName );
+        return prefs;
     }
 }

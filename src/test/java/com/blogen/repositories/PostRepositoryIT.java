@@ -152,7 +152,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void deletingAllChildPostShouldNotDeleteParent() {
+    public void deletingAllChildPost_ShouldNotDeleteParent() {
         Post parent = postRepository.findOne( PARENT_POST_ID_TWO_CHILDREN );
         Post child1 = postRepository.findOne( CHILD5_POST_ID );
         Post child2 = postRepository.findOne( CHILD6_POST_ID );
