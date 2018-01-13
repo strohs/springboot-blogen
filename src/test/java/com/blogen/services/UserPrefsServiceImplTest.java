@@ -27,13 +27,13 @@ public class UserPrefsServiceImplTest {
     private static final Long   USER_PREFS_ID = 2L;
     private static final String AVATAR_IMAGE_NAME = "avatar1.jpg";
 
-
-    UserPrefsService userPrefsService;
+    //system under test
+    private UserPrefsService userPrefsService;
 
     @Mock
-    UserPrefsRepository userPrefsRepository;
+    private UserPrefsRepository userPrefsRepository;
 
-    UserPrefsCommandMapper userPrefsCommandMapper = UserPrefsCommandMapper.INSTANCE;
+    private UserPrefsCommandMapper userPrefsCommandMapper = UserPrefsCommandMapper.INSTANCE;
 
 
 
@@ -44,7 +44,7 @@ public class UserPrefsServiceImplTest {
     }
 
     @Test
-    public void shouldGetUserPrefs_whenGetUserPrefs_isCalledWithUserId() {
+    public void shouldGetUserPrefs_whenGetUserPrefsByUserId_isCalledWithUserId() {
         UserPrefs prefs = new UserPrefs();
         prefs.setId( USER_PREFS_ID );
         prefs.setAvatarImage( AVATAR_IMAGE_NAME );
