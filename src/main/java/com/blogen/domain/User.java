@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 /**
- * Model for a user of Blogen
+ * Model for a User of Blogen
  *
  * @author Cliff
  */
