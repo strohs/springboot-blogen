@@ -18,14 +18,14 @@
 <!-- really thin navbar with no padding: p-0 -->
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
     <div class="container">
-        <a href="index.html" class="navbar-brand">Blogen</a>
+        <a href="index.html" th:href="@{/index}" class="navbar-brand">Blogen</a>
 
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div id="navbarNav" class="collapse navbar-collapse">
-            <!-- TODO not available to people who have not logged in -->
+            <!-- TODO not available on login page, nor to people who have not logged in -->
             <!--<ul class="navbar-nav">-->
                 <!--<li class="nav-item px-2">-->
                     <!--<a href="admin-index.html" class="nav-link">Dashboard</a>-->
@@ -119,11 +119,11 @@
                         <h4>Account Login</h4>
                     </div>
                     <div class="card-body">
-                        <!--TODO set proper actions -->
-                        <form action="posts.html">
+                        <!--TODO set proper actions, this may be handled by spring security -->
+                        <form action="posts.html" th:action="@{/doLogin}" method="post">
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input id="email" name="email" type="text" class="form-control"/>
+                                <label for="username">Username</label>
+                                <input id="username" name="username" type="text" class="form-control"/>
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>

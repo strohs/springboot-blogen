@@ -1,9 +1,10 @@
 package com.blogen.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * Controller for CRUD operations on Blogen Posts.
+ * Controller for the Blogen posts page.
  *
  * @author Cliff
  */
@@ -20,6 +21,10 @@ public class PostController {
     //showPost - GET - /post/{id} - show a specific post
 
     //showAllPosts - GET /post - get all posts in descending order by date posted, my need to implement paging logic
+    @GetMapping("/post")
+    public String showAllPosts() {
+        return "posts";
+    }
 
 
 }

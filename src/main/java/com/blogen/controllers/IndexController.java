@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * Controller for the index page
+ *
  * @author Cliff
- * 1/5/18
+ *
  */
 @Slf4j
 @Controller
@@ -26,10 +28,10 @@ public class IndexController {
     @Autowired
     UserRepository userRepository;
 
-   @GetMapping({"/{page}"})
-    public String returnPage( @PathVariable("page") String page ) {
-       log.debug( "returning page:" + page );
-       return page;
+   @GetMapping({"","/"})
+    public String showIndex() {
+       log.debug( "showing index page");
+       return "index";
     }
 
 
