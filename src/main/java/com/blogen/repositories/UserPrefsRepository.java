@@ -10,5 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface UserPrefsRepository extends JpaRepository<UserPrefs,Long> {
 
+    UserPrefs findByUser_Id( Long userId );
 
 }

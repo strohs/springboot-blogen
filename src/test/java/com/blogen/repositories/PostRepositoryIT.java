@@ -1,17 +1,14 @@
 package com.blogen.repositories;
 
-import com.blogen.bootstrap.BlogenBootstrap;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;

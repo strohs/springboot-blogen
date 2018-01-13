@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Log4j
 @Component
-public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> {
 
     private CategoryRepository categoryRepository;
     private UserRepository userRepository;
@@ -32,8 +32,8 @@ public class BlogenBootstrap implements ApplicationListener<ContextRefreshedEven
     private static final String IMG_SERVICE_GREY = "http://lorempixel.com/g/400/200";
 
     @Autowired
-    public BlogenBootstrap( CategoryRepository categoryRepository, UserRepository userRepository,
-                            UserPrefsRepository userPrefsRepository, PostRepository postRepository ) {
+    public Bootstrapper( CategoryRepository categoryRepository, UserRepository userRepository,
+                         UserPrefsRepository userPrefsRepository, PostRepository postRepository ) {
         this.categoryRepository = categoryRepository;
         this.userPrefsRepository = userPrefsRepository;
         this.userRepository = userRepository;
