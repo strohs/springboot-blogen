@@ -22,6 +22,12 @@ public interface PostService {
     //get a Post by ID
     PostCommand getPost( Long id );
 
+    //get all posts for the specified page number
+    List<PostCommand> getAllPostsForPage( int page );
+
+    //get all posts for the user id and specified page number
+    List<PostCommand> getAllPostsByUserForPage( Long userId, int page );
+
     //save a new Post (parent or child)
     PostCommand savePostCommand( PostCommand command );
 

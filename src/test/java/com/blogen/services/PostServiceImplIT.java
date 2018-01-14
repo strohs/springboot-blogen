@@ -49,24 +49,31 @@ public class PostServiceImplIT {
     }
 
     @Test
-    public void getAllPosts_shouldReturnAllParentPosts() {
-
+    public void shouldGetThreePostsTotal_whenPageZeroIsRequested() throws Exception {
+        //this user has 10 Posts total
+        Long userId = 5L;
+        List<PostCommand> commands = postService.getAllPostsByUserForPage( userId, 0 );
+        assertThat( commands.size(), is(3));
+        assertThat( commands.get( 0 ).getUserId(), is( userId ));
     }
 
     @Test
-    public void getPost() {
+    public void shouldReturnPostsInDescendingOrder_whenAnyPageIsRequested() throws Exception {
+        //this user has 10 Posts total
+        Long userId = 5L;
+        Long mostRecentPostId = 26L;
+        List<PostCommand> commands = postService.getAllPostsByUserForPage( userId, 0 );
+        assertThat( commands.get( 0 ).getId(), is( mostRecentPostId ));
     }
 
     @Test
-    public void deletePost() {
-    }
-
-    @Test
-    public void savePostCommand() {
-    }
-
-    @Test
-    public void updatePostCommand() {
+    public void shouldGetOnePostTotal_whenPageThreeIsRequested() throws Exception {
+        //this user has 10 Posts total
+        Long userId = 5L;
+        Long postId = 17L;
+        List<PostCommand> commands = postService.getAllPostsByUserForPage( userId, 3 );
+        assertThat( commands.size(), is(1));
+        assertThat( commands.get( 0 ).getId(), is(postId));
     }
 
 

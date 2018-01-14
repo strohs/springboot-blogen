@@ -8,11 +8,17 @@ import com.blogen.domain.User;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
+import javafx.geometry.Pos;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +29,10 @@ import java.util.stream.Collectors;
 @Log4j
 @Service
 public class PostServiceImpl implements PostService {
+
+    //number of parent posts to display on the posts.html page
+    @Value( "${blogen.posts.per.page}" )
+    private int POSTS_PER_PAGE;
 
     private PostRepository postRepository;
     private UserRepository userRepository;
@@ -63,7 +73,28 @@ public class PostServiceImpl implements PostService {
     public PostCommand getPost( Long id ) {
         Post post = postRepository.findOne( id );
         return postCommandMapper.postToPostCommand( post );
+    }
 
+
+    @Override
+    @Transactional
+    public List<PostCommand> getAllPostsForPage( int pageNum ) {
+        PageRequest pageRequest = new PageRequest( pageNum, POSTS_PER_PAGE, Sort.Direction.DESC, "created" );
+        Page<Post> page = postRepository.findAll( pageRequest );
+        List<PostCommand> commands = new ArrayList<>();
+        page.forEach( (Post p) -> commands.add( postCommandMapper.postToPostCommand( p )));
+        return commands;
+    }
+
+    @Override
+    @Transactional
+    public List<PostCommand> getAllPostsByUserForPage( Long id, int pageNum ) {
+        PageRequest pageRequest = new PageRequest( pageNum, POSTS_PER_PAGE, Sort.Direction.DESC, "created" );
+        List<Post> posts = postRepository.findAllByUser_IdAndParentNull( id, pageRequest );
+        List<PostCommand> commands = posts.stream()
+                .map( postCommandMapper::postToPostCommand )
+                .collect( Collectors.toList());
+        return commands;
     }
 
     @Override

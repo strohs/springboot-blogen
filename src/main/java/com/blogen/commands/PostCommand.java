@@ -39,10 +39,6 @@ public class PostCommand {
 
     List<PostCommand> children = new ArrayList<>();
 
-    //holds the current page of Post data being viewed on the page. Default to page 1
-    //TODO decide how to map this and on what object. May need new command object.
-    //int currentPage = 1;
-
 
     @Override
     public String toString() {

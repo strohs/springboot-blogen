@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PostController {
 
+    //todo make sure to add requestedPage and totalPages to the Model
+
     //addNewPost - create a new post - POST - /post
     // need to check if PostCommand has parentId set in order to determine if this is a child post
 

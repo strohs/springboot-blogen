@@ -15,6 +15,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 /**
  * Bootstrap the blogen embedded JPA database with data
  * @author Cliff
@@ -152,42 +154,52 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         //Build Posts for elizabeth (10 parent posts for her)
         pb = new PostBuilder( elizabeth, business, IMG_SERVICE, "Invest now","these stocks are at all time lows and ready to rise" );
         parent = pb.build();
+        parent.setCreated( LocalDateTime.of( 2017, 1, 1, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( elizabeth, health, IMG_SERVICE_GREY, "Proper Diet trumps all","No matter what excercise you do, just remember you can never out-train a poor diet" );
         parent = pb.build();
+        parent.setCreated( LocalDateTime.of( 2017, 1, 2, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( elizabeth, tech, IMG_SERVICE, "About Alexa","Does anyone own one of these? Is it any good?" );
         parent = pb.build();
+        parent.setCreated( LocalDateTime.of( 2017, 1, 3, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( elizabeth, webDev, IMG_SERVICE_GREY, "Bootstrap 4","Hey you all. Would it be worth my time to learn Bootstrap 4?" );
         parent = pb.build();
+        parent.setCreated( LocalDateTime.of( 2017, 1, 4, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( elizabeth, business, IMG_SERVICE, "Buying gold","I wanna buy some gold. Can someone point me in the right direction" );
         parent = pb.build();
+        parent.setCreated( LocalDateTime.of( 2017, 1, 5, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( elizabeth, health, IMG_SERVICE_GREY, "HIIT Training","Forget about running for hours on end. High Intensity Interval Training can give you all the benefits in half the time" );
         parent = pb.build();
+        parent.setCreated( LocalDateTime.of( 2017, 1, 6, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( elizabeth, tech, IMG_SERVICE, "Toys that teach Programming","My nephew is showing an interest in programming. Can anyone recommend something for a ten year old?" );
         parent = pb.build();
+        parent.setCreated( LocalDateTime.of( 2017, 1, 7, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( elizabeth, webDev, IMG_SERVICE_GREY, "Clojure Script","You guys need to try this http://clojure.org, It saved me hours of web dev work" );
         parent = pb.build();
+        parent.setCreated( LocalDateTime.of( 2017, 1, 8, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( elizabeth, tech, IMG_SERVICE, "Samsung Galaxy 8","This phone is the greatest. Nice screen, good battery life, and tons of apps!" );
         parent = pb.build();
+        parent.setCreated( LocalDateTime.of( 2017, 1, 9, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( elizabeth, webDev, IMG_SERVICE_GREY, "Spring Framework 5","I hear webFlux is all the rage in Spring Framework. Does anyone have first hand experience?" );
         parent = pb.build();
+        parent.setCreated( LocalDateTime.of( 2017, 1, 10, 10,11,12 ) );
         postRepository.save( parent );
         
 
