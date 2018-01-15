@@ -39,6 +39,16 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * gets a user by their userName
+     * @param userName the userName used to retrieve a {@link User}
+     * @return UserCommand containing the user properties
+     */
+    @Override
+    public UserCommand getUserByUserName( String userName ) {
+        return userCommandMapper.userToUserCommand( userRepository.findByUserName( userName ) );
+    }
+
+    /**
      * get all users with a userName field containing the substring passed in the 'name' parameter
      * @param name a substring containing the characters to search for in the userName field
      * @return a List of {@link UserCommand} objects with userName(s) matching the name parameter

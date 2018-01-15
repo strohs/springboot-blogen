@@ -55,7 +55,7 @@ public class PostCommandMapperTest {
 
 
     @Test
-    public void postToPostCommand() {
+    public void postToPostCommand_shouldCorrectlyMapPostFieldsToPostCommand() {
         Category cat = buildCategory( CAT_ID, CAT_NAME );
         UserPrefs up = buildUserPrefs( USER_PREF_ID, USER_PREF_AVATAR );
         User user = buildUser( USER_ID, USER_NAME, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL,USER_PASSWORD );
@@ -70,6 +70,7 @@ public class PostCommandMapperTest {
         assertThat( postCommand.getCategoryName(), is( CAT_NAME) );
         assertThat( postCommand.getUserId(), is( USER_ID ));
         assertThat( postCommand.getUserName(), is(USER_NAME ));
+        assertThat( postCommand.getUserAvatar(),is(USER_PREF_AVATAR) );
         assertThat( postCommand.getImageUrl(), is(POST_IMAGE_URL));
         assertThat( postCommand.getParentId(), is( nullValue() ));
         assertThat( postCommand.getText(), is(POST_TEXT));
@@ -87,7 +88,7 @@ public class PostCommandMapperTest {
     @Test
     public void parentPostCommandToPost_shouldMapCorrectly() {
         CategoryCommand cc = buildCategoryCommand( CAT_ID, CAT_NAME );
-        PostCommand pc = buildPostCommand( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, CAT_NAME, USER_ID, USER_NAME, null );
+        PostCommand pc = buildPostCommand( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, CAT_NAME, USER_ID, USER_NAME,USER_PREF_AVATAR, null );
 
         Post post = postCommandMapper.postCommandToPost( pc );
 
@@ -100,6 +101,7 @@ public class PostCommandMapperTest {
         assertThat( post.getCategory().getName(), is( CAT_NAME) );
         assertThat( post.getUser().getUserName(), is(USER_NAME) );
         assertThat( post.getUser().getId(), is(USER_ID) );
+        assertThat( post.getUser().getUserPrefs().getAvatarImage(), is(USER_PREF_AVATAR) );
         assertThat( post.getChildren().size(), is(0));
     }
 
@@ -108,7 +110,7 @@ public class PostCommandMapperTest {
     //child posts and parent posts map the same way...for now
     public void childPostCommandToPost_shouldMapCorrectly() {
         CategoryCommand cc = buildCategoryCommand( CAT_ID, CAT_NAME );
-        PostCommand childPc = buildPostCommand( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, CAT_NAME, USER_ID, USER_NAME, POST_PARENT_ID );
+        PostCommand childPc = buildPostCommand( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, CAT_NAME, USER_ID, USER_NAME,USER_PREF_AVATAR, POST_PARENT_ID );
 
         Post child = postCommandMapper.postCommandToPost( childPc );
         assertThat( child.getId(), is(POST_ID));
@@ -134,7 +136,7 @@ public class PostCommandMapperTest {
         return post;
     }
 
-    private PostCommand buildPostCommand( Long id, String title, String text, String image, String catName, Long userId, String userName, Long parentId ) {
+    private PostCommand buildPostCommand( Long id, String title, String text, String image, String catName, Long userId, String userName, String avatarName, Long parentId ) {
         PostCommand pc = new PostCommand();
         pc.setId( id );
         pc.setTitle( title );
@@ -142,6 +144,7 @@ public class PostCommandMapperTest {
         pc.setImageUrl( image );
         pc.setCategoryName( catName );
         pc.setUserId( userId );
+        pc.setUserAvatar( avatarName );
         pc.setUserName( userName );
         pc.setParentId( parentId );
         return pc;

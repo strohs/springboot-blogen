@@ -13,6 +13,8 @@ public interface UserService {
 
     UserCommand getUserById( Long id );
 
+    UserCommand getUserByUserName( String userName );
+
     List<UserCommand> getUserByNameLike( String name );
 
     List<UserCommand> getAllUsers();

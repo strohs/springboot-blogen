@@ -1,7 +1,9 @@
 package com.blogen.services;
 
+import com.blogen.commands.CategoryCommand;
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
+import com.blogen.commands.mappers.CategoryCommandMapper;
 import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
@@ -40,14 +42,17 @@ public class PostServiceImpl implements PostService {
     private CategoryRepository categoryRepository;
 
     private PostCommandMapper postCommandMapper;
+    private CategoryCommandMapper categoryCommandMapper;
 
     @Autowired
     public PostServiceImpl( PostRepository postRepository, UserRepository userRepository,
-                            CategoryRepository categoryRepository, PostCommandMapper postCommandMapper ) {
+                            CategoryRepository categoryRepository, PostCommandMapper postCommandMapper,
+                            CategoryCommandMapper categoryCommandMapper ) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.postCommandMapper = postCommandMapper;
+        this.categoryCommandMapper = categoryCommandMapper;
     }
 
 
@@ -80,21 +85,35 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PageCommand getAllPostsForPage( int pageNum ) {
+        //build the PageRequest for the requested page
         PageRequest pageRequest = new PageRequest( pageNum, POSTS_PER_PAGE, Sort.Direction.DESC, "created" );
         Page<Post> page = postRepository.findAll( pageRequest );
         List<PostCommand> commands = new ArrayList<>();
         page.forEach( (Post p) -> commands.add( postCommandMapper.postToPostCommand( p )));
-        return new PageCommand( pageNum, page.getTotalPages(), page.getTotalElements(), commands );
+        List<CategoryCommand> categoryCommands = categoryRepository.findAll()
+                .stream()
+                .map( categoryCommandMapper::categoryToCategoryCommand )
+                .collect( Collectors.toList());
+
+        return new PageCommand( pageNum, page.getTotalPages(), page.getTotalElements(), commands, categoryCommands );
     }
 
     @Override
     @Transactional
     public PageCommand getAllPostsByUserForPage( Long id, int pageNum ) {
+        //build the PageRequest for the requested page
         PageRequest pageRequest = new PageRequest( pageNum, POSTS_PER_PAGE, Sort.Direction.DESC, "created" );
         Page<Post> page = postRepository.findAllByUser_IdAndParentNull( id, pageRequest );
+        //build the List of PostCommands
         List<PostCommand> commands = new ArrayList<>();
         page.forEach( (Post p) -> commands.add( postCommandMapper.postToPostCommand( p )));
-        return new PageCommand( pageNum, page.getTotalPages(), page.getTotalElements(), commands );
+        //build the list of Categories
+        List<CategoryCommand> categoryCommands = categoryRepository.findAll()
+                .stream()
+                .map( categoryCommandMapper::categoryToCategoryCommand )
+                .collect( Collectors.toList());
+
+        return new PageCommand( pageNum, page.getTotalPages(), page.getTotalElements(), commands, categoryCommands );
     }
 
     @Override
@@ -177,6 +196,7 @@ public class PostServiceImpl implements PostService {
         target.setTitle( source.getTitle() );
         target.setText( source.getText() );;
     }
+
 
 
     /**

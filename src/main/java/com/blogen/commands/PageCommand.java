@@ -25,4 +25,6 @@ public class PageCommand {
     private long totalElements;
 
     List<PostCommand> posts;
+
+    List<CategoryCommand> categories;
 }

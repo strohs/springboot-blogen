@@ -27,6 +27,6 @@ public class LoginController {
         log.debug( "LOGIN: " + username + " PW: " + password );
 
         //redirect to show-posts
-        return "posts";
+        return "redirect:/posts";
     }
 }

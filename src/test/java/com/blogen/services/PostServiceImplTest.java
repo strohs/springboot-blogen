@@ -1,6 +1,7 @@
 package com.blogen.services;
 
 import com.blogen.commands.PostCommand;
+import com.blogen.commands.mappers.CategoryCommandMapper;
 import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
@@ -59,12 +60,12 @@ public class PostServiceImplTest {
     private UserRepository userRepository;
 
     private PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
-
+    private CategoryCommandMapper categoryCommandMapper = CategoryCommandMapper.INSTANCE;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
-        postService = new PostServiceImpl( postRepository, userRepository, categoryRepository, postCommandMapper );
+        postService = new PostServiceImpl( postRepository, userRepository, categoryRepository, postCommandMapper,categoryCommandMapper );
     }
 
     @Test

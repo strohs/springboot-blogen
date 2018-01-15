@@ -4,6 +4,7 @@ import com.blogen.commands.PostCommand;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
+import com.blogen.domain.UserPrefs;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -23,6 +24,7 @@ public interface PostCommandMapper {
     @Mapping( target = "userId", source = "user.id")
     @Mapping( target = "userName", source = "user.userName")
     @Mapping( target = "categoryName", source = "category.name")
+    @Mapping( target = "userAvatar", source = "user.userPrefs.avatarImage")
     PostCommand postToPostCommand( Post post );
 
 
@@ -35,9 +37,12 @@ public interface PostCommandMapper {
         post.setId( postCommand.getId() );
         post.setCategory( new Category() );
         post.getCategory().setName( postCommand.getCategoryName() );
+        UserPrefs prefs = new UserPrefs();
+        prefs.setAvatarImage( postCommand.getUserAvatar() );
         post.setUser( new User() );
         post.getUser().setUserName( postCommand.getUserName() );
         post.getUser().setId( postCommand.getUserId() );
+        post.getUser().setUserPrefs( prefs );
         post.setImageUrl( postCommand.getImageUrl() );
         post.setTitle( postCommand.getTitle() );
         post.setText( postCommand.getText() );

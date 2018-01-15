@@ -33,9 +33,10 @@
                 <li class="nav-item dropdown mr-3">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-user"></i>
-                        Welcome Cliff
+                        Welcome <span th:text="${user.userName}"></span>
                     </a>
                     <div class="dropdown-menu">
+                        <!--todo add profile page -->
                         <a th:href="@{profile.html}" class="dropdown-item">
                             <i class="fa fa-user-circle"></i>
                             Profile
@@ -48,7 +49,8 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a th:href="@{login.html}" class="nav-link">
+                    <!--todo add logout -->
+                    <a th:href="@{/logout}" class="nav-link">
                         <i class="fa fa-user-times"></i>
                         Logout
                     </a>
@@ -63,8 +65,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <!-- TODO this heading will change depend on what posts are being shown, my posts -->
-                <h1><i class="fa fa-pencil"></i>All Posts</h1>
+                <h1><i class="fa fa-pencil"></i>Posts</h1>
             </div>
         </div>
     </div>
@@ -82,12 +83,10 @@
                         Filter Posts
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="posts.html">All Posts</a>
-                        <a class="dropdown-item" href="posts.html">My Posts</a>
-                        <a class="dropdown-item" href="posts.html">Business</a>
-                        <a class="dropdown-item" href="posts.html">Health & Wellness</a>
-                        <a class="dropdown-item" href="posts.html">Tech Gadgets</a>
-                        <a class="dropdown-item" href="posts.html">Web Development</a>
+                        <a th:each="category : ${page.categories}" class="dropdown-item"
+                           href="posts.html" th:href="@{'/posts/category/'+${category.id}}" th:text="${category.name}">
+                            Category Name
+                        </a>
                     </div>
                 </div>
             </div>
@@ -99,11 +98,11 @@
             </div>
             <!-- SEARCH -->
             <div class="col-md-4">
-                <form id="searchPostsForm">
+                <form id="searchPostsForm" th:action="@{/posts/search}" method="post">
                     <div class="form-row">
                         <div class="form-inline ml-auto">
-                            <input type="text" class="form-control" placeholder="Search"/>
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <input type="text" name="searchText" class="form-control" placeholder="Search Posts"/>
+                            <input type="submit" class="btn btn-primary" value="Search"/>
                         </div>
                     </div>
                 </form>
@@ -114,55 +113,52 @@
 
 </section>
 
-<!-- TODO decide which presentation style to use -->
 <!-- POSTS IN MEDIA OBJECTS STYLE -->
 <section id="posts" class="py-2">
     <div class="container">
-        <div class="row">
+        
 
-            <div class="media mt-3">
-                <img class="d-flex mr-3 align-self-start img-thumbnail" width="100" height="100" src="img/avatar1.jpg">
+            <!-- POST BEGIN HERE -->
+            <div class="media mt-3" th:each="parentPost : ${page.posts}">
+                <img class="d-flex mr-3" src="img/avatar2.jpg" th:src="@{'img/'+${parentPost.getUserAvatar()}}">
                 <div class="media-body">
-                    <h5 class="font-weight-bold">Starting to eat healthy</h5>
-                    <h6>By <small>missHealthy</small> in <small class="font-italic">Health & Wellness</small></h6>
 
-                    <p>I kicked off the new year by starting the cabbage diet. I'm in day two and can no longer feel my
-                        hands. Maybe I should switch it up. I hear the the orange juice diet is pretty good.</p>
-                    <!-- data-val contains parent post id -->
-                    <a href="#" class="btn btn-outline-success btn-sm" data-post-id="2" data-cat-id="3"  data-toggle="modal" data-target="#replyPostModal">
+                    <h5 class="font-weight-bold" th:text="${parentPost.title}">Loving the echo</h5>
+
+                    <h6>By <small th:text="${parentPost.userName}">rogueTwo</small>
+                        in <small class="font-italic" th:text="${parentPost.categoryName}">Tech Gadgets</small>
+                        at <small class="font-italic" th:text="${parentPost.created}">date</small>
+                    </h6>
+
+                    <span th:text="${parentPost.text}">Got one of these Amazon Echo things for Christmas. I don't think I'll leave the house.</span>
+
+                    <!--REPLY BUTTON - any user can reply to a parent post -->
+                    <a href="#" class="btn btn-outline-success btn-sm"
+                       th:data-post-id="${parentPost.id}" data-post-id="2"
+                       th:data-cat-name="${parentPost.categoryName}" data-cat-name="Business" data-toggle="modal" data-target="#replyPostModal">
                         Reply
                     </a>
-                    <a href="#" class="btn btn-outline-danger btn-sm" data-val="1">
+                    <!--todo only the user that created the post should be able to delete it -->
+                    <a href="#" th:href="@{'/posts/'+${parentPost.id}+'/delete'}" class="btn btn-outline-danger btn-sm" th:data-val="${parentPost.id}" data-val="2">
                         Delete
                     </a>
-                </div>
-            </div>
 
-            <!-- NESTING MEDIA OBJECTS -->
-            <div class="media mt-3">
-                <img class="d-flex mr-3" src="img/avatar2.jpg">
-                <div class="media-body">
-                    <h5 class="font-weight-bold">Loving the echo</h5>
-                    <h6>By <small>rogueTwo</small> in <small class="font-italic">Tech Gadgets</small></h6>
-                    <p>Got one of these Amazon Echo things for Christmas. I don't think I'll leave the house.</p>
-                    <a href="#" class="btn btn-outline-success btn-sm" data-post-id="2" data-cat-id="3" data-toggle="modal" data-target="#replyPostModal">
-                        Reply
-                    </a>
-                    <a href="#" class="btn btn-outline-danger btn-sm" data-val="2">
-                        Delete
-                    </a>
-                    <div class="media mt-3">
+                    <!--CHILD POSTS start here -->
+                    <div class="media mt-3" th:each="childPost : ${parentPost.children}">
                         <a class="d-flex pr-3" href="#">
-                            <img src="img/avatar3.jpg" class="img-thumbnail" width="100" height="100">
+                            <img src="img/avatar3.jpg" th:src="@{'img/'+${childPost.getUserAvatar()}}" class="img-thumbnail" width="100" height="100">
                         </a>
                         <div class="media-body">
-                            <h5 class="mt-0">Loving the echo....be careful</h5>
-                            <h6>Tech Gadgets</h6>
-                            Be careful...I don't trust those things. They're always on... :(
+                            <h5 class="mt-0" th:text="${childPost.title}">Loving the echo....be careful</h5>
+                            <h6>By <small th:text="${childPost.userName}">rogueTwo</small>
+                                in <small class="font-italic" th:text="${childPost.categoryName}">Tech Gadgets</small>
+                                at <small class="font-italic" th:text="${childPost.created}">date</small>
+                            </h6>
+                            <span th:text="${childPost.text}">Be careful...I don't trust those things. They're always on... :(</span>
                         </div>
                     </div>
 
-                    <div class="media mt-3">
+                    <div class="media mt-3" th:remove="all">
                         <a class="d-flex pr-3" href="#">
                             <img src="img/avatar4.jpg" class="img-thumbnail" width="100" height="100">
                         </a>
@@ -176,7 +172,7 @@
                 </div>
             </div>
 
-            <div class="media mt-3">
+            <div class="media mt-3" th:remove="all">
                 <img class="d-flex mr-3 align-self-start img-thumbnail" width="100" height="100" src="img/avatar.png">
                 <div class="media-body">
                     <h5 class="mt-0">Bootstrap 4</h5>
@@ -185,25 +181,25 @@
                 </div>
             </div>
             
-        </div>
+        
         <!-- PAGINATION -->
         <nav class="ml-4 mt-5">
             <!--TODO build pagination -->
             <ul class="pagination">
-                <li class="page-item disabled">
-                    <a href="#" class="page-link">Previous</a>
+                <li class="page-item disabled" th:class="${page.requestedPage == 0 ? 'page-item disabled' : 'page-item'}">
+                    <a href="#" th:href="@{'/posts/page/'+${page.requestedPage - 1}}" class="page-link">Previous</a>
                 </li>
-                <li class="page-item">
-                    <a href="#" class="page-link">1</a>
+                <li class="page-item" th:each="i: ${#numbers.sequence(0,page.totalPages - 1)}">
+                    <a href="#" th:href="@{'/posts/page/'+${i}}" class="page-link" th:text="${i + 1}">1</a>
                 </li>
-                <li class="page-item">
+                <li class="page-item" th:remove="all">
                     <a href="#" class="page-link">2</a>
                 </li>
-                <li class="page-item">
+                <li class="page-item" th:remove="all">
                     <a href="#" class="page-link">3</a>
                 </li>
-                <li class="page-item">
-                    <a href="#" class="page-link">Next</a>
+                <li class="page-item" th:class="${page.requestedPage + 1 == page.totalPages ? 'page-item disabled' : 'page-item'}">
+                    <a href="#" th:href="@{'/posts/page/'+${page.requestedPage + 1}}" class="page-link">Next</a>
                 </li>
             </ul>
         </nav>
@@ -386,7 +382,7 @@
 
                     <!--TODO probably need a hidden field with parent post id -->
                     <input id="parentId" name="parentId" type="hidden" value=""/>
-                    <input id="categoryId" name="categoryId" type="hidden" value=""/>
+                    <input id="categoryName" name="categoryName" type="hidden" value=""/>
 
                     <div class="form-group">
                         <label for="post-title">Title</label>
@@ -493,11 +489,11 @@
     //sets the parent post Id and categoryId when someone clicks the reply button for a post
     $('#replyPostModal').on('show.bs.modal', function (event) {
         var postId = $(event.relatedTarget).data('post-id');
-        var catId = $(event.relatedTarget).data('cat-id');
+        var catName = $(event.relatedTarget).data('cat-name');
         console.log("running replyPostModal post-id:" + postId);
-        console.log("running replyPostModal cat-id:" + catId);
+        console.log("running replyPostModal cat-name:" + catName);
         $(this).find("#parentId").val(postId);
-        $(this).find("#categoryId").val(catId);
+        $(this).find("#categoryName").val(catName);
     });
 </script>
 

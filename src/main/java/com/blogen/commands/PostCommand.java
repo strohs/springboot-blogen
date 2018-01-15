@@ -37,6 +37,9 @@ public class PostCommand {
     //the username of the user making the posting
     String userName;
 
+    //the avatar of the user that made the post
+    String userAvatar;
+
     List<PostCommand> children = new ArrayList<>();
 
 

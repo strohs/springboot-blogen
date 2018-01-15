@@ -46,22 +46,22 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
 
     public void initData() {
         //BUILD CATEGORIES
-        Category all = CategoryBuilder.build( "All Categories" );
-        Category my = CategoryBuilder.build( "My Categories" );
+        //Category all = CategoryBuilder.build( "All Categories" );
+        //Category my = CategoryBuilder.build( "My Categories" );
         Category business = CategoryBuilder.build( "Business" );
         Category webDev = CategoryBuilder.build( "Web Development" );
         Category tech = CategoryBuilder.build( "Tech Gadgets" );
         Category health = CategoryBuilder.build( "Health & Fitness");
 
-        categoryRepository.save( all );
-        categoryRepository.save( my );
+        //categoryRepository.save( all );
+        //categoryRepository.save( my );
         categoryRepository.save( business );
         categoryRepository.save( webDev );
         categoryRepository.save( tech );
         categoryRepository.save( health );
 
         //BUILD USER PREFS
-        UserPrefsBuilder upb = new UserPrefsBuilder( "avatar1.jpg" );
+        UserPrefsBuilder upb = new UserPrefsBuilder( "avatar3.jpg" );
         UserPrefs upJohn = upb.build();
         userPrefsRepository.save( upJohn );
 
@@ -69,7 +69,7 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         UserPrefs upAdmin = upb.build();
         userPrefsRepository.save( upAdmin );
 
-        upb = new UserPrefsBuilder( "avatar3.jpg" );
+        upb = new UserPrefsBuilder( "avatar1.jpg" );
         UserPrefs upMaggie = upb.build();
         userPrefsRepository.save( upMaggie );
 
@@ -104,7 +104,7 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         userRepository.save( william );
 
         //Elizabeth Reed
-        ub = new UserBuilder( "lizIsEverywhere","Elizabeth","Reed","liz@gmail.com","password", upElizabeth);
+        ub = new UserBuilder( "lizreed","Elizabeth","Reed","liz@gmail.com","password", upElizabeth);
         User elizabeth = ub.build();
         userRepository.save( elizabeth );
 
