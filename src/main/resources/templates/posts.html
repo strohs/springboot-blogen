@@ -92,7 +92,8 @@
             </div>
             <!-- NEW POST -->
             <div class="col-md-4">
-                <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#newPostModal">
+                <a href="#" class="btn btn-primary btn-block" th:data-user-id="${user.id}" data-user-id="1"
+                   data-toggle="modal" data-target="#newPostModal">
                     <i class="fa fa-plus"></i>New Post
                 </a>
             </div>
@@ -378,11 +379,12 @@
 
             <div class="modal-body">
                 <!-- TODO correct action needed here -->
-                <form id="replyPostForm" action="login.html">
+                <form id="replyPostForm" th:object="${postCommand}" action="login.html" th:action="@{/posts}" method="post">
 
                     <!--TODO probably need a hidden field with parent post id -->
-                    <input id="parentId" name="parentId" type="hidden" value=""/>
-                    <input id="categoryName" name="categoryName" type="hidden" value=""/>
+                    <input id="parentId" name="parentId" type="hidden" value="" th:field="*{parentId}"/>
+                    <input id="reply-userId" name="userId" type="hidden" value="" th:field="${user.id}"/>
+                    <!--<input id="categoryName" name="categoryName" type="hidden" value=""/>-->
 
                     <div class="form-group">
                         <label for="post-title">Title</label>
@@ -390,22 +392,21 @@
                     </div>
                     <div class="form-group">
                         <label for="post-category">Category</label>
-                        <select id="post-category" name="category" class="form-control">
-                            <option value="Web Development">Web Development</option>
-                            <option value="Tech Gadgets">Tech Gadgets</option>
-                            <option value="Business">Business</option>
-                            <option value="Health & Wellness">Health & Wellness</option>
+                        <select id="post-category" name="category" class="form-control" th:field="*{categoryName}">
+                            <option th:each="category : ${page.categories}"
+                                    th:value="${category.name}" value="Web Development"
+                                    th:text="${category.name}">Web Development</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="post-image">Image Link</label>
-                        <input id="post-image" name="image" type="url" class="form-control"/>
+                        <input id="post-image" name="image" type="url" class="form-control" th:field="*{imageUrl}"/>
                         <small class="form-text text-muted">Valid URL to an image</small>
                     </div>
                     <div class="form-group">
                         <label for="post-body">Body</label>
-                        <!-- uses ckeditor here -->
-                        <textarea id="post-body" name="body" rows="5" class="form-control"></textarea>
+                        <!-- maybe we will use ckeditor here -->
+                        <textarea id="post-body" name="body" rows="5" class="form-control" th:field="*{text}"></textarea>
                     </div>
 
                     <div class="form-row justify-content-end">
@@ -432,29 +433,31 @@
 
             <div class="modal-body">
                 <!--TODO set action here -->
-                <form id="newPostForm" action="posts.html">
+                <form id="newPostForm" action="posts.html" th:object="${postCommand}" th:action="@{/posts}" method="post">
+
+                    <input id="userId" name="userId" type="hidden" value="" th:field="*{userId}"/>
+
                     <div class="form-group">
                         <label for="newPostTitle">Title</label>
-                        <input id="newPostTitle" name="title" type="text" class="form-control"/>
+                        <input id="newPostTitle" th:field="*{title}" name="title" type="text" class="form-control"/>
                     </div>
                     <div class="form-group">
                         <label for="newPostCategory">Category</label>
-                        <select id="newPostCategory" name="category" class="form-control">
-                            <option value="Web Development">Web Development</option>
-                            <option value="Tech Gadgets">Tech Gadgets</option>
-                            <option value="Business">Business</option>
-                            <option value="Health & Wellness">Health & Wellness</option>
+                        <select id="newPostCategory" name="categoryName" class="form-control" th:field="*{categoryName}">
+                            <option th:each="category : ${page.categories}"
+                                    th:value="${category.name}" value="Web Development"
+                                    th:text="${category.name}">Web Development</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="newPostImage">Image Link</label>
-                        <input id="newPostImage" name="image" type="url" class="form-control"/>
+                        <input id="newPostImage" name="imageUrl" type="url" class="form-control" th:field="*{imageUrl}"/>
                         <small class="form-text text-muted">Valid URL to an image</small>
                     </div>
                     <div class="form-group">
                         <label for="newPostBody">Body</label>
-                        <!-- uses ckeditor here -->
-                        <textarea id="newPostBody" name="body" rows="5" class="form-control"></textarea>
+                        <!-- maybe we will use ckeditor here -->
+                        <textarea id="newPostBody" name="text" rows="5" class="form-control" th:field="*{text}"></textarea>
                     </div>
                     <div class="form-row justify-content-end">
                         <button class="btn btn-secondary mx-2" data-dismiss="modal">Close</button>
@@ -493,7 +496,17 @@
         console.log("running replyPostModal post-id:" + postId);
         console.log("running replyPostModal cat-name:" + catName);
         $(this).find("#parentId").val(postId);
-        $(this).find("#categoryName").val(catName);
+        //no longer need to set category name
+        //$(this).find("#categoryName").val(catName);
+    });
+</script>
+
+<script>
+    //sets the userId when someone clicks the new post button
+    $('#newPostModal').on('show.bs.modal', function (event) {
+        var userId = $(event.relatedTarget).data('user-id');
+        console.log("running newPostModal user-id:" + userId);
+        $(this).find("#userId").val(userId);
     });
 </script>
 
