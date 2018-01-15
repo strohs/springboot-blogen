@@ -1,5 +1,6 @@
 package com.blogen.services;
 
+import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
@@ -78,23 +79,22 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public List<PostCommand> getAllPostsForPage( int pageNum ) {
+    public PageCommand getAllPostsForPage( int pageNum ) {
         PageRequest pageRequest = new PageRequest( pageNum, POSTS_PER_PAGE, Sort.Direction.DESC, "created" );
         Page<Post> page = postRepository.findAll( pageRequest );
         List<PostCommand> commands = new ArrayList<>();
         page.forEach( (Post p) -> commands.add( postCommandMapper.postToPostCommand( p )));
-        return commands;
+        return new PageCommand( pageNum, page.getTotalPages(), page.getTotalElements(), commands );
     }
 
     @Override
     @Transactional
-    public List<PostCommand> getAllPostsByUserForPage( Long id, int pageNum ) {
+    public PageCommand getAllPostsByUserForPage( Long id, int pageNum ) {
         PageRequest pageRequest = new PageRequest( pageNum, POSTS_PER_PAGE, Sort.Direction.DESC, "created" );
-        List<Post> posts = postRepository.findAllByUser_IdAndParentNull( id, pageRequest );
-        List<PostCommand> commands = posts.stream()
-                .map( postCommandMapper::postToPostCommand )
-                .collect( Collectors.toList());
-        return commands;
+        Page<Post> page = postRepository.findAllByUser_IdAndParentNull( id, pageRequest );
+        List<PostCommand> commands = new ArrayList<>();
+        page.forEach( (Post p) -> commands.add( postCommandMapper.postToPostCommand( p )));
+        return new PageCommand( pageNum, page.getTotalPages(), page.getTotalElements(), commands );
     }
 
     @Override
@@ -177,6 +177,7 @@ public class PostServiceImpl implements PostService {
         target.setTitle( source.getTitle() );
         target.setText( source.getText() );;
     }
+
 
     /**
      * Tests this post to see if it is a parent post. A parent post will have a parentId = null, otherwise this is

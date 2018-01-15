@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Command object for transferring {@link com.blogen.domain.Post} data between the server and web-pages
+ * Command object for transferring {@link com.blogen.domain.Post} data between the server and web forms
  *
  * @author Cliff
  */

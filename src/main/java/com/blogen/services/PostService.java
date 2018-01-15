@@ -1,6 +1,7 @@
 package com.blogen.services;
 
 import com.blogen.api.v1.model.PostDTO;
+import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
@@ -23,10 +24,10 @@ public interface PostService {
     PostCommand getPost( Long id );
 
     //get all posts for the specified page number
-    List<PostCommand> getAllPostsForPage( int page );
+    PageCommand getAllPostsForPage( int page );
 
     //get all posts for the user id and specified page number
-    List<PostCommand> getAllPostsByUserForPage( Long userId, int page );
+    PageCommand getAllPostsByUserForPage( Long userId, int page );
 
     //save a new Post (parent or child)
     PostCommand savePostCommand( PostCommand command );

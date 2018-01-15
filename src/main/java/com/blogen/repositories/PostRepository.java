@@ -35,5 +35,5 @@ public interface PostRepository extends JpaRepository<Post,Long> {
      * @param pageable
      * @return a lists of posts made by the specified user id to be displayed on the pageable
      */
-   List<Post> findAllByUser_IdAndParentNull( Long userId, Pageable pageable );
+   Page<Post> findAllByUser_IdAndParentNull( Long userId, Pageable pageable );
 }

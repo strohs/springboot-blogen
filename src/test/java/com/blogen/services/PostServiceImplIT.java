@@ -1,5 +1,6 @@
 package com.blogen.services;
 
+import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Post;
@@ -49,12 +50,24 @@ public class PostServiceImplIT {
     }
 
     @Test
+    public void shouldHaveTenPostsTotal_whenGetAllPostsByUserForPage() throws Exception {
+        //this user has 10 Posts total
+        Long userId = 5L;
+        Long totalParentPosts = 10L;
+        PageCommand pageCommand = postService.getAllPostsByUserForPage( userId, 0 );
+        assertThat( pageCommand.getTotalElements(), is( totalParentPosts ));
+    }
+
+    @Test
     public void shouldGetThreePostsTotal_whenPageZeroIsRequested() throws Exception {
         //this user has 10 Posts total
         Long userId = 5L;
-        List<PostCommand> commands = postService.getAllPostsByUserForPage( userId, 0 );
-        assertThat( commands.size(), is(3));
-        assertThat( commands.get( 0 ).getUserId(), is( userId ));
+        Long totalParentPosts = 10L;
+        PageCommand pageCommand = postService.getAllPostsByUserForPage( userId, 0 );
+        assertThat( pageCommand.getPosts().size(), is(3));
+        assertThat( pageCommand.getPosts().get( 0 ).getUserId(), is( userId ));
+        assertThat( pageCommand.getRequestedPage(), is(0));
+        assertThat( pageCommand.getTotalPages(), is(4));
     }
 
     @Test
@@ -62,8 +75,8 @@ public class PostServiceImplIT {
         //this user has 10 Posts total
         Long userId = 5L;
         Long mostRecentPostId = 26L;
-        List<PostCommand> commands = postService.getAllPostsByUserForPage( userId, 0 );
-        assertThat( commands.get( 0 ).getId(), is( mostRecentPostId ));
+        PageCommand pageCommand = postService.getAllPostsByUserForPage( userId, 0 );
+        assertThat( pageCommand.getPosts().get( 0 ).getId(), is( mostRecentPostId ));
     }
 
     @Test
@@ -71,9 +84,9 @@ public class PostServiceImplIT {
         //this user has 10 Posts total
         Long userId = 5L;
         Long postId = 17L;
-        List<PostCommand> commands = postService.getAllPostsByUserForPage( userId, 3 );
-        assertThat( commands.size(), is(1));
-        assertThat( commands.get( 0 ).getId(), is(postId));
+        PageCommand pageCommand = postService.getAllPostsByUserForPage( userId, 3 );
+        assertThat( pageCommand.getPosts().size(), is(1));
+        assertThat( pageCommand.getPosts().get( 0 ).getId(), is(postId));
     }
 
 
