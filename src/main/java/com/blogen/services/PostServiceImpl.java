@@ -131,6 +131,7 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+
     @Override
     public PostCommand savePostCommand( PostCommand pc ) {
         if ( isParentPost( pc ) ) {
@@ -144,7 +145,7 @@ public class PostServiceImpl implements PostService {
     public PostCommand saveNewParentPostCommand( PostCommand pc ) {
         Post detachedPost = postCommandMapper.postCommandToPost( pc );
         //1. get CategoryById
-        Category cat = categoryRepository.findOne( detachedPost.getCategory().getId() );
+        Category cat = categoryRepository.findByName( detachedPost.getCategory().getName() );
         //2. get UserById
         User user = userRepository.findOne( detachedPost.getUser().getId() );
         //3. set category
@@ -156,17 +157,22 @@ public class PostServiceImpl implements PostService {
         return postCommandMapper.postToPostCommand( savedPost );
     }
 
+    /**
+     * saves the PostCommand to the DB.
+     * @param pc The PostCommand to save. It is assumed to be a child Post
+     * @return the Parent PostCommand object for the child that was just saved
+     */
     @Transactional
     public PostCommand saveNewChildPostCommand( PostCommand pc ) {
         Post detachedPost = postCommandMapper.postCommandToPost( pc );
-        //get category
-        Category cat = categoryRepository.findOne( detachedPost.getCategory().getId() );
         //get user
         User user = userRepository.findOne( detachedPost.getUser().getId() );
-        detachedPost.setCategory( cat );
         detachedPost.setUser( user );
         //get Parent Post
         Post parent = postRepository.findOne( pc.getParentId() );
+        //get category - child posts inherit the parents category
+        Category cat = categoryRepository.findByName( parent.getCategory().getName() );
+        detachedPost.setCategory( cat );
         parent.addChild( detachedPost );
         Post savedPost = postRepository.saveAndFlush( parent );
         //the parent PostCommand of the child that was saved is returned

@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.anyLong;
 
 /**
  * Integration Tests for {@link PostServiceImpl}
@@ -87,6 +89,46 @@ public class PostServiceImplIT {
         PageCommand pageCommand = postService.getAllPostsByUserForPage( userId, 3 );
         assertThat( pageCommand.getPosts().size(), is(1));
         assertThat( pageCommand.getPosts().get( 0 ).getId(), is(postId));
+    }
+
+    @Test
+    @Transactional
+    public void shouldSaveParentPost_whenSaveNewParentPostCommand() throws Exception {
+        Long userId = 5L;
+        PostCommand postCommand = new PostCommand();
+        postCommand.setUserId( userId );
+        postCommand.setTitle( "new title" );
+        postCommand.setText( "new text" );
+        postCommand.setImageUrl( "http://pexels.com" );
+        postCommand.setCategoryName( "Business" );
+        PostCommand savedCommand = postService.savePostCommand( postCommand );
+        assertThat( savedCommand.getId(), is(notNullValue()));
+        assertThat( savedCommand.getText(), is("new text"));
+        assertThat( savedCommand.getTitle(), is("new title"));
+        assertThat( savedCommand.getChildren().size(), is(0));
+    }
+
+    @Test
+    @Transactional
+    public void shouldSaveNewChildPost_whenSavingPostCommandThatHasValidParentId() throws Exception {
+        Long userId = 4L;
+        //this is a post with no children
+        Long parentId = 6L;
+        PostCommand postCommand = new PostCommand();
+        postCommand.setParentId( parentId );
+        postCommand.setUserId( userId );
+        postCommand.setTitle( "new title" );
+        postCommand.setText( "new text" );
+        postCommand.setImageUrl( "http://pexels.com" );
+        postCommand.setCategoryName( "Health & Fitness" );
+        //saves the child and returns back the parent post command object
+        PostCommand savedCommand = postService.savePostCommand( postCommand );
+        assertThat( savedCommand.getId(), is(notNullValue()));
+        assertThat( savedCommand.getChildren().size(), is(1));
+        assertThat( savedCommand.getChildren().get( 0 ).getId(), is(notNullValue()));
+        assertThat( savedCommand.getChildren().get( 0 ).getText(), is("new text"));
+        assertThat( savedCommand.getChildren().get( 0 ).getTitle(), is("new title"));
+        assertThat( savedCommand.getChildren().get( 0 ).getCategoryName(),is("Health & Fitness"));
     }
 
 

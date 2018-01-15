@@ -62,16 +62,19 @@ public class PostController {
         model.addAttribute( "page",pageCommand );
         model.addAttribute( "user",userCommand );
         PostCommand postCommand = new PostCommand();
+        //this is needed for postCommand form submission. see if there is a way around this
+        postCommand.setUserId( userCommand.getId() );
         model.addAttribute( "postCommand",postCommand );
         return "posts";
     }
 
     //addNewPost - create a new post - POST - /posts
-    // need to check if PostCommand has parentId set in order to determine if this is a child post
     @PostMapping("/posts")
     public String addNewPost( @ModelAttribute("postCommand") PostCommand postCommand ) {
         log.debug( "received new post: \n" + postCommand );
-        return "redirect:posts";
+        PostCommand savedPost = postService.savePostCommand( postCommand );
+        log.debug( "new post saved: \n" + savedPost );
+        return "redirect:/posts";
     }
 
 

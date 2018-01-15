@@ -155,14 +155,14 @@ public class PostServiceImplTest {
         PostCommand pc = postCommandMapper.postToPostCommand( post );
         pc.setId( null );
 
-        given( categoryRepository.findOne( anyLong() )).willReturn( cat );
+        given( categoryRepository.findByName( anyString() )).willReturn( cat );
         given( userRepository.findOne( anyLong() )).willReturn( user1 );
         given( postRepository.saveAndFlush( Matchers.any( Post.class ) )).willReturn( post );
 
         postService.savePostCommand( pc );
 
         then( postRepository ).should().saveAndFlush( Matchers.any( Post.class) );
-        then( categoryRepository).should().findOne( anyLong() );
+        then( categoryRepository).should().findByName( anyString() );
         then( userRepository ).should().findOne( anyLong() );
     }
 
@@ -175,7 +175,7 @@ public class PostServiceImplTest {
         PostCommand pc = postCommandMapper.postToPostCommand( child );
         pc.setParentId( post.getId() );
 
-        given( categoryRepository.findOne( anyLong() )).willReturn( cat );
+        given( categoryRepository.findByName( anyString() )).willReturn( cat );
         given( userRepository.findOne( anyLong() )).willReturn( user1 );
         given( postRepository.findOne( anyLong() )).willReturn( post );
         given( postRepository.saveAndFlush( Matchers.any( Post.class ) )).willReturn( post );
@@ -183,7 +183,7 @@ public class PostServiceImplTest {
         PostCommand savedCommand = postService.savePostCommand( pc );
 
         then( postRepository ).should().saveAndFlush( Matchers.any( Post.class) );
-        then( categoryRepository).should().findOne( anyLong() );
+        then( categoryRepository).should().findByName( anyString() );
         then( userRepository ).should().findOne( anyLong() );
         then( postRepository ).should().findOne( anyLong() );
         assertThat( savedCommand.getId(), is(POST1_ID) );

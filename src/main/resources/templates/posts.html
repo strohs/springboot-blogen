@@ -383,21 +383,22 @@
 
                     <!--TODO probably need a hidden field with parent post id -->
                     <input id="parentId" name="parentId" type="hidden" value="" th:field="*{parentId}"/>
-                    <input id="reply-userId" name="userId" type="hidden" value="" th:field="${user.id}"/>
+                    <input id="reply-userId" name="userId" type="hidden" value="" th:field="*{userId}"/>
                     <!--<input id="categoryName" name="categoryName" type="hidden" value=""/>-->
 
                     <div class="form-group">
                         <label for="post-title">Title</label>
                         <input id="post-title" name="title" type="text" class="form-control"/>
                     </div>
-                    <div class="form-group">
-                        <label for="post-category">Category</label>
-                        <select id="post-category" name="category" class="form-control" th:field="*{categoryName}">
-                            <option th:each="category : ${page.categories}"
-                                    th:value="${category.name}" value="Web Development"
-                                    th:text="${category.name}">Web Development</option>
-                        </select>
-                    </div>
+                    <!-- replying to a post will inherit the parent's category -->
+                    <!--<div class="form-group">-->
+                        <!--<label for="post-category">Category</label>-->
+                        <!--<select id="post-category" name="category" class="form-control" th:field="*{categoryName}">-->
+                            <!--<option th:each="category : ${page.categories}"-->
+                                    <!--th:value="${category.name}" value="Web Development"-->
+                                    <!--th:text="${category.name}">Web Development</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
                     <div class="form-group">
                         <label for="post-image">Image Link</label>
                         <input id="post-image" name="image" type="url" class="form-control" th:field="*{imageUrl}"/>

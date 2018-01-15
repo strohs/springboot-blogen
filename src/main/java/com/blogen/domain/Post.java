@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Model for a blogen Post.
+ * Model for a blogen Post. A Post in Blogen will either be a "Parent" post or a "child" post. A parent post can have
+ * any number of child posts, but we only go one level deep. That is to say, you can reply to a Parent post, but you
+ * cannot reply to a child post. This is by design to keep the model as simple as possible.
+ *
  * @author Cliff
  */
 @Getter
