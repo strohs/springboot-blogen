@@ -84,7 +84,7 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a th:each="category : ${page.categories}" class="dropdown-item"
-                           href="posts.html" th:href="@{'/posts/category/'+${category.id}}" th:text="${category.name}">
+                           href="userPosts.html" th:href="@{'/posts/category/'+${category.id}}" th:text="${category.name}">
                             Category Name
                         </a>
                     </div>
@@ -434,7 +434,7 @@
 
             <div class="modal-body">
                 <!--TODO set action here -->
-                <form id="newPostForm" action="posts.html" th:object="${postCommand}" th:action="@{/posts}" method="post">
+                <form id="newPostForm" action="userPosts.html" th:object="${postCommand}" th:action="@{/posts}" method="post">
 
                     <input id="userId" name="userId" type="hidden" value="" th:field="*{userId}"/>
 

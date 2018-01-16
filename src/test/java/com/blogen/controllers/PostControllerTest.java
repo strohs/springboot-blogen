@@ -27,8 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * MockMVC tests for PostController
  *
- * NOTE: could not get MockMvcBuilders.standAloneSetup to work with Thymleaf 3. Kept throwing Circular Path errors.
- * Possible bug in thymeleaf/spring boot view resolvers. Had to resort to using full on WebApplicationContext setup.
  * 
  * @author Cliff
  */

@@ -65,7 +65,7 @@ public class PostController {
         //this is needed for postCommand form submission. see if there is a way around this
         postCommand.setUserId( userCommand.getId() );
         model.addAttribute( "postCommand",postCommand );
-        return "posts";
+        return "userPosts";
     }
 
     //addNewPost - create a new post - POST - /posts
