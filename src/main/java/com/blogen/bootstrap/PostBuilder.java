@@ -31,11 +31,11 @@ public class PostBuilder {
         post.setText( text );
     }
 
-    public Post addChildPost( User user, String title, String text ) {
+    public Post addChildPost( User user, String title, String text, String imageUrl ) {
         Post child = new Post();
         child.setUser( user );
         child.setCategory( post.getCategory() );
-        child.setImageUrl( null );
+        child.setImageUrl( imageUrl );
         child.setTitle( title );
         child.setText( text );
         post.addChild( child );

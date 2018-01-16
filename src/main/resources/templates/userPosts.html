@@ -121,7 +121,7 @@
 
             <!-- POST BEGIN HERE -->
             <div class="media mt-3" th:each="parentPost : ${page.posts}">
-                <img class="d-flex mr-3" src="img/avatar2.jpg" th:src="@{'img/'+${parentPost.getUserAvatar()}}">
+                <img class="d-flex mr-3" src="img/avatar2.jpg" th:src="@{'img/'+${parentPost.userAvatar}}">
                 <div class="media-body">
 
                     <h5 class="font-weight-bold" th:text="${parentPost.title}">Loving the echo</h5>
@@ -147,7 +147,7 @@
                     <!--CHILD POSTS start here -->
                     <div class="media mt-3" th:each="childPost : ${parentPost.children}">
                         <a class="d-flex pr-3" href="#">
-                            <img src="img/avatar3.jpg" th:src="@{'img/'+${childPost.getUserAvatar()}}" class="img-thumbnail" width="100" height="100">
+                            <img src="img/avatar3.jpg" th:src="@{'img/'+${childPost.userAvatar}}" class="img-thumbnail" width="100" height="100">
                         </a>
                         <div class="media-body">
                             <h5 class="mt-0" th:text="${childPost.title}">Loving the echo....be careful</h5>
@@ -156,6 +156,7 @@
                                 at <small class="font-italic" th:text="${childPost.created}">date</small>
                             </h6>
                             <span th:text="${childPost.text}">Be careful...I don't trust those things. They're always on... :(</span>
+
                         </div>
                     </div>
 
