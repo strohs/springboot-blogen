@@ -75,7 +75,7 @@ public class PostControllerTest {
 
         mockMvc.perform( get("/posts") )
                 .andExpect( status().isOk() )
-                .andExpect( view().name( "posts" ) )
+                .andExpect( view().name( "userPosts" ) )
                 .andExpect( model().attributeExists( "postCommand" ) )
                 .andExpect( model().attributeExists( "user" ) )
                 .andExpect( model().attributeExists( "page" ) );
