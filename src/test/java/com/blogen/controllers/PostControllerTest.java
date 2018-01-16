@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,12 +44,15 @@ public class PostControllerTest {
     WebApplicationContext webCtx;
 
 
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
-        mockMvc = MockMvcBuilders.webAppContextSetup( webCtx ).build();
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup( webCtx )
+                //.apply( springSecurity() )
+                .build();
     }
 
     @Test
