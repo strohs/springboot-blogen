@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
+ * Spring Security Configuration
+ *
  * @author Cliff
  */
 @Configuration
@@ -30,14 +32,14 @@ public class SpringSecConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider( PasswordEncoder passwordEncoder,
-                                                                UserDetailsService userDetailsService){
+    public DaoAuthenticationProvider daoAuthenticationProvider( UserDetailsService userDetailsService, PasswordEncoder passwordEncoder){
 
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder( passwordEncoder );
         daoAuthenticationProvider.setUserDetailsService( userDetailsService );
         return daoAuthenticationProvider;
     }
+
 
 
     @Autowired

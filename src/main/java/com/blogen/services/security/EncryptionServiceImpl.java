@@ -20,6 +20,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         this.passwordEncoder = passwordEncoder;
     }
 
+
     @Override
     public String encrypt( String input ) {
         return passwordEncoder.encode( input );

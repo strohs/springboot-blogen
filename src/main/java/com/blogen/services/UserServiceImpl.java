@@ -26,11 +26,16 @@ public class UserServiceImpl implements UserService {
     private EncryptionService encryptionService;
 
     @Autowired
-    public UserServiceImpl( UserRepository userRepository, UserCommandMapper userCommandMapper,EncryptionService encryptionService ) {
+    public UserServiceImpl( UserRepository userRepository, UserCommandMapper userCommandMapper, EncryptionService encryptionService ) {
         this.userRepository = userRepository;
         this.userCommandMapper = userCommandMapper;
         this.encryptionService = encryptionService;
     }
+
+//    @Autowired
+//    public void setEncryptionService( EncryptionService encryptionService ) {
+//        this.encryptionService = encryptionService;
+//    }
 
     /**
      * get a user by their id
@@ -97,7 +102,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveUser( User user ) {
         if ( user.getPassword() != null )
-            user.setEncryptedPassword( encryptionService.encrypt( user.getPassword() ) );
+            user.setEncryptedPassword( encryptionService.encrypt(  user.getPassword() ) );
         User savedUser = userRepository.save( user );
         return savedUser;
     }

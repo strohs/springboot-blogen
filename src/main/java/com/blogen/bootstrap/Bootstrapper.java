@@ -10,6 +10,7 @@ import com.blogen.services.UserService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,16 +37,19 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
     private static final String IMG_SERVICE_GREY = "http://lorempixel.com/g/400/200";
 
     @Autowired
-    public Bootstrapper( CategoryRepository categoryRepository, UserService userService,
+    public Bootstrapper( CategoryRepository categoryRepository,
                          UserPrefsRepository userPrefsRepository, PostRepository postRepository,RoleService roleService ) {
         this.categoryRepository = categoryRepository;
         this.userPrefsRepository = userPrefsRepository;
-        this.userService = userService;
+        //this.userService = userService;
         this.postRepository = postRepository;
         this.roleService = roleService;
     }
 
-
+    @Autowired
+    public void setUserService( UserService userService ) {
+        this.userService = userService;
+    }
 
     public void initData() {
         //BUILD ROLES
@@ -222,7 +226,7 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         parent = pb.build();
         parent.setCreated( LocalDateTime.of( 2017, 1, 10, 10,11,12 ) );
         postRepository.save( parent );
-        
+
 
         //there should now be sixteen posts in total - six parent posts and ten child posts
     }

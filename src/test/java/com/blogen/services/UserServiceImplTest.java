@@ -49,6 +49,7 @@ public class UserServiceImplTest {
     @Mock
     private EncryptionService encryptionService;
 
+
     private UserCommandMapper userCommandMapper = UserCommandMapper.INSTANCE;
 
 
