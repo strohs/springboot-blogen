@@ -4,7 +4,9 @@ import com.blogen.commands.UserCommand;
 import com.blogen.commands.mappers.UserCommandMapper;
 import com.blogen.domain.User;
 import com.blogen.repositories.UserRepository;
+import com.blogen.services.security.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +23,13 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private UserCommandMapper userCommandMapper;
+    private EncryptionService encryptionService;
 
     @Autowired
-    public UserServiceImpl( UserRepository userRepository, UserCommandMapper userCommandMapper ) {
+    public UserServiceImpl( UserRepository userRepository, UserCommandMapper userCommandMapper,EncryptionService encryptionService ) {
         this.userRepository = userRepository;
         this.userCommandMapper = userCommandMapper;
+        this.encryptionService = encryptionService;
     }
 
     /**
@@ -46,6 +50,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserCommand getUserByUserName( String userName ) {
         return userCommandMapper.userToUserCommand( userRepository.findByUserName( userName ) );
+    }
+
+    /**
+     * gets a {@link User} by their username
+     *
+     * @param name - username to search for
+     * @return a {@link User} having the specified username
+     */
+    @Override
+    public User findByUserName( String name ) {
+        return userRepository.findByUserName( name );
     }
 
     /**
@@ -74,7 +89,22 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * save the updated user information stored in the passed in UserCommand
+     * saves a {@link User} to the underlying datastore. This method is primarily called when setting up new users
+     *
+     * @param user the user to save
+     * @return the saved user
+     */
+    @Override
+    public User saveUser( User user ) {
+        if ( user.getPassword() != null )
+            user.setEncryptedPassword( encryptionService.encrypt( user.getPassword() ) );
+        User savedUser = userRepository.save( user );
+        return savedUser;
+    }
+
+    /**
+     * save the updated user information stored in the passed in {@link UserCommand}
+     *
      * @param command - contains the user data to be saved
      * @return a UserCommand object containing the saved data
      */
@@ -82,7 +112,29 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserCommand saveUserCommand( UserCommand command ) {
         User userToSave = userCommandMapper.userCommandToUser( command );
-        User savedUser = userRepository.save( userToSave );
+        //todo may have to retrieve User and perform manual merge
+        User fetchedUser = userRepository.findOne( command.getId() );
+        mergeUsers( userToSave, fetchedUser );
+        if( userToSave.getPassword() != null )
+            fetchedUser.setEncryptedPassword( encryptionService.encrypt( userToSave.getPassword() ) );
+
+        User savedUser = userRepository.save( fetchedUser );
         return userCommandMapper.userToUserCommand( savedUser );
+    }
+
+    /**
+     * merge some of the source user properties into target user
+     * @param source
+     * @param target
+     */
+    private void mergeUsers( User source, User target ) {
+        target.setUserName( source.getUserName() );
+        target.setPassword( source.getPassword() );
+        target.setEmail( source.getEmail() );
+        target.setFirstName( source.getFirstName() );
+        target.setLastName( source.getLastName() );
+        target.setUserPrefs( source.getUserPrefs() );
+        //note: Roles are left untouched...for now
+
     }
 }

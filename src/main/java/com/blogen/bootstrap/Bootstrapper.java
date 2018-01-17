@@ -1,13 +1,12 @@
 package com.blogen.bootstrap;
 
-import com.blogen.domain.Category;
-import com.blogen.domain.Post;
-import com.blogen.domain.User;
-import com.blogen.domain.UserPrefs;
+import com.blogen.domain.*;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserPrefsRepository;
 import com.blogen.repositories.UserRepository;
+import com.blogen.services.RoleService;
+import com.blogen.services.UserService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -19,32 +18,47 @@ import java.time.LocalDateTime;
 
 /**
  * Bootstrap the blogen embedded JPA database with data
- * @author Cliff
+ *
+ *  @author Cliff
  */
 @Log4j
 @Component
 public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> {
 
     private CategoryRepository categoryRepository;
-    private UserRepository userRepository;
+    private UserService userService;
+    //private UserRepository userRepository;
     private UserPrefsRepository userPrefsRepository;
     private PostRepository postRepository;
+    private RoleService roleService;
 
     private static final String IMG_SERVICE = "http://lorempixel.com/400/200";
     private static final String IMG_SERVICE_GREY = "http://lorempixel.com/g/400/200";
 
     @Autowired
-    public Bootstrapper( CategoryRepository categoryRepository, UserRepository userRepository,
-                         UserPrefsRepository userPrefsRepository, PostRepository postRepository ) {
+    public Bootstrapper( CategoryRepository categoryRepository, UserService userService,
+                         UserPrefsRepository userPrefsRepository, PostRepository postRepository,RoleService roleService ) {
         this.categoryRepository = categoryRepository;
         this.userPrefsRepository = userPrefsRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.postRepository = postRepository;
+        this.roleService = roleService;
     }
 
 
 
     public void initData() {
+        //BUILD ROLES
+        Role userRole = new Role();
+        userRole.setRole("USER");
+        roleService.saveOrUpdate(userRole);
+        log.info("Saved role" + userRole.getRole());
+        Role adminRole = new Role();
+        adminRole.setRole("ADMIN");
+        roleService.saveOrUpdate(adminRole);
+        log.info("Saved role" + adminRole.getRole());
+
+
         //BUILD CATEGORIES
         //Category all = CategoryBuilder.build( "All Categories" );
         //Category my = CategoryBuilder.build( "My Categories" );
@@ -59,6 +73,8 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         categoryRepository.save( webDev );
         categoryRepository.save( tech );
         categoryRepository.save( health );
+
+
 
         //BUILD USER PREFS
         UserPrefsBuilder upb = new UserPrefsBuilder( "avatar3.jpg" );
@@ -86,27 +102,32 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         //administrator
         UserBuilder ub = new UserBuilder( "theAdmin","Carl","Sagan","admin@blogen.org","adminpassword",upAdmin );
         User admin = ub.build();
-        userRepository.save( admin );
+        admin.addRole( adminRole );
+        userService.saveUser( admin );
 
         //JohnDoe
         ub = new UserBuilder( "johndoe","John","Doe","jdoe@gmail.com","password", upJohn );
         User john = ub.build();
-        userRepository.save( john );
+        john.addRole( userRole );
+        userService.saveUser( john );
 
         //Maggie McGill
         ub = new UserBuilder( "mgill","Maggie","McGill","gilly@yahoo.com","password", upMaggie );
         User maggie = ub.build();
-        userRepository.save( maggie );
+        maggie.addRole( userRole );
+        userService.saveUser( maggie );
 
         //William Wallace
         ub = new UserBuilder( "scotsman","William","Wallace","scotty@hotmail.com","password", upWilliam );
         User william = ub.build();
-        userRepository.save( william );
+        william.addRole( userRole );
+        userService.saveUser( william );
 
         //Elizabeth Reed
         ub = new UserBuilder( "lizreed","Elizabeth","Reed","liz@gmail.com","password", upElizabeth);
         User elizabeth = ub.build();
-        userRepository.save( elizabeth );
+        elizabeth.addRole( userRole );
+        userService.saveUser( elizabeth );
 
         // BUILD POSTS
         //

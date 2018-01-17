@@ -22,11 +22,11 @@ public class LoginController {
     }
 
     //todo configure security as this may be handled by spring security
-    @PostMapping("/doLogin")
-    public String login( @RequestParam String username, @RequestParam String password ) {
-        log.debug( "LOGIN: " + username + " PW: " + password );
-
-        //redirect to show-posts
-        return "redirect:/posts";
-    }
+//    @PostMapping("/doLogin")
+//    public String login( @RequestParam String username, @RequestParam String password ) {
+//        log.debug( "LOGIN: " + username + " PW: " + password );
+//
+//        //redirect to show-posts
+//        return "redirect:/posts";
+//    }
 }

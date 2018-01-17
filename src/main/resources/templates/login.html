@@ -18,7 +18,7 @@
 <!-- really thin navbar with no padding: p-0 -->
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
     <div class="container">
-        <a href="index.html" th:href="@{/index}" class="navbar-brand">Blogen</a>
+        <a href="index.html" th:href="@{/}" class="navbar-brand">Blogen</a>
 
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -119,8 +119,18 @@
                         <h4>Account Login</h4>
                     </div>
                     <div class="card-body">
+
+                        <div th:if="${param.error}">
+                            <label class="text-danger">Invalid username or password.</label>
+                        </div>
+                        <div th:if="${param.logout}">
+                            <label>
+                                You have been logged out.
+                            </label>
+                        </div>
+
                         <!--TODO set proper actions, this may be handled by spring security -->
-                        <form action="userPosts.html" th:action="@{/doLogin}" method="post">
+                        <form action="userPosts.html" th:action="@{/login}" method="post">
                             <div class="form-group">
                                 <label for="username">Username</label>
                                 <input id="username" name="username" type="text" class="form-control"/>

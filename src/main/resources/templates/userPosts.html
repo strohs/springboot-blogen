@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,7 +33,8 @@
                 <li class="nav-item dropdown mr-3">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-user"></i>
-                        Welcome <span th:text="${user.userName}"></span>
+                        <span sec:authorize="isAuthenticated()">Welcome <span sec:authentication="name"></span></span>
+                        <!--Welcome <span th:text="${user.userName}"></span>-->
                     </a>
                     <div class="dropdown-menu">
                         <!--todo add profile page -->
@@ -48,12 +49,16 @@
                         <!--</a>-->
                     </div>
                 </li>
+                <!-- LOGOUT Form -->
                 <li class="nav-item">
-                    <!--todo add logout -->
-                    <a th:href="@{/logout}" class="nav-link">
+                    <form th:action="@{/logout}" method="post">
                         <i class="fa fa-user-times"></i>
-                        Logout
-                    </a>
+                        <button type="submit" class="btn btn-link text-secondary">Logout</button>
+                    </form>
+                    <!--<a th:href="@{/logout}" class="nav-link">-->
+                        <!--<i class="fa fa-user-times"></i>-->
+                        <!--Logout-->
+                    <!--</a>-->
                 </li>
             </ul>
         </div>

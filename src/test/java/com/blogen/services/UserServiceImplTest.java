@@ -6,10 +6,12 @@ import com.blogen.commands.mappers.UserCommandMapper;
 import com.blogen.domain.User;
 import com.blogen.domain.UserPrefs;
 import com.blogen.repositories.UserRepository;
+import com.blogen.services.security.EncryptionService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,11 +39,15 @@ public class UserServiceImplTest {
     private static final String USER3_USERNAME = "william456";
     private static final Long   USER_PREFS_ID = 55L;
     private static final String USER_PREFS_AVATAR = "avatar1.jpg";
+    private static final String ENCRYPTED_PASSWORD = "encrypted";
 
     private UserService userService;
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private EncryptionService encryptionService;
 
     private UserCommandMapper userCommandMapper = UserCommandMapper.INSTANCE;
 
@@ -49,11 +55,11 @@ public class UserServiceImplTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
-        userService = new UserServiceImpl( userRepository, userCommandMapper );
+        userService = new UserServiceImpl( userRepository, userCommandMapper, encryptionService );
     }
 
     @Test
-    public void shouldReturnOneUser_whenGetUserById() {
+    public void whenGetUserById_shouldReturnOneUser() {
         User user = buildUser( USER1_ID, USER1_USERNAME );
 
         given( userRepository.findOne( anyLong() ) ).willReturn( user );
@@ -65,7 +71,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void shouldReturnTwoUsers_containingString_doe_whenGetUserByNameLike() {
+    public void whenGetUserByNameLike_shouldReturnTwoUsers_containingString_doe() {
         User user1 = buildUser( USER1_ID, USER1_USERNAME );
         User user2 = buildUser( USER2_ID, USER2_USERNAME );
         String likeName = "doe";
@@ -84,7 +90,7 @@ public class UserServiceImplTest {
     //TODO test case for when user name like, is NOT found, should throw exception
 
     @Test
-    public void shouldReturnThreeUsers_whenGetAllUsers() {
+    public void whenGetAllUsers_shouldReturnThreeUsers() {
         User user1 = buildUser( USER1_ID, USER1_USERNAME );
         User user2 = buildUser( USER2_ID, USER2_USERNAME );
         User user3 = buildUser( USER3_ID, USER3_USERNAME );
@@ -100,13 +106,16 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void shouldSaveUser_whenSaveUserCommand() throws Exception {
+    public void whenSaveUserCommand_shouldSaveUser() throws Exception {
         UserPrefsCommand upc = buildUserPrefsCommand( USER_PREFS_ID, USER_PREFS_AVATAR );
         UserCommand commandToSave = buildUserCommand( USER1_ID, USER3_USERNAME, upc );
         User savedUser = buildUser( USER1_ID, USER3_USERNAME );
         savedUser.setUserPrefs( buildUserPrefs( USER_PREFS_ID, USER_PREFS_AVATAR ) );
+        User fetchedUser = buildUser( USER1_ID, USER1_USERNAME );
 
         given( userRepository.save( any( User.class ) )).willReturn( savedUser );
+        given( userRepository.findOne( anyLong() )).willReturn( fetchedUser );
+        given( encryptionService.encrypt( anyString() )).willReturn( ENCRYPTED_PASSWORD );
 
         UserCommand savedCommand = userService.saveUserCommand( commandToSave );
 
