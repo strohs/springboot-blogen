@@ -30,12 +30,16 @@ public class SpringSecConfig extends WebSecurityConfigurerAdapter {
         this.authenticationProvider = authenticationProvider;
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider( UserDetailsService userDetailsService, PasswordEncoder passwordEncoder){
+    public DaoAuthenticationProvider daoAuthenticationProvider( UserDetailsService userDetailsService ){
 
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder( passwordEncoder );
+        daoAuthenticationProvider.setPasswordEncoder( passwordEncoder() );
         daoAuthenticationProvider.setUserDetailsService( userDetailsService );
         return daoAuthenticationProvider;
     }
