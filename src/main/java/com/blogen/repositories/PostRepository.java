@@ -30,6 +30,12 @@ public interface PostRepository extends JpaRepository<Post,Long> {
    List<Post> findAllByUser_IdAndParentNullOrderByCreatedDesc( Long userId );
 
     /**
+     * get a page of Parent Posts in descending order of creation
+     * @return a Page of parent posts ordered by creation date, in descending order
+     */
+   Page<Post> findAllByParentNullOrderByCreatedDesc( Pageable pageable );
+
+    /**
      * get all parent posts for the specified userId, using the pageable to control the page of results returned
      * @param userId
      * @param pageable

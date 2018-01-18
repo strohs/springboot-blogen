@@ -87,7 +87,7 @@ public class PostServiceImpl implements PostService {
     public PageCommand getAllPostsForPage( int pageNum ) {
         //build the PageRequest for the requested page
         PageRequest pageRequest = new PageRequest( pageNum, POSTS_PER_PAGE, Sort.Direction.DESC, "created" );
-        Page<Post> page = postRepository.findAll( pageRequest );
+        Page<Post> page = postRepository.findAllByParentNullOrderByCreatedDesc( pageRequest );
         List<PostCommand> commands = new ArrayList<>();
         page.forEach( (Post p) -> commands.add( postCommandMapper.postToPostCommand( p )));
         List<CategoryCommand> categoryCommands = categoryRepository.findAll()

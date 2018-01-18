@@ -88,7 +88,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void shouldReturnAllParentPosts_when_getAllPosts() {
+    public void should_ReturnAllParentPosts_when_getAllPosts() {
         Post p1 = getParentPost1();
         Post p2 = getParentPost2();
         Post p3 = getParentPost3();
@@ -106,7 +106,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void shouldGetOnePost_when_getPost() {
+    public void should_GetOnePost_when_getPost() {
         Post p1 = getParentPost1();
 
         given( postRepository.findOne( anyLong() )).willReturn( p1 );
@@ -131,7 +131,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void shouldDeleteChildPost_when_deletePostIsCalledWithChildId() {
+    public void should_DeleteChildPost_when_deletePostIsCalledWithChildId() {
         Post p1 = getParentPost1();
         Post c1 = getChildPost1();
         p1.addChild( c1 );
@@ -167,7 +167,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void shouldSaveNewChild_when_saveNewChildPostCommand() {
+    public void should_SaveNewChild_when_saveNewChildPostCommand() {
         Post post = getParentPost1();
         Post child = getChildPost1();
         Category cat = getCategory();
@@ -192,7 +192,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void shouldUpdatePostWithNewText_when_updatePostCommand() {
+    public void should_UpdatePostWithNewText_when_updatePostCommand() {
         Post existingPost = getParentPost1();
         Category cat = getCategory();
         String newText = "new post text";
