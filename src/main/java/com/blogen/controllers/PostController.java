@@ -4,17 +4,23 @@ import com.blogen.commands.CategoryCommand;
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.UserCommand;
+import com.blogen.domain.User;
 import com.blogen.services.CategoryService;
 import com.blogen.services.PostService;
 import com.blogen.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
+;
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -49,21 +55,24 @@ public class PostController {
 
     //searchForPosts - POST - /posts/search  form param is 'searchText'
 
-    //showAllPosts - GET /post - get all posts in descending order by date posted, my need to implement paging logic
+    //showAllPosts - GET /post - get all posts in descending order by date posted
     @GetMapping("/posts")
-    public String showAllPosts( Model model ) {
-        //todo hardcode userID for now, replace with spring security
-        String userName = "johndoe";
-        Long userId = 2L;
+    public String showAllPosts( Model model, Principal principal ) {
+        log.debug( "show all posts" );
+        String userName = principal.getName();
+        log.debug( "user logged in: " + userName );
+
+        //get User information for the logged in user
         UserCommand userCommand = userService.getUserByUserName( userName );
-        PageCommand pageCommand = postService.getAllPostsByUserForPage( userCommand.getId(), 0 );
-        List<CategoryCommand> categories = categoryService.getAllCategories();
-        pageCommand.setCategories( categories );
+        //get the posts to display on the page
+        PageCommand pageCommand = postService.getAllPostsForPage( 0 );
+
+        PostCommand postCommand = new PostCommand();
+        //this is needed for when we submit postCommand from a form. See if there is a way around this
+        postCommand.setUserId( userCommand.getId() );
+
         model.addAttribute( "page",pageCommand );
         model.addAttribute( "user",userCommand );
-        PostCommand postCommand = new PostCommand();
-        //this is needed for postCommand form submission. see if there is a way around this
-        postCommand.setUserId( userCommand.getId() );
         model.addAttribute( "postCommand",postCommand );
         return "userPosts";
     }

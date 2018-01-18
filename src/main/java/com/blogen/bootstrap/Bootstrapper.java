@@ -104,7 +104,7 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
 
         //BUILD USERS
         //administrator
-        UserBuilder ub = new UserBuilder( "theAdmin","Carl","Sagan","admin@blogen.org","adminpassword",upAdmin );
+        UserBuilder ub = new UserBuilder( "admin","Carl","Sagan","admin@blogen.org","adminpassword",upAdmin );
         User admin = ub.build();
         admin.addRole( adminRole );
         userService.saveUser( admin );
