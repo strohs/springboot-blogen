@@ -1,16 +1,14 @@
 package com.blogen.controllers;
 
-import com.blogen.domain.Post;
-import com.blogen.domain.User;
-import com.blogen.repositories.PostRepository;
-import com.blogen.repositories.UserRepository;
+import com.blogen.commands.PostCommand;
 import com.blogen.services.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 /**
  * Controller for the index page
@@ -22,15 +20,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
 
-    @Autowired
-    PostService postService;
+    private PostService postService;
 
     @Autowired
-    UserRepository userRepository;
+    public IndexController( PostService postService ) {
+        this.postService = postService;
+    }
 
-   @GetMapping({"","/"})
-    public String showIndex() {
+    @GetMapping({"","/"})
+    public String showIndex(Model model) {
        log.debug( "showing index page");
+       List<PostCommand> recentPosts = postService.getTenRecentPosts();
+       model.addAttribute( "posts",recentPosts );
+
        return "index";
     }
 

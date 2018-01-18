@@ -116,6 +116,8 @@ public class PostServiceImpl implements PostService {
         return new PageCommand( pageNum, page.getTotalPages(), page.getTotalElements(), commands, categoryCommands );
     }
 
+
+
     @Override
     @Transactional
     public void deletePost( PostCommand pc ) {
@@ -190,6 +192,16 @@ public class PostServiceImpl implements PostService {
 
         Post savedPost = postRepository.saveAndFlush( postToUpdate );
         return postCommandMapper.postToPostCommand( savedPost );
+    }
+
+    /**
+     *
+     * @return the ten most recent posts made
+     */
+    @Override
+    public List<PostCommand> getTenRecentPosts() {
+        List<Post> recentPosts = postRepository.findTop10ByOrderByCreatedDesc();
+        return recentPosts.stream().map( postCommandMapper::postToPostCommand ).collect( Collectors.toList());
     }
 
     /**

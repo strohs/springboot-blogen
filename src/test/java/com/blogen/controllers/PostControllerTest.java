@@ -20,6 +20,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -41,45 +47,32 @@ public class PostControllerTest {
     @Autowired
     WebApplicationContext webCtx;
 
-
     private MockMvc mockMvc;
+
+    private static final String USER_NAME = "lizreed";
+    private static final Long   USER_ID   = 5L;
+    private static final String USER_PW   = "password";
+    private static final String ROLE_USER = "USER";
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
         mockMvc = MockMvcBuilders
                 .webAppContextSetup( webCtx )
-                //.apply( springSecurity() )
+                .apply( springSecurity() )
                 .build();
     }
 
     @Test
     public void showAllPosts() throws Exception {
-        PageCommand page = new PageCommand();
-        UserCommand user = new UserCommand();
-        CategoryCommand category = new CategoryCommand();
-        category.setId( 1L );
-        category.setName( "Category" );
-        Long userId = 2L;
-        List<CategoryCommand> categories = new ArrayList<>();
-        PostCommand post1 = new PostCommand();
-        PostCommand post2 = new PostCommand();
-        List<PostCommand> posts = Arrays.asList( post1,post2 );
-        page.setCategories( categories );
-        page.setPosts( posts );
-
-//        given( postService.getAllPostsByUserForPage( anyLong(),anyInt() ) ).willReturn( page );
-//        given( categoryService.getAllCategories() ).willReturn( categories );
-//        //todo this will prob be removed with Spring Security
-//        given( userService.getUserByUserName( anyString() )).willReturn( user );
-
-        mockMvc.perform( get("/posts") )
+        
+        mockMvc.perform( get("/posts").with( user(USER_NAME).password( USER_PW ).roles(ROLE_USER)) )
                 .andExpect( status().isOk() )
                 .andExpect( view().name( "userPosts" ) )
                 .andExpect( model().attributeExists( "postCommand" ) )
+                .andExpect( model().attribute( "postCommand", hasProperty("userId", is( USER_ID ))))
                 .andExpect( model().attributeExists( "user" ) )
                 .andExpect( model().attributeExists( "page" ) );
-
     }
 
 

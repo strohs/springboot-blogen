@@ -1,27 +1,22 @@
 package com.blogen.controllers;
 
-import com.blogen.commands.CategoryCommand;
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.UserCommand;
-import com.blogen.domain.User;
 import com.blogen.services.CategoryService;
 import com.blogen.services.PostService;
 import com.blogen.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-;
+
 import java.security.Principal;
-import java.util.List;
+
+;
 
 /**
  * Controller for the Blogen "posts" page.

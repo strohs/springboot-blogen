@@ -34,6 +34,9 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
     private RoleService roleService;
 
     private static final String IMG_SERVICE = "http://lorempixel.com/400/200";
+    private static final String IMG_SERVICE_BUSINESS = "http://lorempixel.com/400/200/business";
+    private static final String IMG_SERVICE_NATURE = "http://lorempixel.com/400/200/nature";
+    private static final String IMG_SERVICE_FOOD = "http://lorempixel.com/400/200/food";
     private static final String IMG_SERVICE_GREY = "http://lorempixel.com/g/400/200";
 
     @Autowired
@@ -139,15 +142,15 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         PostBuilder pb = new PostBuilder( john, tech, IMG_SERVICE,"Love this tech", "johns tech post" );
         Post parent = pb.build();
         //postRepository.save( parent );
-        Post child1 = pb.addChildPost( john,"Love it too", "child post1 for tech", IMG_SERVICE_GREY );
-        Post child2 = pb.addChildPost( maggie,"Not so fast", "maggies replay to tech post", IMG_SERVICE );
+        Post child1 = pb.addChildPost( john,"Love it too", "child post1 for tech", IMG_SERVICE_NATURE );
+        Post child2 = pb.addChildPost( maggie,"Not so fast", "maggies replay to tech post", IMG_SERVICE_FOOD);
         Post child3 = pb.addChildPost( william,"Here today gone tomorrow","wills reply to johns post", IMG_SERVICE_GREY );
         Post child4 = pb.addChildPost( william,"no no no","wills reply to his reply", IMG_SERVICE );
         postRepository.save( parent );
 
         //
         //build posts for william - 2 parent posts
-        pb = new PostBuilder( william, health,null,"Start lifting today","health and wellness tip" );
+        pb = new PostBuilder( william, health,IMG_SERVICE_FOOD,"Start lifting today","health and wellness tip" );
         parent = pb.build();
         postRepository.save( parent );
 
@@ -159,19 +162,19 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         //build posts for maggie - 3 parent posts with 2 child posts each
         pb = new PostBuilder( maggie, business,"http://lorempixel.com/400/200/business/1","Bitcoin or bust", "maggies post about business" );
         parent = pb.build();
-        child1 = pb.addChildPost( john,"probably buying it", "johns reply to maggies business post", IMG_SERVICE );
+        child1 = pb.addChildPost( john,"probably buying it", "johns reply to maggies business post", IMG_SERVICE_NATURE );
         child2 = pb.addChildPost( maggie,"beware the bubble", "maggies reply to johns reply", IMG_SERVICE_GREY );
         postRepository.save( parent );
 
         pb = new PostBuilder( maggie,health,"http://lorempixel.com/400/200/sports/3","Eat these healthy foods","maggies parent post about health" );
         parent = pb.build();
-        child1 = pb.addChildPost( william,"sounds gross", "william first reply to maggies health post", IMG_SERVICE );
+        child1 = pb.addChildPost( william,"sounds gross", "william first reply to maggies health post", IMG_SERVICE_FOOD );
         child2 = pb.addChildPost( william, "on second thought...","william second reply to maggies health post", IMG_SERVICE_GREY );
         postRepository.save( parent );
 
         pb = new PostBuilder( maggie, webDev,"http://lorempixel.com/400/200/technics/3","Is PHP dead?","maggies parent post about webdev" );
         parent = pb.build();
-        child1 = pb.addChildPost( william,"I doubt it", "william reply to maggies webdev post", IMG_SERVICE );
+        child1 = pb.addChildPost( william,"I doubt it", "william reply to maggies webdev post", IMG_SERVICE_BUSINESS );
         child2 = pb.addChildPost( admin, "We don't use it here","admins reply to maggies webdev post", IMG_SERVICE_GREY );
         postRepository.save( parent );
 
@@ -187,27 +190,27 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         parent.setCreated( LocalDateTime.of( 2017, 1, 2, 10,11,12 ) );
         postRepository.save( parent );
 
-        pb = new PostBuilder( elizabeth, tech, IMG_SERVICE, "About Alexa","Does anyone own one of these? Is it any good?" );
+        pb = new PostBuilder( elizabeth, tech, IMG_SERVICE_BUSINESS, "About Alexa","Does anyone own one of these? Is it any good?" );
         parent = pb.build();
         parent.setCreated( LocalDateTime.of( 2017, 1, 3, 10,11,12 ) );
         postRepository.save( parent );
 
-        pb = new PostBuilder( elizabeth, webDev, IMG_SERVICE_GREY, "Bootstrap 4","Hey you all. Would it be worth my time to learn Bootstrap 4?" );
+        pb = new PostBuilder( elizabeth, webDev, IMG_SERVICE_BUSINESS, "Bootstrap 4","Hey you all. Would it be worth my time to learn Bootstrap 4?" );
         parent = pb.build();
         parent.setCreated( LocalDateTime.of( 2017, 1, 4, 10,11,12 ) );
         postRepository.save( parent );
 
-        pb = new PostBuilder( elizabeth, business, IMG_SERVICE, "Buying gold","I wanna buy some gold. Can someone point me in the right direction" );
+        pb = new PostBuilder( elizabeth, business, IMG_SERVICE_BUSINESS, "Buying gold","I wanna buy some gold. Can someone point me in the right direction" );
         parent = pb.build();
         parent.setCreated( LocalDateTime.of( 2017, 1, 5, 10,11,12 ) );
         postRepository.save( parent );
 
-        pb = new PostBuilder( elizabeth, health, IMG_SERVICE_GREY, "HIIT Training","Forget about running for hours on end. High Intensity Interval Training can give you all the benefits in half the time" );
+        pb = new PostBuilder( elizabeth, health, IMG_SERVICE_FOOD, "HIIT Training","Forget about running for hours on end. High Intensity Interval Training can give you all the benefits in half the time" );
         parent = pb.build();
         parent.setCreated( LocalDateTime.of( 2017, 1, 6, 10,11,12 ) );
         postRepository.save( parent );
 
-        pb = new PostBuilder( elizabeth, tech, IMG_SERVICE, "Toys that teach Programming","My nephew is showing an interest in programming. Can anyone recommend something for a ten year old?" );
+        pb = new PostBuilder( elizabeth, tech, IMG_SERVICE_BUSINESS, "Toys that teach Programming","My nephew is showing an interest in programming. Can anyone recommend something for a ten year old?" );
         parent = pb.build();
         parent.setCreated( LocalDateTime.of( 2017, 1, 7, 10,11,12 ) );
         postRepository.save( parent );

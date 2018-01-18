@@ -36,4 +36,10 @@ public interface PostRepository extends JpaRepository<Post,Long> {
      * @return a lists of posts made by the specified user id to be displayed on the pageable
      */
    Page<Post> findAllByUser_IdAndParentNull( Long userId, Pageable pageable );
+
+    /**
+     *
+     * @return the 10 most recent posts made
+     */
+   List<Post> findTop10ByOrderByCreatedDesc();
 }

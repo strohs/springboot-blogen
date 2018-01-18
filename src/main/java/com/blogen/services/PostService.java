@@ -35,6 +35,9 @@ public interface PostService {
     //update an existing post
     PostCommand updatePostCommand( PostCommand command );
 
+    //get the ten most recent posts made
+    List<PostCommand> getTenRecentPosts();
+
     //delete a post
     void deletePost( PostCommand command );
 

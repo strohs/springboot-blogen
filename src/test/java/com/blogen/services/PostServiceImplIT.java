@@ -35,7 +35,7 @@ import static org.mockito.Matchers.anyLong;
  * @author Cliff
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(properties = {"blogen.posts.per.page=3"})
 public class PostServiceImplIT {
 
     @Autowired

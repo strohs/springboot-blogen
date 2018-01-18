@@ -69,7 +69,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void getAllPostsByUser_shouldReturnTwoParentPostsMadeByUser1() {
+    public void shouldReturnTwoParentPostsMadeByUser1_when_getAllPostsByUser() {
         //this user has two parent posts
         User user = getUser1();
         Post p1 = getParentPost1();
@@ -88,7 +88,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void getAllPosts_shouldReturnAllParentPosts() {
+    public void shouldReturnAllParentPosts_when_getAllPosts() {
         Post p1 = getParentPost1();
         Post p2 = getParentPost2();
         Post p3 = getParentPost3();
@@ -106,7 +106,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void getPost() {
+    public void shouldGetOnePost_when_getPost() {
         Post p1 = getParentPost1();
 
         given( postRepository.findOne( anyLong() )).willReturn( p1 );
@@ -121,7 +121,7 @@ public class PostServiceImplTest {
     //TODO test for when ID is not found
 
     @Test
-    public void deleteParentPost_shouldDeleteTheParent() {
+    public void should_DeleteTheParent_when_deletePostIsCalledWithParentId() {
         Post p1 = getParentPost1();
         PostCommand pc = postCommandMapper.postToPostCommand( p1 );
 
@@ -131,7 +131,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void deleteChildPost_shouldDeleteChild() {
+    public void shouldDeleteChildPost_when_deletePostIsCalledWithChildId() {
         Post p1 = getParentPost1();
         Post c1 = getChildPost1();
         p1.addChild( c1 );
@@ -148,7 +148,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void saveNewParentPostCommand_ShouldSaveNewPost() {
+    public void should_SaveNewPost_when_saveNewParentPostCommand() {
         Post post = getParentPost1();
         Category cat = getCategory();
         User user1 = getUser1();
@@ -167,7 +167,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void saveNewChildPostCommand_ShouldSaveNewChild() {
+    public void shouldSaveNewChild_when_saveNewChildPostCommand() {
         Post post = getParentPost1();
         Post child = getChildPost1();
         Category cat = getCategory();
@@ -192,7 +192,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void updatePostCommand_shouldUpdatePostWithNewText() {
+    public void shouldUpdatePostWithNewText_when_updatePostCommand() {
         Post existingPost = getParentPost1();
         Category cat = getCategory();
         String newText = "new post text";
@@ -212,6 +212,28 @@ public class PostServiceImplTest {
         then( postRepository ).should().findOne( anyLong() );
         assertThat( savedCommand.getId(), is(POST1_ID) );
         assertThat( savedCommand.getText(), is(newText) );
+    }
+
+    @Test
+    public void should_getTenPosts_when_getTenRecentPosts() throws Exception {
+        Post post1 = getParentPost1();
+        Post post2 = getParentPost2();
+        Post post3 = getParentPost3();
+        Post post4 = getParentPost1();
+        Post post5 = getParentPost2();
+        Post post6 = getParentPost3();
+        Post post7 = getParentPost1();
+        Post post8 = getParentPost1();
+        Post post9 = getParentPost2();
+        Post post10 = getParentPost3();
+        List<Post> posts = Arrays.asList( post1,post2,post3,post4,post5,post6,post7,post8,post9,post10 );
+
+        given( postRepository.findTop10ByOrderByCreatedDesc() ).willReturn( posts );
+
+        List<PostCommand> recentPosts = postService.getTenRecentPosts();
+
+        then( postRepository ).should().findTop10ByOrderByCreatedDesc();
+        assertThat( recentPosts.size(), is(10));
     }
 
 

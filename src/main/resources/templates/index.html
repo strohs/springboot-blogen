@@ -78,19 +78,20 @@
 <!-- CARD COLUMNS -->
 <section id="cards">
     <div class="card-columns">
-        <div class="card border-dark text-dark">
-            <div class="card-header">Heath &amp; Wellness</div>
-            <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/sports/1" alt="Card image cap">
+        <div class="card border-dark text-dark" th:each="post : ${posts}">
+            <div class="card-header" th:text="${post.categoryName}">Heath &amp; Wellness</div>
+            <img class="card-img-top img-fluid" th:src="${post.imageUrl}" src="http://lorempixel.com/400/200/sports/1" alt="Card image cap">
             <div class="card-body">
-                <h4 class="card-title">Kicking the year off right!!</h4>
-                <p class="card-text">This year I'm taking no prisoners. I'm going to excercise everyday and eat only carrots and steak!!</p>
+                <h4 class="card-title" th:text="${post.title}">Kicking the year off right!!</h4>
+                <p class="card-text" th:text="${post.text}">This year I'm taking no prisoners. I'm going to excercise everyday and eat only carrots and steak!!</p>
                 <small>
-                    Posted by <cite title="Source Title">YouKnowJohnDoe</cite>
+                    Posted by <cite title="Source Title" th:text="${post.userName}">YouKnowJohnDoe</cite> on
+                    <cite th:text="${post.created}">Mon Jan 22,2017</cite>
                 </small>
             </div>
         </div>
 
-        <div class="card border-dark text-dark">
+        <div class="card border-dark text-dark" th:remove="all">
             <div class="card-header">Tech Gadgets</div>
             <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/technics/2" alt="Card image cap">
             <div class="card-body">
@@ -102,7 +103,7 @@
             </div>
         </div>
 
-        <div class="card border-dark text-dark">
+        <div class="card border-dark text-dark" th:remove="all">
             <div class="card-header">Web Development</div>
             <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/sports/3" alt="Card image cap">
             <div class="card-body">
@@ -114,7 +115,7 @@
             </div>
         </div>
 
-        <div class="card border-dark text-dark">
+        <div class="card border-dark text-dark" th:remove="all">
             <div class="card-header">Business</div>
             <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/business/1" alt="Card image cap">
             <div class="card-body">
@@ -127,7 +128,7 @@
         </div>
 
 
-        <div class="card border-dark text-dark">
+        <div class="card border-dark text-dark" th:remove="all">
             <div class="card-header">Web Development</div>
             <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/technics/1" alt="Card image cap">
             <div class="card-body">
@@ -139,7 +140,7 @@
             </div>
         </div>
 
-        <div class="card border-dark text-dark">
+        <div class="card border-dark text-dark" th:remove="all">
             <div class="card-header">Heath & Wellness</div>
             <img class="card-img-top img-fluid" src="http://lorempixel.com/400/200/sports" alt="Card image cap">
             <div class="card-body">
