@@ -139,48 +139,48 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         // BUILD POSTS
         //
         //build posts for John - 1 Parent post with 3 child posts
-        PostBuilder pb = new PostBuilder( john, tech, IMG_SERVICE,"Love this tech", "johns tech post" );
+        PostBuilder pb = new PostBuilder( john, tech, IMG_SERVICE,"Love this tech", "Smart-phones are the greatest invention in the history of mankind" );
         Post parent = pb.build();
         //postRepository.save( parent );
-        Post child1 = pb.addChildPost( john,"Love it too", "child post1 for tech", IMG_SERVICE_NATURE );
-        Post child2 = pb.addChildPost( maggie,"Not so fast", "maggies replay to tech post", IMG_SERVICE_FOOD);
-        Post child3 = pb.addChildPost( william,"Here today gone tomorrow","wills reply to johns post", IMG_SERVICE_GREY );
-        Post child4 = pb.addChildPost( william,"no no no","wills reply to his reply", IMG_SERVICE );
+        Post child1 = pb.addChildPost( john,"Love it too", "I wish I could embed the phone into my head", IMG_SERVICE_NATURE );
+        Post child2 = pb.addChildPost( maggie,"Not so fast", "Are they even greater than the Internet?", IMG_SERVICE_FOOD);
+        Post child3 = pb.addChildPost( william,"Here today gone tomorrow","They're the greatest for now, but something better will come along", IMG_SERVICE_GREY );
+        Post child4 = pb.addChildPost( william,"No No No","the greatest invention is velcro :)", IMG_SERVICE );
         postRepository.save( parent );
 
         //
         //build posts for william - 2 parent posts
-        pb = new PostBuilder( william, health,IMG_SERVICE_FOOD,"Start lifting today","health and wellness tip" );
+        pb = new PostBuilder( william, health,IMG_SERVICE_FOOD,"Started lifting today","Trying to burn off these holiday calories. I hear resistence training is better than running" );
         parent = pb.build();
         postRepository.save( parent );
 
-        pb = new PostBuilder( william, business, "http://lorempixel.com/400/200/business/1","Try these stocks", "business post" );
+        pb = new PostBuilder( william, business, "http://lorempixel.com/400/200/business/1","Bulls are on parade", "They stock markets won't stop running higher. When will the bubble burst?" );
         parent = pb.build();
         postRepository.save( parent );
 
         //
         //build posts for maggie - 3 parent posts with 2 child posts each
-        pb = new PostBuilder( maggie, business,"http://lorempixel.com/400/200/business/1","Bitcoin or bust", "maggies post about business" );
+        pb = new PostBuilder( maggie, business,"http://lorempixel.com/400/200/business/1","Bitcoin or bust", "Forget about gold, I'm all in on bitcoin" );
         parent = pb.build();
-        child1 = pb.addChildPost( john,"probably buying it", "johns reply to maggies business post", IMG_SERVICE_NATURE );
-        child2 = pb.addChildPost( maggie,"beware the bubble", "maggies reply to johns reply", IMG_SERVICE_GREY );
+        child1 = pb.addChildPost( john,"probably buying it", "I'm game too. I just don't know where to but it from", IMG_SERVICE_NATURE );
+        child2 = pb.addChildPost( maggie,"beware the bubble", "If we've waited this long, I fear it's already too late", IMG_SERVICE_GREY );
         postRepository.save( parent );
 
-        pb = new PostBuilder( maggie,health,"http://lorempixel.com/400/200/sports/3","Eat these healthy foods","maggies parent post about health" );
+        pb = new PostBuilder( maggie,health,"http://lorempixel.com/400/200/sports/3","What ever happened to Jazzercise?","It used to be all the rage, now I can't find a single gym that offers it" );
         parent = pb.build();
-        child1 = pb.addChildPost( william,"sounds gross", "william first reply to maggies health post", IMG_SERVICE_FOOD );
-        child2 = pb.addChildPost( william, "on second thought...","william second reply to maggies health post", IMG_SERVICE_GREY );
+        child1 = pb.addChildPost( william,"sounds gross", "Jazzercise? Really? What do you do, listen to jazz until you pass out?", IMG_SERVICE_FOOD );
+        child2 = pb.addChildPost( william, "on second thought...","I changed my mind. It looks kinda fun. Someone get me a leotard", IMG_SERVICE_GREY );
         postRepository.save( parent );
 
-        pb = new PostBuilder( maggie, webDev,"http://lorempixel.com/400/200/technics/3","Is PHP dead?","maggies parent post about webdev" );
+        pb = new PostBuilder( maggie, webDev,"http://lorempixel.com/400/200/technics/3","Is PHP dead?","Does anyone have stats on PHP usage in the wild?" );
         parent = pb.build();
-        child1 = pb.addChildPost( william,"I doubt it", "william reply to maggies webdev post", IMG_SERVICE_BUSINESS );
-        child2 = pb.addChildPost( admin, "We don't use it here","admins reply to maggies webdev post", IMG_SERVICE_GREY );
+        child1 = pb.addChildPost( william,"I doubt it", "PHP is everywhere. I'm pretty sure it still powers the internet!", IMG_SERVICE_BUSINESS );
+        child2 = pb.addChildPost( admin, "We don't use it here","...anymore. We switched to Kotlin/React, but a lot of companies are still powered by PHP", IMG_SERVICE_GREY );
         postRepository.save( parent );
 
         //
         //Build Posts for elizabeth (10 parent posts for her)
-        pb = new PostBuilder( elizabeth, business, IMG_SERVICE, "Invest now","these stocks are at all time lows and ready to rise" );
+        pb = new PostBuilder( elizabeth, business, IMG_SERVICE, "Invest now","Market returns are crazy, there is still time to jump on in" );
         parent = pb.build();
         parent.setCreated( LocalDateTime.of( 2017, 1, 1, 10,11,12 ) );
         postRepository.save( parent );
