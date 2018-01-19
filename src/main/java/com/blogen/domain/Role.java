@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode( of = {"id","role"})
+@EqualsAndHashCode
 @Entity
 public class Role {
 
@@ -26,10 +26,7 @@ public class Role {
 
     private String role;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable
-    // ~ defaults to @JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "role_id"),
-    //     inverseJoinColumns = @joinColumn(name = "user_id"))
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
     private List<User> users = new ArrayList<>();
 
     public String getRole() {

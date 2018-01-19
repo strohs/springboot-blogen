@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"id","roles","password"})
+@EqualsAndHashCode(of = {"userName"})
 @Entity
 public class User {
 

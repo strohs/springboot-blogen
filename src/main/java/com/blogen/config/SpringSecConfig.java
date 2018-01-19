@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @author Cliff
  */
 @Configuration
-@EnableGlobalMethodSecurity( prePostEnabled = true)
+@EnableGlobalMethodSecurity( prePostEnabled = true )
 public class SpringSecConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired

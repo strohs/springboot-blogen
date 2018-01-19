@@ -3,6 +3,7 @@ package com.blogen.controllers;
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.UserCommand;
+import com.blogen.domain.User;
 import com.blogen.services.CategoryService;
 import com.blogen.services.PostService;
 import com.blogen.services.UserService;
@@ -56,9 +57,6 @@ public class PostController {
     public String showAllPosts( Model model, Principal principal ) {
         log.debug( "show all posts" );
         String userName = principal.getName();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        auth.getAuthorities().forEach( o -> log.debug( o.toString() ) );
-
         log.debug( "user logged in: " + userName );
 
         //get User information for the logged in user

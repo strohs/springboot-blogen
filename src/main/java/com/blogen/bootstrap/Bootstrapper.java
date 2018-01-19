@@ -60,11 +60,11 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         //BUILD ROLES
         Role userRole = new Role();
         userRole.setRole("USER");
-        userRole = roleService.saveOrUpdate(userRole);
+        roleService.saveOrUpdate(userRole);
         log.info("Saved role" + userRole.getRole());
         Role adminRole = new Role();
         adminRole.setRole("ADMIN");
-        adminRole = roleService.saveOrUpdate(adminRole);
+        roleService.saveOrUpdate(adminRole);
         log.info("Saved role" + adminRole.getRole());
 
 
@@ -109,43 +109,41 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
 
         
         //BUILD USERS
+        //
+        //retrieve the roles we created
+        adminRole = roleService.getByName( "ADMIN" );
+        userRole = roleService.getByName( "USER" );
+
         //administrator
         UserBuilder ub = new UserBuilder( "admin","Carl","Sagan","admin@blogen.org","adminpassword",upAdmin );
         User admin = ub.build();
         admin.addRole( adminRole );
-        adminRole.addUser( admin );
         admin.addRole( userRole );
-        userRole.addUser( admin );
         userService.saveUser( admin );
 
         //JohnDoe
         ub = new UserBuilder( "johndoe","John","Doe","jdoe@gmail.com","password", upJohn );
         User john = ub.build();
         john.addRole( userRole );
-        userRole.addUser( john );
         userService.saveUser( john );
 
         //Maggie McGill
         ub = new UserBuilder( "mgill","Maggie","McGill","gilly@yahoo.com","password", upMaggie );
         User maggie = ub.build();
         maggie.addRole( userRole );
-        userRole.addUser( maggie );
         userService.saveUser( maggie );
 
         //William Wallace
         ub = new UserBuilder( "scotsman","William","Wallace","scotty@hotmail.com","password", upWilliam );
         User william = ub.build();
         william.addRole( userRole );
-        userRole.addUser( william );
         userService.saveUser( william );
 
         //Elizabeth Reed
         ub = new UserBuilder( "lizreed","Elizabeth","Reed","liz@gmail.com","password", upElizabeth);
         User elizabeth = ub.build();
         elizabeth.addRole( userRole );
-        userRole.addUser( elizabeth );
         userService.saveUser( elizabeth );
-
 
 
         // BUILD POSTS
@@ -233,7 +231,7 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         postRepository.save( parent );
 
 
-        //there should now be sixteen posts in total - six parent posts and ten child posts
+        //there should now be 26 posts in total - sixteen parent posts and ten child posts
     }
 
     @Transactional

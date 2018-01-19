@@ -24,4 +24,13 @@ public class UserPrefs {
 
     //avatar image file name
     String avatarImage;
+
+    @Override
+    public String toString() {
+        return "UserPrefs{" +
+                "id=" + id +
+                ", userName=" + (user != null ?  user.getUserName() : "null") +
+                ", avatarImage='" + avatarImage + '\'' +
+                '}';
+    }
 }

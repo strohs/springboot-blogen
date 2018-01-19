@@ -13,6 +13,8 @@ public interface RoleService {
 
     Role getById(Long id);
 
+    Role getByName( String roleName );
+
     Role saveOrUpdate(Role role);
 
     void delete(Long id);
