@@ -93,7 +93,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void should_notDeletePost_when_userWhoDidNotCreateThePostTriesToDeleteIt() throws Exception {
+    public void should_throw4xxException_when_userWhoDidNotCreateThePostTriesToDeleteIt() throws Exception {
         //user1 did NOT create post with id 14
         mockMvc.perform( get("/posts/14/delete").with( user( USER1_NAME ).password( USER1_PW ).roles( ROLE_USER ) ) )
                 .andExpect( status().is4xxClientError() );
