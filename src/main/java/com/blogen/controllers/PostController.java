@@ -32,27 +32,16 @@ public class PostController {
 
     private PostService postService;
     private UserService userService;
-    private CategoryService categoryService;
 
     @Autowired
-    public PostController( PostService postService, UserService userService, CategoryService categoryService ) {
+    public PostController( PostService postService, UserService userService ) {
         this.postService = postService;
         this.userService = userService;
-        this.categoryService = categoryService;
     }
 
 
 
-    //delete a post - GET - /posts/{id}/delete
-    @GetMapping("/posts/{id}/delete")
-    public String deletePost( @PathVariable("id") Long postId ) {
-        log.debug( "deleting post: " + postId );
-        //get details of the post to be deleted
-        PostCommand postCommand = postService.getPost( postId );
-        postService.deletePost( postCommand );
-        return "redirect:/posts";
 
-    }
 
     //editPost - POST - /posts/{id}/edit  - edit an existing post
 
@@ -67,6 +56,8 @@ public class PostController {
     public String showAllPosts( Model model, Principal principal ) {
         log.debug( "show all posts" );
         String userName = principal.getName();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        auth.getAuthorities().forEach( o -> log.debug( o.toString() ) );
 
         log.debug( "user logged in: " + userName );
 
@@ -95,4 +86,14 @@ public class PostController {
     }
 
 
+    //delete a post - GET - /posts/{id}/delete
+    @GetMapping("/posts/{id}/delete")
+    public String deletePost( @PathVariable("id") Long postId ) {
+        log.debug( "deleting post: " + postId );
+        //get details of the post to be deleted
+        PostCommand postCommand = postService.getPost( postId );
+        postService.deletePost( postCommand );
+        return "redirect:/posts";
+
+    }
 }

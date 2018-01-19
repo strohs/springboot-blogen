@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>navbar</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<!-- really thin navbar with no padding: p-0 -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0" th:fragment="navbar">
+    <div class="container">
+        <a href="index.html" th:href="@{/}" class="navbar-brand">Blogen</a>
+
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navbarNav" class="collapse navbar-collapse">
+            <!--navbar links for admins only -->
+            <ul class="navbar-nav" sec:authorize="hasRole('ROLE_ADMIN')">
+                <li class="nav-item px-2">
+                    <a href="admin-index.html" class="nav-link active">Dashboard</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a href="userPosts.html" class="nav-link">Posts</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a href="categories.html" class="nav-link">Categories</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a href="users.html" class="nav-link">Users</a>
+                </li>
+            </ul>
+             <!-- navbar links for all users -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown mr-3">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-user"></i>
+                        <span sec:authorize="isAuthenticated()">
+                            Welcome <span th:text="${user.userName}">UserName</span>
+                        </span>
+
+                    </a>
+                    <div class="dropdown-menu">
+                        <!--todo add profile page -->
+                        <a th:href="@{/profile}" class="dropdown-item">
+                            <i class="fa fa-user-circle"></i>
+                            Profile
+                        </a>
+                        <!-- Not going to use settings -->
+                        <!--<a href="settings.html" class="dropdown-item">-->
+                        <!--<i class="fa fa-gear"></i>-->
+                        <!--Settings-->
+                        <!--</a>-->
+                    </div>
+                </li>
+                <!-- LOGOUT Form -->
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post">
+                        <i class="fa fa-user-times"></i>
+                        <button type="submit" class="btn btn-link text-secondary">Logout</button>
+                    </form>
+                    <!--<a th:href="@{/logout}" class="nav-link">-->
+                    <!--<i class="fa fa-user-times"></i>-->
+                    <!--Logout-->
+                    <!--</a>-->
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

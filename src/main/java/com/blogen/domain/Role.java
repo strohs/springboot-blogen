@@ -1,5 +1,9 @@
 package com.blogen.domain;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +14,9 @@ import java.util.List;
  *
  * @author Cliff
  */
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode( of = {"id","role"})
 @Entity
 public class Role {
 

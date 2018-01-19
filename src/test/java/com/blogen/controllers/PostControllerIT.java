@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * MockMVC tests for PostController
+ * MockMVC integration tests for PostController
  *
  * 
  * @author Cliff
@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @WebAppConfiguration
-public class PostControllerTest {
+public class PostControllerIT {
 
     @Autowired
     PostController controller;
