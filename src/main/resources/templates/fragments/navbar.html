@@ -17,7 +17,8 @@
 
         <div id="navbarNav" class="collapse navbar-collapse">
             <!--navbar links for admins only -->
-            <ul class="navbar-nav" sec:authorize="hasRole('ROLE_ADMIN')">
+            <ul class="navbar-nav" sec:authorize="hasAuthority('ADMIN')">
+                <!--TODO add links for admin pages -->
                 <li class="nav-item px-2">
                     <a href="admin-index.html" class="nav-link active">Dashboard</a>
                 </li>

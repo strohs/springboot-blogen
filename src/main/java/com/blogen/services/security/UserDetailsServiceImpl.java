@@ -24,6 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private UserDetailsMapper userDetailsMapper;
 
+    //declared as @Lazy here to prevent a circular dependency from occurring with UserService
     @Autowired
     @Lazy
     public UserDetailsServiceImpl( UserService userService, UserDetailsMapper userDetailsMapper ) {

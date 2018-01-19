@@ -20,7 +20,12 @@ public interface UserDetailsMapper {
 
     UserDetailsMapper INSTANCE = Mappers.getMapper( UserDetailsMapper.class );
 
-
+    /**
+     * map a {@link User} and their {@link com.blogen.domain.Role}s to Spring Security {@link UserDetails} and
+     * GrantedAuthorities
+     * @param user the user to map to a UserDetails object
+     * @return a UserDetails containing some User properties, namely username,password,enabled and authorities
+     */
     default UserDetails userToUserDetails( User user ) {
         UserDetailsImpl userDetails = new UserDetailsImpl();
 
