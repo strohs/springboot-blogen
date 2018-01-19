@@ -21,14 +21,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SpringSecConfig extends WebSecurityConfigurerAdapter {
 
-    private AuthenticationProvider authenticationProvider;
-
-
     @Autowired
     @Qualifier("daoAuthenticationProvider")
-    public void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
-        this.authenticationProvider = authenticationProvider;
-    }
+    private AuthenticationProvider authenticationProvider;
+
+// setter injection was causing random NPEs when a user tried to login
+//    @Autowired
+//    @Qualifier("daoAuthenticationProvider")
+//    public void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
+//        this.authenticationProvider = authenticationProvider;
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

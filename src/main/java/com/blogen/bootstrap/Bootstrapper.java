@@ -35,6 +35,8 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
 
     private static final String IMG_SERVICE = "http://lorempixel.com/400/200";
     private static final String IMG_SERVICE_BUSINESS = "http://lorempixel.com/400/200/business";
+    private static final String IMG_SERVICE_CITY = "http://lorempixel.com/400/200/city";
+    private static final String IMG_SERVICE_ABSTRACT = "http://lorempixel.com/400/200/abstract";
     private static final String IMG_SERVICE_NATURE = "http://lorempixel.com/400/200/nature";
     private static final String IMG_SERVICE_FOOD = "http://lorempixel.com/400/200/food";
     private static final String IMG_SERVICE_GREY = "http://lorempixel.com/g/400/200";
@@ -105,6 +107,7 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         userPrefsRepository.save( upElizabeth );
 
 
+        
         //BUILD USERS
         //administrator
         UserBuilder ub = new UserBuilder( "admin","Carl","Sagan","admin@blogen.org","adminpassword",upAdmin );
@@ -136,6 +139,8 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         elizabeth.addRole( userRole );
         userService.saveUser( elizabeth );
 
+
+
         // BUILD POSTS
         //
         //build posts for John - 1 Parent post with 3 child posts
@@ -163,7 +168,7 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         pb = new PostBuilder( maggie, business,"http://lorempixel.com/400/200/business/1","Bitcoin or bust", "Forget about gold, I'm all in on bitcoin",LocalDateTime.of( 2017, 4, 1, 10,11,12 ) );
         parent = pb.build();
         pb.addChildPost( john,"probably buying it", "I'm game too. I just don't know where to but it from", IMG_SERVICE_NATURE,LocalDateTime.of( 2017, 4, 2, 10,11,12 ) );
-        pb.addChildPost( maggie,"beware the bubble", "If we've waited this long, I fear it's already too late", IMG_SERVICE_GREY,LocalDateTime.of( 2017, 4, 3, 10,11,12 ) );
+        pb.addChildPost( maggie,"beware the bubble", "If we've waited this long, I fear it's already too late", IMG_SERVICE_BUSINESS,LocalDateTime.of( 2017, 4, 3, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( maggie,health,"http://lorempixel.com/400/200/sports/3","What ever happened to Jazzercise?","It used to be all the rage, now I can't find a single gym that offers it",LocalDateTime.of( 2017, 5, 1, 10,11,12 ) );
@@ -175,7 +180,7 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         pb = new PostBuilder( maggie, webDev,"http://lorempixel.com/400/200/technics/3","Is PHP dead?","Does anyone have stats on PHP usage in the wild?",LocalDateTime.of( 2017, 6, 1, 10,11,12 ) );
         parent = pb.build();
         pb.addChildPost( william,"I doubt it", "PHP is everywhere. I'm pretty sure it still powers the internet!", IMG_SERVICE_BUSINESS,LocalDateTime.of( 2017, 6, 2, 10,11,12 ) );
-        pb.addChildPost( admin, "We don't use it here","...anymore. We switched to Kotlin/React, but a lot of companies are still powered by PHP", IMG_SERVICE_GREY,LocalDateTime.of( 2017, 6, 3, 10,11,12 ) );
+        pb.addChildPost( admin, "We don't use it here","...anymore. We switched to Kotlin/React, but a lot of companies are still powered by PHP", IMG_SERVICE_ABSTRACT,LocalDateTime.of( 2017, 6, 3, 10,11,12 ) );
         postRepository.save( parent );
 
         //

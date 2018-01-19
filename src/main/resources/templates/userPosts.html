@@ -33,7 +33,9 @@
                 <li class="nav-item dropdown mr-3">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-user"></i>
-                        <span sec:authorize="isAuthenticated()">Welcome <span sec:authentication="name"></span></span>
+                        <span sec:authorize="isAuthenticated()">
+                            Welcome <span th:text="${user.userName}">UserName</span>
+                        </span>
                         <!--Welcome <span th:text="${user.userName}"></span>-->
                     </a>
                     <div class="dropdown-menu">
@@ -144,8 +146,9 @@
                        th:data-cat-name="${parentPost.categoryName}" data-cat-name="Business" data-toggle="modal" data-target="#replyPostModal">
                         Reply
                     </a>
-                    <!--todo only the user that created the post should be able to delete it -->
-                    <a href="#" th:href="@{'/posts/'+${parentPost.id}+'/delete'}" class="btn btn-outline-danger btn-sm" th:data-val="${parentPost.id}" data-val="2">
+                    
+                    <a th:if="${parentPost.userId == user.id}" href="#" th:href="@{'/posts/'+${parentPost.id}+'/delete'}"
+                       class="btn btn-outline-danger btn-sm" th:data-val="${parentPost.id}" data-val="2">
                         Delete
                     </a>
 
@@ -408,7 +411,7 @@
                     <div class="form-group">
                         <label for="post-image">Image Link</label>
                         <input id="post-image" name="image" type="url" class="form-control" th:field="*{imageUrl}"/>
-                        <small class="form-text text-muted">Valid URL to an image</small>
+                        <small class="form-text text-muted">Valid URL to an image that will be displayed on Blogen Front Page</small>
                     </div>
                     <div class="form-group">
                         <label for="post-body">Body</label>

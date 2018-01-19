@@ -8,6 +8,8 @@ import com.blogen.services.PostService;
 import com.blogen.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,6 +57,7 @@ public class PostController {
     public String showAllPosts( Model model, Principal principal ) {
         log.debug( "show all posts" );
         String userName = principal.getName();
+
         log.debug( "user logged in: " + userName );
 
         //get User information for the logged in user
