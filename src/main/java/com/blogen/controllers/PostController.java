@@ -14,10 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -42,9 +39,6 @@ public class PostController {
     }
 
 
-
-
-
     //editPost - POST - /posts/{id}/edit  - edit an existing post
 
     //showPost - GET - /posts/{id} - show a specific post
@@ -60,25 +54,12 @@ public class PostController {
         String userName = principal.getName();
         log.debug( "user logged in: " + userName );
 
-
-        //get User information for the logged in user
-        UserCommand userCommand = userService.getUserByUserName( userName );
-        //get the posts to display on the page
-        PageCommand pageCommand = postService.getAllPostsForPage( 0 );
-
-        PostCommand postCommand = new PostCommand();
-        //this is needed for when we submit postCommand from a form. See if there is a way around this
-        postCommand.setUserId( userCommand.getId() );
-
-        model.addAttribute( "page",pageCommand );
-        model.addAttribute( "user",userCommand );
-        model.addAttribute( "postCommand",postCommand );
-        return "userPosts";
+        return "redirect:/posts/page/0";
     }
 
     //addNewPost - create a new post - POST - /posts
     @PostMapping("/posts")
-    public String addNewPost( @ModelAttribute("postCommand") PostCommand postCommand ) {
+    public String addNewPost( @ModelAttribute("postCommand") PostCommand postCommand, Principal principal ) {
         log.debug( "received new post: \n" + postCommand );
         PostCommand savedPost = postService.savePostCommand( postCommand );
         log.debug( "new post saved: \n" + savedPost );
@@ -94,6 +75,19 @@ public class PostController {
         PostCommand postCommand = postService.getPost( postId );
         postService.deletePost( postCommand );
         return "redirect:/posts";
+    }
+
+    //showPostForPage - GET - /posts/page/{pageNum}
+    @GetMapping("/posts/page/{pageNum}")
+    public String showPostsForPage( @PathVariable("pageNum") Integer page, Principal principal, Model model ) {
+        log.debug( "showing posts for page: " + page );
+        PageCommand pageCommand = postService.getAllPostsForPage( page );
+        UserCommand userCommand = userService.getUserByUserName( principal.getName() );
+
+        model.addAttribute( "page",pageCommand );
+        model.addAttribute( "user",userCommand );
+        model.addAttribute( "postCommand", new PostCommand() );
+        return "userPosts";
 
     }
 }

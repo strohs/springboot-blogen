@@ -11,7 +11,6 @@ import com.blogen.domain.User;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
-
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,17 +40,19 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
     private UserRepository userRepository;
     private CategoryRepository categoryRepository;
+    private PrincipalService principalService;
 
     private PostCommandMapper postCommandMapper;
     private CategoryCommandMapper categoryCommandMapper;
 
     @Autowired
     public PostServiceImpl( PostRepository postRepository, UserRepository userRepository,
-                            CategoryRepository categoryRepository, PostCommandMapper postCommandMapper,
+                            CategoryRepository categoryRepository, PrincipalService principalService, PostCommandMapper postCommandMapper,
                             CategoryCommandMapper categoryCommandMapper ) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.principalService = principalService;
         this.postCommandMapper = postCommandMapper;
         this.categoryCommandMapper = categoryCommandMapper;
     }
@@ -167,14 +168,19 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     public PostCommand saveNewParentPostCommand( PostCommand pc ) {
+        //get the username of the currently logged in principal
+        String userName = principalService.getPrincipalUserName();
+        //get user details
+        User user = userRepository.findByUserName( userName );
+
         Post detachedPost = postCommandMapper.postCommandToPost( pc );
-        //1. get CategoryById
+
+        //get CategoryById
         Category cat = categoryRepository.findByName( detachedPost.getCategory().getName() );
-        //2. get UserById
-        User user = userRepository.findOne( detachedPost.getUser().getId() );
-        //3. set category
+
+        //set category
         detachedPost.setCategory( cat );
-        //4. set user
+        //set user
         detachedPost.setUser( user );
 
         Post savedPost = postRepository.saveAndFlush( detachedPost );
@@ -188,9 +194,13 @@ public class PostServiceImpl implements PostService {
      */
     @Transactional
     public PostCommand saveNewChildPostCommand( PostCommand pc ) {
+        //get the username of the currently logged in principal
+        String userName = principalService.getPrincipalUserName();
+        //get user details
+        User user = userRepository.findByUserName( userName );
+
         Post detachedPost = postCommandMapper.postCommandToPost( pc );
-        //get user
-        User user = userRepository.findOne( detachedPost.getUser().getId() );
+
         detachedPost.setUser( user );
         //get Parent Post
         Post parent = postRepository.findOne( pc.getParentId() );
@@ -236,7 +246,6 @@ public class PostServiceImpl implements PostService {
         target.setTitle( source.getTitle() );
         target.setText( source.getText() );;
     }
-
 
 
     /**

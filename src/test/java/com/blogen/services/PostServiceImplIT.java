@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,7 +94,8 @@ public class PostServiceImplIT {
 
     @Test
     @Transactional
-    public void shouldSaveParentPost_whenSaveNewParentPostCommand() throws Exception {
+    @WithMockUser("lizreed")
+    public void should_saveNewParentPost_when_savePostCommand() throws Exception {
         Long userId = 5L;
         PostCommand postCommand = new PostCommand();
         postCommand.setUserId( userId );
@@ -110,7 +112,8 @@ public class PostServiceImplIT {
 
     @Test
     @Transactional
-    public void shouldSaveNewChildPost_whenSavingPostCommandThatHasValidParentId() throws Exception {
+    @WithMockUser("lizreed")
+    public void should_saveNewChildPost_when_savingPostCommandThatHasValidParentId() throws Exception {
         Long userId = 4L;
         //this is a post with no children
         Long parentId = 6L;

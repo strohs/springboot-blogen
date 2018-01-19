@@ -9,11 +9,13 @@ import com.blogen.domain.User;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
+import com.blogen.services.security.UserDetailsImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -59,13 +61,16 @@ public class PostServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private PrincipalService principalService;
+
     private PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
     private CategoryCommandMapper categoryCommandMapper = CategoryCommandMapper.INSTANCE;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
-        postService = new PostServiceImpl( postRepository, userRepository, categoryRepository, postCommandMapper,categoryCommandMapper );
+        postService = new PostServiceImpl( postRepository, userRepository, categoryRepository, principalService, postCommandMapper,categoryCommandMapper );
     }
 
     @Test
@@ -184,14 +189,15 @@ public class PostServiceImplTest {
         pc.setId( null );
 
         given( categoryRepository.findByName( anyString() )).willReturn( cat );
-        given( userRepository.findOne( anyLong() )).willReturn( user1 );
+        given( userRepository.findByUserName( anyString() )).willReturn( user1 );
         given( postRepository.saveAndFlush( Matchers.any( Post.class ) )).willReturn( post );
+        given( principalService.getPrincipalUserName() ).willReturn( USER_NAME );
 
         postService.savePostCommand( pc );
 
         then( postRepository ).should().saveAndFlush( Matchers.any( Post.class) );
         then( categoryRepository).should().findByName( anyString() );
-        then( userRepository ).should().findOne( anyLong() );
+        then( userRepository ).should().findByUserName( anyString() );
     }
 
     @Test
@@ -204,15 +210,16 @@ public class PostServiceImplTest {
         pc.setParentId( post.getId() );
 
         given( categoryRepository.findByName( anyString() )).willReturn( cat );
-        given( userRepository.findOne( anyLong() )).willReturn( user1 );
+        given( userRepository.findByUserName( anyString() )).willReturn( user1 );
         given( postRepository.findOne( anyLong() )).willReturn( post );
         given( postRepository.saveAndFlush( Matchers.any( Post.class ) )).willReturn( post );
+        given( principalService.getPrincipalUserName() ).willReturn( USER_NAME );
 
         PostCommand savedCommand = postService.savePostCommand( pc );
 
         then( postRepository ).should().saveAndFlush( Matchers.any( Post.class) );
         then( categoryRepository).should().findByName( anyString() );
-        then( userRepository ).should().findOne( anyLong() );
+        then( userRepository ).should().findByUserName( anyString() );
         then( postRepository ).should().findOne( anyLong() );
         assertThat( savedCommand.getId(), is(POST1_ID) );
         assertThat( savedCommand.getChildren().size(), is(1));

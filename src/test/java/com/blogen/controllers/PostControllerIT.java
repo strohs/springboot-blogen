@@ -73,12 +73,31 @@ public class PostControllerIT {
     public void should_showAllPosts() throws Exception {
         
         mockMvc.perform( get("/posts").with( user(USER1_NAME).password( USER1_PW ).roles(ROLE_USER)) )
+                .andExpect( status().is3xxRedirection() )
+                .andExpect( view().name( "redirect:/posts/page/0" ) );
+    }
+
+    @Test
+    public void should_showPostsByPage() throws Exception {
+
+        mockMvc.perform( get("/posts/page/0").with( user(USER1_NAME).password( USER1_PW ).roles(ROLE_USER)) )
                 .andExpect( status().isOk() )
                 .andExpect( view().name( "userPosts" ) )
                 .andExpect( model().attributeExists( "postCommand" ) )
-                .andExpect( model().attribute( "postCommand", hasProperty("userId", is( USER1_ID ))))
                 .andExpect( model().attributeExists( "user" ) )
                 .andExpect( model().attributeExists( "page" ) );
+    }
+
+    @Test
+    public void should_returnNoPosts_when_showingPageThatDoesNotExist() throws Exception {
+
+        mockMvc.perform( get("/posts/page/999").with( user(USER1_NAME).password( USER1_PW ).roles(ROLE_USER)) )
+                .andExpect( status().isOk() )
+                .andExpect( model().attributeExists( "postCommand" ) )
+                .andExpect( model().attributeExists( "user" ) )
+                .andExpect( model().attributeExists( "page" ) )
+                .andExpect( model().attribute( "page", hasProperty( "posts", hasSize( 0 ) ) ) );
+
     }
 
     @Test
@@ -97,7 +116,6 @@ public class PostControllerIT {
         //user1 did NOT create post with id 14
         mockMvc.perform( get("/posts/14/delete").with( user( USER1_NAME ).password( USER1_PW ).roles( ROLE_USER ) ) )
                 .andExpect( status().is4xxClientError() );
-
     }
 
 
