@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
@@ -43,6 +44,15 @@ public class PostController {
 
 
     //delete a post - GET - /posts/{id}/delete
+    @GetMapping("/posts/{id}/delete")
+    public String deletePost( @PathVariable("id") Long postId ) {
+        log.debug( "deleting post: " + postId );
+        //get details of the post to be deleted
+        PostCommand postCommand = postService.getPost( postId );
+        postService.deletePost( postCommand );
+        return "redirect:/posts";
+
+    }
 
     //editPost - POST - /posts/{id}/edit  - edit an existing post
 

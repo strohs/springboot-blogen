@@ -146,11 +146,14 @@
                        th:data-cat-name="${parentPost.categoryName}" data-cat-name="Business" data-toggle="modal" data-target="#replyPostModal">
                         Reply
                     </a>
-                    
+
+                    <!-- DELETE BUTTON -->
                     <a th:if="${parentPost.userId == user.id}" href="#" th:href="@{'/posts/'+${parentPost.id}+'/delete'}"
-                       class="btn btn-outline-danger btn-sm" th:data-val="${parentPost.id}" data-val="2">
-                        Delete
+                           class="btn btn-outline-danger btn-sm" th:data-val="${parentPost.id}" data-val="2">
+                            Delete
                     </a>
+
+
 
                     <!--CHILD POSTS start here -->
                     <div class="media mt-3" th:each="childPost : ${parentPost.children}">

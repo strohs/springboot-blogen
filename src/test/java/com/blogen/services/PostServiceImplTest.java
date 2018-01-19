@@ -121,7 +121,7 @@ public class PostServiceImplTest {
     //TODO test for when ID is not found
 
     @Test
-    public void should_DeleteTheParent_when_deletePostIsCalledWithParentId() {
+    public void should_DeleteParentPost_when_deletePostIsCalledWithParentPostCommand() {
         Post p1 = getParentPost1();
         PostCommand pc = postCommandMapper.postToPostCommand( p1 );
 
@@ -130,8 +130,20 @@ public class PostServiceImplTest {
         then( postRepository ).should().delete( anyLong() );
     }
 
+//    @Test
+//    public void should_DeleteParentPost_when_deletePostIsCalledWithParentId() {
+//        Post p1 = getParentPost1();
+//
+//        given( postRepository.findOne( anyLong() )).willReturn( p1 );
+//
+//        postService.deletePost( p1.getId() );
+//
+//        then( postRepository ).should().findOne( anyLong() );
+//        then( postRepository ).should().delete( anyLong() );
+//    }
+
     @Test
-    public void should_DeleteChildPost_when_deletePostIsCalledWithChildId() {
+    public void should_DeleteChildPost_when_deletePostIsCalledWithChildPostCommand() {
         Post p1 = getParentPost1();
         Post c1 = getChildPost1();
         p1.addChild( c1 );
@@ -146,6 +158,22 @@ public class PostServiceImplTest {
         then( postRepository ).should().findOne( p1.getId() );
         then( postRepository ).should().findOne( c1.getId() );
     }
+
+//    @Test
+//    public void should_DeleteChildPost_when_deletePostIsCalledWithChildPostId() {
+//        Post p1 = getParentPost1();
+//        Post c1 = getChildPost1();
+//        p1.addChild( c1 );
+//
+//        given( postRepository.findOne( p1.getId() )).willReturn( p1 );
+//        given( postRepository.findOne( c1.getId() )).willReturn( c1 );
+//
+//        postService.deletePost( c1.getId() );
+//
+//        then( postRepository ).should().delete( c1.getId() );
+//        then( postRepository ).should().findOne( p1.getId() );
+//        then( postRepository ).should().findOne( c1.getId() );
+//    }
 
     @Test
     public void should_SaveNewPost_when_saveNewParentPostCommand() {

@@ -6,10 +6,12 @@ import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +71,7 @@ public class PostRepositoryIT {
     }
 
     @Test
-    public void findAllParentPosts() {
+    public void should_findAllParentPosts_when_findAllParentPosts() {
 
         List<Post> parentPosts = postRepository.findAllByParentNull();
 
@@ -79,7 +81,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void parentPostShouldHaveFourChildPosts() {
+    public void should_findFourChildPosts() {
 
         int CHILD_COUNT = 4;
 
@@ -94,7 +96,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void parentPostShouldHaveNoChildPosts() {
+    public void should_findParentPostWithNoChildPosts() {
         int CHILD_COUNT = 0;
 
         Post parent = postRepository.findOne( PARENT_POST_ID_NO_CHILDREN );
@@ -104,14 +106,14 @@ public class PostRepositoryIT {
     }
 
     @Test
-    public void isParentPostShouldReturnTrue() {
+    public void should_returnTrue_when_ifPostIsAParentPost() {
 
         Post parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
         assertThat( parent.isParentPost(), is( true ));
     }
 
     @Test
-    public void isParentPostShouldReturnFalse() {
+    public void should_returnFalse_ifPostIsAChildPost() {
         Post child = postRepository.findOne( CHILD1_POST_ID );
 
         assertThat( child.isParentPost(), is(false) );
@@ -120,7 +122,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void deletingParentPostShouldDeleteAllChildren() {
+    public void should_deleteParentPostAndAllItsChildPosts() {
         Post parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
 
         postRepository.delete( parent );

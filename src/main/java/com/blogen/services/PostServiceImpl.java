@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -117,9 +118,15 @@ public class PostServiceImpl implements PostService {
     }
 
 
-
+    /**
+     * delete the post represented by the passed in PostCommand object
+     *
+     * NOTE: only admins OR the user that made the post can delete it
+     * @param pc {@link PostCommand} containing details of the post to be deleted
+     */
     @Override
     @Transactional
+    @PreAuthorize( "hasRole('ADMIN') || #pc.userName == authentication.name" )
     public void deletePost( PostCommand pc ) {
         if ( isParentPost( pc ) ) {
             //delete the parent post
@@ -132,6 +139,21 @@ public class PostServiceImpl implements PostService {
             postRepository.delete( child.getId() );
         }
     }
+
+
+//    @Transactional
+//    public void deletePost( Long id ) {
+//        Post postToDelete = postRepository.findOne( id );
+//        if ( postToDelete.getParent() == null ) {
+//            //delete the parent post
+//            postRepository.delete( postToDelete.getId() );
+//        } else {
+//            //postToDelete is a child post, need to get the parent post object and remove the child from it.
+//            Post parent = postRepository.findOne( postToDelete.getParent().getId() );
+//            parent.removeChild( postToDelete );
+//            postRepository.delete( postToDelete.getId() );
+//        }
+//    }
 
 
     @Override
