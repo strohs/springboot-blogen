@@ -19,7 +19,7 @@
 
 <!-- NAVBAR -->
 <!-- really thin navbar with no padding: p-0 -->
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0" th:replace="~{fragments/navbar :: navbar}">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0" th:replace="~{/fragments/navbar :: navbar}">
     <div class="container">
         <a href="index.html" th:href="@{/}" class="navbar-brand">Blogen</a>
 
@@ -72,7 +72,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h1><i class="fa fa-pencil"></i>Posts</h1>
+                <span>
+                    <h1><i class="fa fa-pencil"></i>Posts (<small th:text="${page.selectedCategoryName}">Category</small>)</h1>
+                </span>
             </div>
         </div>
     </div>
@@ -128,7 +130,6 @@
 <!-- POSTS IN MEDIA OBJECTS STYLE -->
 <section id="posts" class="py-2">
     <div class="container">
-        
 
             <!-- POST BEGIN HERE -->
             <div class="media mt-3" th:each="parentPost : ${page.posts}">
@@ -151,8 +152,8 @@
                         Reply
                     </a>
 
-                    <!-- DELETE BUTTON -->
-                    <a th:if="${parentPost.userId == user.id}" href="#" th:href="@{'/posts/'+${parentPost.id}+'/delete'}"
+                    <!-- DELETE BUTTON only user that created a post can delete it -->
+                    <a th:if="${parentPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}" href="#" th:href="@{'/posts/'+${parentPost.id}+'/delete'}"
                            class="btn btn-outline-danger btn-sm" th:data-val="${parentPost.id}" data-val="2">
                             Delete
                     </a>
@@ -172,6 +173,12 @@
                             </h6>
                             <span th:text="${childPost.text}">Be careful...I don't trust those things. They're always on... :(</span>
 
+                            <!-- DELETE BUTTON only user that created a post can delete it -->
+                            <a th:if="${childPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}"
+                               href="#" th:href="@{'/posts/'+${childPost.id}+'/delete'}" class="btn btn-outline-danger btn-sm"
+                               th:data-val="${parentPost.id}" data-val="2">
+                                Delete
+                            </a>
                         </div>
                     </div>
 
@@ -204,10 +211,10 @@
             <!--TODO build pagination -->
             <ul class="pagination">
                 <li class="page-item disabled" th:class="${page.requestedPage == 0 ? 'page-item disabled' : 'page-item'}">
-                    <a href="#" th:href="@{'/posts/page/'+${page.requestedPage - 1}}" class="page-link">Previous</a>
+                    <a href="#" th:href="@{/posts/show(cat=${page.selectedCategoryId},page=${page.requestedPage - 1})}" class="page-link">Previous</a>
                 </li>
                 <li class="page-item" th:each="i: ${#numbers.sequence(0,page.totalPages - 1)}">
-                    <a href="#" th:href="@{'/posts/page/'+${i}}" class="page-link" th:text="${i + 1}">1</a>
+                    <a href="#" th:href="@{/posts/show(cat=${page.selectedCategoryId},page=${i})}" class="page-link" th:text="${i + 1}">1</a>
                 </li>
                 <li class="page-item" th:remove="all">
                     <a href="#" class="page-link">2</a>
@@ -216,171 +223,15 @@
                     <a href="#" class="page-link">3</a>
                 </li>
                 <li class="page-item" th:class="${page.requestedPage + 1 == page.totalPages ? 'page-item disabled' : 'page-item'}">
-                    <a href="#" th:href="@{'/posts/page/'+${page.requestedPage + 1}}" class="page-link">Next</a>
+                    <a href="#" th:href="@{/posts/show(cat=${page.selectedCategoryId},page=${page.requestedPage + 1})}" class="page-link">Next</a>
                 </li>
             </ul>
         </nav>
     </div>
 </section>
 
-<!-- POSTS -->
-<!--<section id="posts">-->
-<!--<div class="container">-->
-<!--<div class="row">-->
-<!--<div class="col">-->
-<!--<div class="card">-->
-<!--<div class="card-header">-->
-<!--<h4>Latest Posts</h4>-->
-<!--</div>-->
-<!--<table class="table table-striped">-->
-<!--<thead class="thead-inverse">-->
-<!--<tr>-->
-<!--<th>#</th>-->
-<!--<th>User</th>-->
-<!--<th>Title</th>-->
-<!--<th>Category</th>-->
-<!--<th>Date Posted</th>-->
-<!--<th></th>-->
-<!--</tr>-->
-<!--</thead>-->
-<!--<tbody>-->
-<!--<tr>-->
-<!--<td scope="row">1</td>-->
-<!--<td>-->
-<!--<div class="col">-->
-<!--<h6>YouKnowJohnDoe</h6>-->
-<!--<img class="img-fluid img-thumbnail" src="img/avatar.png" height="50" width="50">-->
-<!--</div>-->
-<!--</td>-->
-<!--<td>-->
-<!--<a href="#" data-toggle="collapse" data-target="#post-text-1">-->
-<!--What is the best way to position block elements...-->
-<!--</a>-->
-<!--<div class="collapse" id="post-text-1">-->
 
-<!--<p>-->
-<!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit eius-->
-<!--libero quisquam nobis explicabo vel non necessitatibus ipsum doloribus-->
-<!--cupiditate voluptate recusandae quo autem error debitis, sed, minima-->
-<!--repellendus commodi.-->
-<!--</p>-->
-<!---->
-<!--</div>-->
-<!--</td>-->
-<!--<td>Web Development</td>-->
-<!--<td>July 12, 2017</td>-->
-<!--<td>-->
-<!--&lt;!&ndash;TODO maybe add functionality to edit a post &ndash;&gt;-->
-<!--&lt;!&ndash;<a href="details.html" class="btn btn-secondary">&ndash;&gt;-->
-<!--&lt;!&ndash;<i class="fa fa-angle-double-right">Details</i>&ndash;&gt;-->
-<!--&lt;!&ndash;</a>&ndash;&gt;-->
-<!--</td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td scope="row">2</td>-->
-<!--<td>-->
-<!--<div class="col">-->
-<!--<h6>sheila</h6>-->
-<!--<img class="img-fluid img-thumbnail" src="img/avatar1.jpg" height="50" width="50">-->
-<!--</div>-->
-<!--</td>-->
-<!--<td>Has anyone used an Amazon Echo or the one with the screen</td>-->
-<!--<td>Tech Gadgets</td>-->
-<!--<td>July 13, 2017</td>-->
-<!--<td></td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td scope="row">3</td>-->
-<!--<td>-->
-<!--<div class="col">-->
-<!--<h6>guster</h6>-->
-<!--<img class="img-fluid img-thumbnail" src="img/avatar2.jpg" height="50" width="50">-->
-<!--</div>-->
-<!--</td>-->
-<!--<td>I need a web framework recommendation for building a product site</td>-->
-<!--<td>Web Development</td>-->
-<!--<td>July 14, 2017</td>-->
-<!--<td></td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td scope="row">4</td>-->
-<!--<td>-->
-<!--<div class="col">-->
-<!--<h6>tron33</h6>-->
-<!--<img class="img-fluid img-thumbnail" src="img/avatar3.jpg" height="50" width="50">-->
-<!--</div>-->
-<!--</td>-->
-<!--<td>What is the best way to form an LLC</td>-->
-<!--<td>Business</td>-->
-<!--<td>July 15, 2017</td>-->
-<!--<td></td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td scope="row">5</td>-->
-<!--<td>-->
-<!--<div class="col">-->
-<!--<h6>sassFan</h6>-->
-<!--<img class="img-fluid img-thumbnail" src="img/avatar4.jpg" height="50" width="50">-->
-<!--</div>-->
-<!--</td>-->
-<!--<td>Can anyone recommend an IDE for Python and Java development</td>-->
-<!--<td>Web Development</td>-->
-<!--<td>July 16, 2017</td>-->
-<!--<td></td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td scope="row">6</td>-->
-<!--<td>-->
-<!--<div class="col">-->
-<!--<h6>missMissy</h6>-->
-<!--<img class="img-fluid img-thumbnail" src="img/avatar.png" height="50" width="50">-->
-<!--</div>-->
-<!--</td>-->
-<!--<td>Whats the best diet to burn fat</td>-->
-<!--<td>Heath & Wellness</td>-->
-<!--<td>July 13, 2017</td>-->
-<!--<td></td>-->
-<!--</tr>-->
-<!--</tbody>-->
-<!--</table>-->
-
-<!--&lt;!&ndash; PAGINATION &ndash;&gt;-->
-<!--<nav class="ml-4">-->
-<!--<ul class="pagination">-->
-<!--<li class="page-item disabled">-->
-<!--<a href="#" class="page-link">Previous</a>-->
-<!--</li>-->
-<!--<li class="page-item">-->
-<!--<a href="#" class="page-link">1</a>-->
-<!--</li>-->
-<!--<li class="page-item">-->
-<!--<a href="#" class="page-link">2</a>-->
-<!--</li>-->
-<!--<li class="page-item">-->
-<!--<a href="#" class="page-link">3</a>-->
-<!--</li>-->
-<!--<li class="page-item">-->
-<!--<a href="#" class="page-link">Next</a>-->
-<!--</li>-->
-<!--</ul>-->
-<!--</nav>-->
-<!---->
-<!--</div>-->
-<!--</div>-->
-
-<!--</div>-->
-<!--</div>-->
-<!--</section>-->
-
-<footer id="main-footer" class="bg-dark text-white mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <p class="lead text-center">Copyright &copy; Blogen 2017</p>
-            </div>
-        </div>
-    </div>
-</footer>
+<div th:replace="~{/fragments/footer :: footer}"></div>
 
 
 <!-- REPLY POST MODAL -->

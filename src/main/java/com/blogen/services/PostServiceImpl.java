@@ -167,12 +167,12 @@ public class PostServiceImpl implements PostService {
     /**
      * delete the post represented by the passed in PostCommand object
      *
-     * NOTE: only admins OR the user that made the post can delete it
+     * NOTE: only admins OR the user that created the post can delete it
      * @param pc {@link PostCommand} containing details of the post to be deleted
      */
     @Override
     @Transactional
-    @PreAuthorize( "hasRole('ADMIN') || #pc.userName == authentication.name" )
+    @PreAuthorize( "hasAuthority('ADMIN') || #pc.userName == authentication.name" )
     public void deletePost( PostCommand pc ) {
         if ( isParentPost( pc ) ) {
             //delete the parent post
