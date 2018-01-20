@@ -1,5 +1,6 @@
 package com.blogen.services;
 
+import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.mappers.CategoryCommandMapper;
 import com.blogen.commands.mappers.PostCommandMapper;
@@ -9,24 +10,23 @@ import com.blogen.domain.User;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
-import com.blogen.services.security.UserDetailsImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.domain.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.*;
 
 /**
  * Unit Tests for {@link PostServiceImpl}
@@ -35,8 +35,10 @@ import static org.mockito.Matchers.anyString;
  */
 public class PostServiceImplTest {
 
-    private static final Long   CAT1_ID   = 3L;
+    private static final Long   CAT1_ID   = 1L;
     private static final String CAT1_NAME = "Business";
+    private static final Long   CAT2_ID   = 4L;
+    private static final String CAT2_NAME = "Tech Gadgets";
     private static final Long   USER_ID   = 1L;
     private static final String USER_NAME = "johnny";
     private static final Long   USER2_ID   = 122L;
@@ -64,17 +66,20 @@ public class PostServiceImplTest {
     @Mock
     private PrincipalService principalService;
 
+    @Mock
+    private PageRequestBuilder pageRequestBuilder;
+
     private PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
     private CategoryCommandMapper categoryCommandMapper = CategoryCommandMapper.INSTANCE;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
-        postService = new PostServiceImpl( postRepository, userRepository, categoryRepository, principalService, postCommandMapper,categoryCommandMapper );
+        postService = new PostServiceImpl( postRepository, userRepository, categoryRepository, principalService, postCommandMapper,categoryCommandMapper,pageRequestBuilder );
     }
 
     @Test
-    public void shouldReturnTwoParentPostsMadeByUser1_when_getAllPostsByUser() {
+    public void shouldReturnTwoParentPosts_when_getAllPostsByUser() {
         //this user has two parent posts
         User user = getUser1();
         Post p1 = getParentPost1();
@@ -89,6 +94,33 @@ public class PostServiceImplTest {
         then( postRepository ).should(  ).findAllByUser_IdAndParentNullOrderByCreatedDesc( anyLong() );
         assertThat( commands, is(notNullValue()));
         assertThat( commands.size(), is( 2));
+
+    }
+
+    @Test
+    public void should_returnTwoParentPostsInBusinessCategory_when_getAllPostsByCategoryForPage() {
+        Post p1 = getParentPost1();
+        Post p2 = getParentPost2();
+        Post p3 = getParentPost3();
+        Category cat1 = getCategory1();
+        Category cat2 = getCategory2();
+        p3.setCategory( getCategory2() );
+        List<Post> posts = Arrays.asList( p1,p2 );
+        List<Category> categories = Arrays.asList( cat1,cat2 );
+        PageRequest pageRequest = new PageRequest( 0,4, Sort.Direction.DESC, "created" );
+        Page<Post> page = new PageImpl<Post>( posts );
+
+        given( postRepository.findAllByCategory_IdAndParentNullOrderByCreatedDesc( anyLong(), Matchers.any( Pageable.class ) )).willReturn( page );
+        given( categoryRepository.findOne( anyLong() )).willReturn( cat1 );
+        given( categoryRepository.findAll() ).willReturn( categories );
+        given( pageRequestBuilder.buildPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
+
+        PageCommand pageCommand = postService.getAllPostsByCategoryForPage( CAT1_ID,0 );
+
+        then( postRepository ).should(  ).findAllByCategory_IdAndParentNullOrderByCreatedDesc( anyLong(), Matchers.any( Pageable.class ) );
+        assertThat( pageCommand, is(notNullValue()));
+        assertThat( pageCommand.getTotalElements(), is( 2L));
+        assertThat( pageCommand.getSelectedCategoryId(), is(CAT1_ID));
 
     }
 
@@ -135,17 +167,6 @@ public class PostServiceImplTest {
         then( postRepository ).should().delete( anyLong() );
     }
 
-//    @Test
-//    public void should_DeleteParentPost_when_deletePostIsCalledWithParentId() {
-//        Post p1 = getParentPost1();
-//
-//        given( postRepository.findOne( anyLong() )).willReturn( p1 );
-//
-//        postService.deletePost( p1.getId() );
-//
-//        then( postRepository ).should().findOne( anyLong() );
-//        then( postRepository ).should().delete( anyLong() );
-//    }
 
     @Test
     public void should_DeleteChildPost_when_deletePostIsCalledWithChildPostCommand() {
@@ -164,26 +185,10 @@ public class PostServiceImplTest {
         then( postRepository ).should().findOne( c1.getId() );
     }
 
-//    @Test
-//    public void should_DeleteChildPost_when_deletePostIsCalledWithChildPostId() {
-//        Post p1 = getParentPost1();
-//        Post c1 = getChildPost1();
-//        p1.addChild( c1 );
-//
-//        given( postRepository.findOne( p1.getId() )).willReturn( p1 );
-//        given( postRepository.findOne( c1.getId() )).willReturn( c1 );
-//
-//        postService.deletePost( c1.getId() );
-//
-//        then( postRepository ).should().delete( c1.getId() );
-//        then( postRepository ).should().findOne( p1.getId() );
-//        then( postRepository ).should().findOne( c1.getId() );
-//    }
-
     @Test
     public void should_SaveNewPost_when_saveNewParentPostCommand() {
         Post post = getParentPost1();
-        Category cat = getCategory();
+        Category cat = getCategory1();
         User user1 = getUser1();
         PostCommand pc = postCommandMapper.postToPostCommand( post );
         pc.setId( null );
@@ -204,7 +209,7 @@ public class PostServiceImplTest {
     public void should_SaveNewChild_when_saveNewChildPostCommand() {
         Post post = getParentPost1();
         Post child = getChildPost1();
-        Category cat = getCategory();
+        Category cat = getCategory1();
         User user1 = getUser1();
         PostCommand pc = postCommandMapper.postToPostCommand( child );
         pc.setParentId( post.getId() );
@@ -229,7 +234,7 @@ public class PostServiceImplTest {
     @Test
     public void should_UpdatePostWithNewText_when_updatePostCommand() {
         Post existingPost = getParentPost1();
-        Category cat = getCategory();
+        Category cat = getCategory1();
         String newText = "new post text";
 
         Post updatedPost = getParentPost1();
@@ -275,14 +280,13 @@ public class PostServiceImplTest {
 
 
     //HELPER METHODS
-
     private Post getParentPost1() {
         Post post = new Post();
         post.setParent( null );
         post.setText( POST1_TEXT );
         post.setId( POST1_ID );
         post.setCreated( LocalDateTime.of( 2017,01,01,10,10,10 ) );
-        post.setCategory( getCategory() );
+        post.setCategory( getCategory1() );
         post.setUser( getUser1() );
         return post;
     }
@@ -293,7 +297,7 @@ public class PostServiceImplTest {
         post.setText( POST2_TEXT );
         post.setId( POST2_ID );
         post.setCreated( LocalDateTime.of( 2017,01,02,10,10,10 ) );
-        post.setCategory( getCategory() );
+        post.setCategory( getCategory1() );
         post.setUser( getUser2() );
         return post;
     }
@@ -304,7 +308,7 @@ public class PostServiceImplTest {
         post.setText( POST3_TEXT );
         post.setId( POST3_ID );
         post.setCreated( LocalDateTime.of( 2017,01,03,10,10,10 ) );
-        post.setCategory( getCategory() );
+        post.setCategory( getCategory1() );
         post.setUser( getUser1() );
         return post;
     }
@@ -313,7 +317,7 @@ public class PostServiceImplTest {
         Post post = new Post();
         post.setText( CHILD1_TEXT );
         post.setId( CHILD1_ID );
-        post.setCategory( getCategory() );
+        post.setCategory( getCategory1() );
         post.setUser( getUser1() );
         post.setCreated( LocalDateTime.of( 2017,01,04,10,10,10 ) );
         return post;
@@ -333,10 +337,17 @@ public class PostServiceImplTest {
         return user;
     }
 
-    private Category getCategory() {
+    private Category getCategory1() {
         Category category = new Category();
         category.setId( CAT1_ID );
         category.setName( CAT1_NAME );
+        return category;
+    }
+
+    private Category getCategory2() {
+        Category category = new Category();
+        category.setId( CAT2_ID );
+        category.setName( CAT2_NAME );
         return category;
     }
 

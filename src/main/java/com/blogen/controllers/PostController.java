@@ -5,10 +5,13 @@ import com.blogen.commands.PostCommand;
 import com.blogen.commands.UserCommand;
 import com.blogen.domain.User;
 import com.blogen.services.CategoryService;
+import com.blogen.services.PageRequestBuilder;
 import com.blogen.services.PostService;
 import com.blogen.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,7 +57,7 @@ public class PostController {
         String userName = principal.getName();
         log.debug( "user logged in: " + userName );
 
-        return "redirect:/posts/page/0";
+        return "redirect:/posts/show?cat=0&page=0";
     }
 
     //addNewPost - create a new post - POST - /posts
@@ -77,11 +80,13 @@ public class PostController {
         return "redirect:/posts";
     }
 
-    //showPostForPage - GET - /posts/page/{pageNum}
-    @GetMapping("/posts/page/{pageNum}")
-    public String showPostsForPage( @PathVariable("pageNum") Integer page, Principal principal, Model model ) {
-        log.debug( "showing posts for page: " + page );
-        PageCommand pageCommand = postService.getAllPostsForPage( page );
+    //showPostForPage - GET - /posts/show?cat=1&page=2
+    @GetMapping("/posts/show")
+    public String showPostsForPage( @RequestParam("cat") Long categoryId, @RequestParam("page") Integer page,
+                                    Principal principal, Model model ) {
+        log.debug( "showing posts for category: " + categoryId + " page:" + page );
+
+        PageCommand pageCommand = postService.getAllPostsByCategoryForPage( categoryId, page );
         UserCommand userCommand = userService.getUserByUserName( principal.getName() );
 
         model.addAttribute( "page",pageCommand );

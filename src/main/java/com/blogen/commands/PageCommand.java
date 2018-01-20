@@ -25,7 +25,14 @@ public class PageCommand {
     //the total number of elements that could be retrieved from the Database
     private long totalElements;
 
+    //id from the category table, of the category the user has selected
+    private long selectedCategoryId;
+
+    private String selectedCategoryName;
+
+    //post to be displayed on the page
     List<PostCommand> posts;
 
+    //contains all categories
     List<CategoryCommand> categories;
 }

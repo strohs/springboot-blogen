@@ -90,8 +90,12 @@
                         Filter Posts
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                           href="#" th:href="@{/posts/show(cat=${0},page=${0})}">
+                            All Posts
+                        </a>
                         <a th:each="category : ${page.categories}" class="dropdown-item"
-                           href="userPosts.html" th:href="@{'/posts/category/'+${category.id}}" th:text="${category.name}">
+                           href="userPosts.html" th:href="@{/posts/show/(cat=${category.id},page=${0})}" th:text="${category.name}">
                             Category Name
                         </a>
                     </div>

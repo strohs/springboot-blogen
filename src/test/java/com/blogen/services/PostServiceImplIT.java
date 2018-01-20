@@ -42,9 +42,15 @@ public class PostServiceImplIT {
     @Autowired
     private PostServiceImpl postService;
 
+    private static final Long ALL_CATEGORIES_ID    = 0L;
+    private static final Long BUSINESS_CATEGORY_ID = 1L;
+    private static final Long WEBDEV_CATEGORY_ID   = 2L;
+    private static final Long TECH_CATEGORY_ID     = 3L;
+    private static final Long HEALTH_CATEGORY_ID   = 4L;
+
 
     @Test
-    public void getAllPostsByUser() {
+    public void should_returnThreePosts_when_getAllPostsByUser() {
         //this user has 3 parent posts
         Long userId = 3L;
         List<PostCommand> commands = postService.getAllPostsByUser( userId );
@@ -53,20 +59,44 @@ public class PostServiceImplIT {
     }
 
     @Test
-    public void shouldHaveTenPostsTotal_whenGetAllPostsByUserForPage() throws Exception {
-        //this user has 10 Posts total
+    public void should_returnTwoPosts_when_getAllPostsByUserAndCategoryForPage() throws Exception {
+        //this user has 2 posts in Business category
         Long userId = 5L;
-        Long totalParentPosts = 10L;
-        PageCommand pageCommand = postService.getAllPostsByUserForPage( userId, 0 );
+        PageCommand pageCommand = postService.getAllPostsByUserAndCategoryForPage( userId, BUSINESS_CATEGORY_ID, 0 );
+        assertThat( pageCommand.getTotalElements(), is( 2L ));
+    }
+
+    @Test
+    public void should_returnFourPosts_when_getAllPostsByCategoryForPage() throws Exception {
+        //there are 4 posts total in Business category
+        Long totalBusinessPosts = 4L;
+        PageCommand pageCommand = postService.getAllPostsByCategoryForPage( BUSINESS_CATEGORY_ID, 0 );
+        assertThat( pageCommand.getTotalElements(), is( totalBusinessPosts ));
+    }
+
+    @Test
+    public void should_returnSixteenPosts_when_getAllPostsForPage() throws Exception {
+        //there are 16 parent posts total
+        Long totalParentPosts = 16L;
+        PageCommand pageCommand = postService.getAllPostsByCategoryForPage( ALL_CATEGORIES_ID, 0 );
         assertThat( pageCommand.getTotalElements(), is( totalParentPosts ));
     }
 
     @Test
-    public void shouldGetThreePostsTotal_whenPageZeroIsRequested() throws Exception {
+    public void should_returnTenPosts_when_GetAllPostsByUserAndCategoryForPage() throws Exception {
+        //this user has 10 Posts total across all categories
+        Long userId = 5L;
+        Long totalParentPosts = 10L;
+        PageCommand pageCommand = postService.getAllPostsByUserAndCategoryForPage( userId, ALL_CATEGORIES_ID, 0 );
+        assertThat( pageCommand.getTotalElements(), is( totalParentPosts ));
+    }
+
+    @Test
+    public void should_returnThreePosts_when_PageZeroIsRequested() throws Exception {
         //this user has 10 Posts total
         Long userId = 5L;
         Long totalParentPosts = 10L;
-        PageCommand pageCommand = postService.getAllPostsByUserForPage( userId, 0 );
+        PageCommand pageCommand = postService.getAllPostsByUserAndCategoryForPage( userId, ALL_CATEGORIES_ID, 0 );
         assertThat( pageCommand.getPosts().size(), is(3));
         assertThat( pageCommand.getPosts().get( 0 ).getUserId(), is( userId ));
         assertThat( pageCommand.getRequestedPage(), is(0));
@@ -74,20 +104,20 @@ public class PostServiceImplIT {
     }
 
     @Test
-    public void shouldReturnPostsInDescendingOrder_whenAnyPageIsRequested() throws Exception {
+    public void should_returnPostsInDescendingOrder_when_AnyPageIsRequested() throws Exception {
         //this user has 10 Posts total
         Long userId = 5L;
         Long mostRecentPostId = 26L;
-        PageCommand pageCommand = postService.getAllPostsByUserForPage( userId, 0 );
+        PageCommand pageCommand = postService.getAllPostsByUserAndCategoryForPage( userId, ALL_CATEGORIES_ID, 0 );
         assertThat( pageCommand.getPosts().get( 0 ).getId(), is( mostRecentPostId ));
     }
 
     @Test
-    public void shouldGetOnePostTotal_whenPageThreeIsRequested() throws Exception {
+    public void should_returnOnePost_when_PageThreeIsRequested() throws Exception {
         //this user has 10 Posts total
         Long userId = 5L;
         Long postId = 17L;
-        PageCommand pageCommand = postService.getAllPostsByUserForPage( userId, 3 );
+        PageCommand pageCommand = postService.getAllPostsByUserAndCategoryForPage( userId, ALL_CATEGORIES_ID, 3 );
         assertThat( pageCommand.getPosts().size(), is(1));
         assertThat( pageCommand.getPosts().get( 0 ).getId(), is(postId));
     }

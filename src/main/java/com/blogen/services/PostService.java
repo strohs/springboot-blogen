@@ -5,6 +5,7 @@ import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ public interface PostService {
     //get a Post by ID
     PostCommand getPost( Long id );
 
-    //get all posts for the specified page number
-    PageCommand getAllPostsForPage( int page );
+    //get all posts for the specified category and page number
+    PageCommand getAllPostsByCategoryForPage( Long categoryId, int page );
 
-    //get all posts for the user id and specified page number
-    PageCommand getAllPostsByUserForPage( Long userId, int page );
+    //get all posts for the user id and category id and for the specified page number
+    PageCommand getAllPostsByUserAndCategoryForPage( Long userId, Long categoryId, int page );
 
     //save a new Post (parent or child)
     PostCommand savePostCommand( PostCommand command );

@@ -72,15 +72,15 @@ public class PostControllerIT {
     @Test
     public void should_showAllPosts() throws Exception {
         
-        mockMvc.perform( get("/posts").with( user(USER1_NAME).password( USER1_PW ).roles(ROLE_USER)) )
+        mockMvc.perform( get("/posts").with( user( USER1_NAME ).password( USER1_PW ).roles(ROLE_USER)) )
                 .andExpect( status().is3xxRedirection() )
-                .andExpect( view().name( "redirect:/posts/page/0" ) );
+                .andExpect( view().name( "redirect:/posts/show?cat=0&page=0" ) );
     }
 
     @Test
     public void should_showPostsByPage() throws Exception {
 
-        mockMvc.perform( get("/posts/page/0").with( user(USER1_NAME).password( USER1_PW ).roles(ROLE_USER)) )
+        mockMvc.perform( get("/posts/show?cat=1&page=0").with( user(USER1_NAME).password( USER1_PW ).roles(ROLE_USER)) )
                 .andExpect( status().isOk() )
                 .andExpect( view().name( "userPosts" ) )
                 .andExpect( model().attributeExists( "postCommand" ) )
@@ -91,7 +91,7 @@ public class PostControllerIT {
     @Test
     public void should_returnNoPosts_when_showingPageThatDoesNotExist() throws Exception {
 
-        mockMvc.perform( get("/posts/page/999").with( user(USER1_NAME).password( USER1_PW ).roles(ROLE_USER)) )
+        mockMvc.perform( get("/posts/show?cat=0&page=9999").with( user(USER1_NAME).password( USER1_PW ).roles(ROLE_USER)) )
                 .andExpect( status().isOk() )
                 .andExpect( model().attributeExists( "postCommand" ) )
                 .andExpect( model().attributeExists( "user" ) )

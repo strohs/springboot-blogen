@@ -33,14 +33,14 @@ import java.util.stream.Collectors;
 @Service
 public class PostServiceImpl implements PostService {
 
-    //number of parent posts to display on the posts.html page
-    @Value( "${blogen.posts.per.page}" )
-    private int POSTS_PER_PAGE;
+
+    private static final String ALL_CATEGORIES = "All Categories";
 
     private PostRepository postRepository;
     private UserRepository userRepository;
     private CategoryRepository categoryRepository;
     private PrincipalService principalService;
+    private PageRequestBuilder pageRequestBuilder;
 
     private PostCommandMapper postCommandMapper;
     private CategoryCommandMapper categoryCommandMapper;
@@ -48,13 +48,14 @@ public class PostServiceImpl implements PostService {
     @Autowired
     public PostServiceImpl( PostRepository postRepository, UserRepository userRepository,
                             CategoryRepository categoryRepository, PrincipalService principalService, PostCommandMapper postCommandMapper,
-                            CategoryCommandMapper categoryCommandMapper ) {
+                            CategoryCommandMapper categoryCommandMapper, PageRequestBuilder pageRequestBuilder ) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.principalService = principalService;
         this.postCommandMapper = postCommandMapper;
         this.categoryCommandMapper = categoryCommandMapper;
+        this.pageRequestBuilder = pageRequestBuilder;
     }
 
 
@@ -86,36 +87,80 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PageCommand getAllPostsForPage( int pageNum ) {
+    public PageCommand getAllPostsByCategoryForPage( Long categoryId, int pageNum ) {
         //build the PageRequest for the requested page
-        PageRequest pageRequest = new PageRequest( pageNum, POSTS_PER_PAGE, Sort.Direction.DESC, "created" );
-        Page<Post> page = postRepository.findAllByParentNullOrderByCreatedDesc( pageRequest );
-        List<PostCommand> commands = new ArrayList<>();
-        page.forEach( (Post p) -> commands.add( postCommandMapper.postToPostCommand( p )));
+        PageRequest pageRequest = pageRequestBuilder.buildPageRequest( pageNum, Sort.Direction.DESC, "created" );
+        PageCommand pageCommand = new PageCommand();
+        Page<Post> page;
+
+        if (categoryId == 0 ) {
+            //all categories selected
+            page = postRepository.findAllByParentNullOrderByCreatedDesc( pageRequest );
+            pageCommand.setSelectedCategoryName( ALL_CATEGORIES );
+        } else {
+            //a specific category id was selected on the page
+            page = postRepository.findAllByCategory_IdAndParentNullOrderByCreatedDesc( categoryId, pageRequest );
+            pageCommand.setSelectedCategoryName( categoryRepository.findOne( categoryId ).getName() );
+
+        }
+        //build the pageCommand objects
+        List<PostCommand> postCommands = new ArrayList<>();
+        page.forEach( (Post p) -> postCommands.add( postCommandMapper.postToPostCommand( p )));
+
+        //get the list of categories to display on the web-page
         List<CategoryCommand> categoryCommands = categoryRepository.findAll()
                 .stream()
                 .map( categoryCommandMapper::categoryToCategoryCommand )
                 .collect( Collectors.toList());
 
-        return new PageCommand( pageNum, page.getTotalPages(), page.getTotalElements(), commands, categoryCommands );
+        //build the PageCommand
+        pageCommand.setSelectedCategoryId( categoryId );
+        pageCommand.setRequestedPage( pageNum );
+        pageCommand.setTotalPages( page.getTotalPages() );
+        pageCommand.setTotalElements( page.getTotalElements() );
+        pageCommand.setPosts( postCommands );
+        pageCommand.setCategories( categoryCommands );
+
+        return pageCommand;
     }
 
     @Override
     @Transactional
-    public PageCommand getAllPostsByUserForPage( Long id, int pageNum ) {
+    public PageCommand getAllPostsByUserAndCategoryForPage( Long userId, Long categoryId, int pageNum ) {
         //build the PageRequest for the requested page
-        PageRequest pageRequest = new PageRequest( pageNum, POSTS_PER_PAGE, Sort.Direction.DESC, "created" );
-        Page<Post> page = postRepository.findAllByUser_IdAndParentNull( id, pageRequest );
-        //build the List of PostCommands
-        List<PostCommand> commands = new ArrayList<>();
-        page.forEach( (Post p) -> commands.add( postCommandMapper.postToPostCommand( p )));
-        //build the list of Categories
+        PageRequest pageRequest = pageRequestBuilder.buildPageRequest( pageNum, Sort.Direction.DESC, "created" );
+        PageCommand pageCommand = new PageCommand();
+        Page<Post> page;
+
+        if (categoryId == 0 ) {
+            //all categories selected
+            page = postRepository.findAllByUser_IdAndParentNull( userId, pageRequest );
+            pageCommand.setSelectedCategoryName( ALL_CATEGORIES );
+        } else {
+            //a specific category id was selected on the page
+            page = postRepository.findAllByUser_IdAndCategory_IdAndParentNull( userId, categoryId, pageRequest );
+            pageCommand.setSelectedCategoryName( categoryRepository.findOne( categoryId ).getName() );
+
+        }
+        //build the pageCommand objects
+        List<PostCommand> postCommands = new ArrayList<>();
+        page.forEach( (Post p) -> postCommands.add( postCommandMapper.postToPostCommand( p )));
+
+        //get the list of categories to display on the web-page
         List<CategoryCommand> categoryCommands = categoryRepository.findAll()
                 .stream()
                 .map( categoryCommandMapper::categoryToCategoryCommand )
                 .collect( Collectors.toList());
 
-        return new PageCommand( pageNum, page.getTotalPages(), page.getTotalElements(), commands, categoryCommands );
+        //build the PageCommand
+        pageCommand.setSelectedCategoryId( categoryId );
+        pageCommand.setRequestedPage( pageNum );
+        pageCommand.setTotalPages( page.getTotalPages() );
+        pageCommand.setTotalElements( page.getTotalElements() );
+        pageCommand.setPosts( postCommands );
+        pageCommand.setCategories( categoryCommands );
+
+        return pageCommand;
     }
 
 
@@ -238,13 +283,13 @@ public class PostServiceImpl implements PostService {
 
     /**
      * helper method for merging the fields of a post that can be changed on a web-form
-     * @param source
-     * @param target
+     * @param source Post properties we are merging from
+     * @param target Post properties we are merging to
      */
     private void mergePosts( Post source, Post target ) {
         target.setImageUrl( source.getImageUrl() );
         target.setTitle( source.getTitle() );
-        target.setText( source.getText() );;
+        target.setText( source.getText() );
     }
 
 
