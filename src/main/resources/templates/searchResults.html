@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Search Results</title>
+
+
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.css}"/>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/4.0.0-beta.3/css/bootstrap.min.css}"
+          integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous"/>
+
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<!-- really thin navbar with no padding: p-0 -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0" th:replace="~{/fragments/navbar :: navbar}">
+    <div class="container">
+        <a href="index.html" th:href="@{/}" class="navbar-brand">Blogen</a>
+
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navbarNav" class="collapse navbar-collapse">
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown mr-3">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-user"></i>
+                        <span sec:authorize="isAuthenticated()">
+                            Welcome <span sec:authorize="principal.getUsername()">UserName</span>
+                        </span>
+                        <!--Welcome <span th:text="${user.userName}"></span>-->
+                    </a>
+                    <div class="dropdown-menu">
+                        <!--todo add profile page -->
+                        <a th:href="@{profile.html}" class="dropdown-item">
+                            <i class="fa fa-user-circle"></i>
+                            Profile
+                        </a>
+                        <!-- Not going to use settings -->
+                        <!--<a href="settings.html" class="dropdown-item">-->
+                            <!--<i class="fa fa-gear"></i>-->
+                            <!--Settings-->
+                        <!--</a>-->
+                    </div>
+                </li>
+                <!-- LOGOUT Form -->
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post">
+                        <i class="fa fa-user-times"></i>
+                        <button type="submit" class="btn btn-link text-secondary">Logout</button>
+                    </form>
+                    <!--<a th:href="@{/logout}" class="nav-link">-->
+                        <!--<i class="fa fa-user-times"></i>-->
+                        <!--Logout-->
+                    <!--</a>-->
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- DASHBOARD HEADER -->
+<header id="main-header" class="py-2 bg-primary text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <span>
+                    <h1><i class="fa fa-pencil"></i>Search Results</h1>
+                </span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ACTION BUTTONS -->
+<section id="action" class="py-4 mb-4 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <a href="#" th:href="@{/posts}" class="btn btn-light btn-block">
+                    <i class="fa fa-arrow-left"></i>Back to Posts
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- POSTS IN MEDIA OBJECTS STYLE -->
+<!-- POSTS -->
+<section id="posts">
+    <div class="container">
+        <div class="row">
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Search Results</h4>
+                    </div>
+                    <table class="table table-striped">
+                        <thead class="thead-inverse">
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Date Posted</th>
+                            <th>Category</th>
+                            <th>Title</th>
+                            <th>Text</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="post : ${page.posts}">
+                            <td scope="row" th:text="${post.id}">1</td>
+
+                            <td>
+                                <div class="col">
+                                    <h6 th:text="${post.userName}">username</h6>
+                                    <img class="img-fluid img-thumbnail" th:src="@{'/img/'+${post.userAvatar}}" src="img/avatar.png" height="50" width="50">
+                                </div>
+                            </td>
+
+                            <td th:text="${post.created}">July 12, 2017</td>
+
+                            <td th:text="${post.categoryName}">Web Development</td>
+
+                            <td th:text="${post.title}">What's going on?</td>
+
+                            <td th:text="${post.text}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aperiam dicta dolorum molestias pariatur soluta tempora temporibus! Cumque, quis similique.</td>
+                        </tr>
+                        <tr th:remove="all">
+                            <td scope="row">2</td>
+                            <td>
+                                <div class="col">
+                                    <h6>sheila</h6>
+                                    <img class="img-fluid img-thumbnail" src="img/avatar1.jpg" height="50" width="50">
+                                </div>
+                            </td>
+                            <td>Has anyone used an Amazon Echo or the one with the screen</td>
+                            <td>Tech Gadgets</td>
+                            <td>July 13, 2017</td>
+                            <td><a href="../details.html" class="btn btn-secondary">
+                                <i class="fa fa-angle-double-right">Details</i>
+                            </a></td>
+                        </tr>
+                        <tr th:remove="all">
+                            <td scope="row">3</td>
+                            <td>
+                                <div class="col">
+                                    <h6>guster</h6>
+                                    <img class="img-fluid img-thumbnail" src="img/avatar2.jpg" height="50" width="50">
+                                </div>
+                            </td>
+                            <td>I need a web framework recommendation for building a product site</td>
+                            <td>Web Development</td>
+                            <td>July 14, 2017</td>
+                            <td><a href="../details.html" class="btn btn-secondary">
+                                <i class="fa fa-angle-double-right">Details</i>
+                            </a></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PAGINATION -->
+<nav class="ml-4 mt-5">
+    <ul class="pagination">
+        <li class="page-item disabled" th:class="${page.requestedPage == 0 ? 'page-item disabled' : 'page-item'}">
+            <a href="#" th:href="@{/posts/search/results(search=${page.searchStr},page=${page.requestedPage - 1})}" class="page-link">Previous</a>
+        </li>
+        <li class="page-item" th:each="i: ${#numbers.sequence(0,page.totalPages - 1)}">
+            <a href="#" th:href="@{/posts/search/results(search=${page.searchStr},page=${i})}" class="page-link" th:text="${i + 1}">1</a>
+        </li>
+        <li class="page-item" th:remove="all">
+            <a href="#" class="page-link">2</a>
+        </li>
+        <li class="page-item" th:remove="all">
+            <a href="#" class="page-link">3</a>
+        </li>
+        <li class="page-item" th:class="${page.requestedPage + 1 == page.totalPages ? 'page-item disabled' : 'page-item'}">
+            <a href="#" th:href="@{/posts/search/results(search=${page.searchStr},page=${page.requestedPage + 1})}" class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>
+
+
+<div th:replace="~{/fragments/footer :: footer}"></div>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        th:src="@{/webjars/jquery/3.2.1/dist/jquery.slim.min.js}"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        th:src="@{/webjars/popper.js/1.12.9/dist/umd/popper.min.js}"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
+    th:src="@{/webjars/bootstrap/4.0.0-beta.3/js/bootstrap.min.js}"
+    integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+    crossorigin="anonymous"></script>
+
+
+</body>
+</html>

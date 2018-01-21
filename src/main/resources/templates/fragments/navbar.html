@@ -37,7 +37,7 @@
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-user"></i>
                         <span sec:authorize="isAuthenticated()">
-                            Welcome <span th:text="${user.userName}">UserName</span>
+                            Welcome <span sec:authentication="principal.username">UserName</span>
                         </span>
 
                     </a>

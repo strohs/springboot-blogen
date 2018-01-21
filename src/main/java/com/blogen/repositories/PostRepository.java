@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 /**
+ * Spring-Data-JPA query methods for the Post table
  *
  * @author Cliff
  */
@@ -58,6 +59,14 @@ public interface PostRepository extends JpaRepository<Post,Long> {
      * @return
      */
    Page<Post> findAllByUser_IdAndCategory_IdAndParentNull( Long userId, Long categoryId, Pageable pageable);
+
+    /**
+     * searches for searchStr in the text or title of a Post
+     * @param searchStr - the substring to search for in post.text or post.title
+     * @return {@link Page} containing Posts matching the searchStr
+     */
+    @Query("select p from Post p where p.title like %?1% or p.text like %?1% order by p.created desc ")
+   Page<Post> findByTextOrTitleIgnoreCaseContaining(String searchStr, Pageable pageable);
 
     /**
      *

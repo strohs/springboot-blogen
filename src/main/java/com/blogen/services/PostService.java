@@ -3,6 +3,7 @@ package com.blogen.services;
 import com.blogen.api.v1.model.PostDTO;
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
+import com.blogen.commands.SearchResultPageCommand;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +26,19 @@ public interface PostService {
     PostCommand getPost( Long id );
 
     //get all posts for the specified category and page number
-    PageCommand getAllPostsByCategoryForPage( Long categoryId, int page );
+    PageCommand getAllPostsByCategoryForPage( Long categoryId, int pageNum );
 
     //get all posts for the user id and category id and for the specified page number
-    PageCommand getAllPostsByUserAndCategoryForPage( Long userId, Long categoryId, int page );
+    PageCommand getAllPostsByUserAndCategoryForPage( Long userId, Long categoryId, int pageNum );
 
     //save a new Post (parent or child)
     PostCommand savePostCommand( PostCommand command );
 
     //update an existing post
     PostCommand updatePostCommand( PostCommand command );
+
+    //search Post.text and Post.title for the specified searchStr
+    SearchResultPageCommand searchPosts( String searchStr, int pageNum );
 
     //get the ten most recent posts made
     List<PostCommand> getTenRecentPosts();

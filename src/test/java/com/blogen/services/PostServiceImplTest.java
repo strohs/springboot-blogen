@@ -2,6 +2,7 @@ package com.blogen.services;
 
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
+import com.blogen.commands.SearchResultPageCommand;
 import com.blogen.commands.mappers.CategoryCommandMapper;
 import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
@@ -19,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -297,7 +299,54 @@ public class PostServiceImplTest {
         assertThat( recentPosts.size(), is(10));
     }
 
+    @Test
+    public void should_returnPageWithTwoPostsContainingSearchString_when_searchPosts() {
+        String searchStr = "groovy";
+        Post p1 = getParentPost1();
+        p1.setText( "this groovy post is first" );
+        Post p2 = getParentPost2();
+        p2.setText("this is groovy post two");
+        Post p3 = getParentPost3();
+        p3.setText("this is regular post three");
+        List<Post> posts = Arrays.asList( p1,p2 );
+        PageRequest pageRequest = new PageRequest( 0,4, Sort.Direction.DESC, "created" );
+        Page<Post> page = new PageImpl<Post>( posts );
 
+        given( postRepository.findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) )).willReturn( page );
+        given( pageRequestBuilder.buildPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
+
+        SearchResultPageCommand command = postService.searchPosts( searchStr, 0 );
+
+        then( postRepository ).should().findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) );
+        then( pageRequestBuilder ).should().buildPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString() );
+        assertThat( command, is(notNullValue()));
+        assertThat( command.getTotalElements(), is( 2L));
+        assertThat( command.getPosts().get( 0 ).getText().contains( searchStr ), is(true) );
+    }
+
+    @Test
+    public void should_returnPageWithNoPosts_when_searchPostsForTextThatDoesNotExist() {
+        String searchStr = "shazam";
+        Post p1 = getParentPost1();
+        p1.setText( "this groovy post is first" );
+        Post p2 = getParentPost2();
+        p2.setText("this is groovy post two");
+        Post p3 = getParentPost3();
+        p3.setText("this is regular post three");
+        List<Post> posts = new ArrayList<>();
+        PageRequest pageRequest = new PageRequest( 0,4, Sort.Direction.DESC, "created" );
+        Page<Post> page = new PageImpl<Post>( posts );
+
+        given( postRepository.findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) )).willReturn( page );
+        given( pageRequestBuilder.buildPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
+
+        SearchResultPageCommand command = postService.searchPosts( searchStr, 0 );
+
+        then( postRepository ).should().findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) );
+        then( pageRequestBuilder ).should().buildPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString() );
+        assertThat( command, is(notNullValue()));
+        assertThat( command.getTotalElements(), is( 0L));
+    }
 
 
     //HELPER METHODS

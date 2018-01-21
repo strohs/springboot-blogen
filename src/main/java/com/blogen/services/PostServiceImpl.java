@@ -3,6 +3,7 @@ package com.blogen.services;
 import com.blogen.commands.CategoryCommand;
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
+import com.blogen.commands.SearchResultPageCommand;
 import com.blogen.commands.mappers.CategoryCommandMapper;
 import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
@@ -148,7 +149,7 @@ public class PostServiceImpl implements PostService {
             pageCommand.setSelectedCategoryName( selectedCategory.getName() );
 
         }
-        //build the pageCommand objects
+        //build the PostCommand objects
         List<PostCommand> postCommands = new ArrayList<>();
         page.forEach( (Post p) -> postCommands.add( postCommandMapper.postToPostCommand( p )));
 
@@ -262,6 +263,27 @@ public class PostServiceImpl implements PostService {
         mergePosts( detachedPost, postToUpdate );
         Post savedPost = postRepository.saveAndFlush( postToUpdate );
         return postCommandMapper.postToPostCommand( savedPost );
+    }
+
+    @Override
+    public SearchResultPageCommand searchPosts( String searchStr, int pageNum ) {
+        //build page request that returns results sorted by created date in descending order
+        PageRequest pageRequest = pageRequestBuilder.buildPageRequest( 0, Sort.Direction.DESC,"created" );
+        SearchResultPageCommand command = new SearchResultPageCommand();
+
+        Page<Post> page = postRepository.findByTextOrTitleIgnoreCaseContaining( searchStr, pageRequest );
+
+        //build PostCommand list
+        List<PostCommand> postCommands = new ArrayList<>();
+        page.forEach( (Post p) -> postCommands.add( postCommandMapper.postToPostCommand( p )));
+
+        //build the SearchResultPageCommand
+        command.setSearchStr( searchStr );
+        command.setPosts( postCommands );
+        command.setRequestedPage( pageNum );
+        command.setTotalElements( page.getTotalElements() );
+        command.setTotalPages( page.getTotalPages() );
+        return command;
     }
 
     /**
