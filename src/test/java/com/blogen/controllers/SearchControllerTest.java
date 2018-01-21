@@ -61,7 +61,7 @@ public class SearchControllerTest {
 
         given( postService.searchPosts( anyString(),anyInt() )).willReturn( command );
 
-        mockMvc.perform( get("/posts/search/text") )
+        mockMvc.perform( get("/posts/search?searchStr=text") )
                 .andExpect( status().isOk() )
                 .andExpect( view().name( "searchResults" ) )
                 .andExpect( model().attributeExists( "page" ) );

@@ -65,7 +65,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
      * @param searchStr - the substring to search for in post.text or post.title
      * @return {@link Page} containing Posts matching the searchStr
      */
-    @Query("select p from Post p where p.title like %?1% or p.text like %?1% order by p.created desc ")
+    @Query("select p from Post p where lower(p.title) like %?1% or lower(p.text) like %?1% order by p.created desc ")
    Page<Post> findByTextOrTitleIgnoreCaseContaining(String searchStr, Pageable pageable);
 
     /**

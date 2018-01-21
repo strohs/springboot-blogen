@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -26,8 +25,8 @@ public class SearchController {
         this.postService = postService;
     }
 
-    @GetMapping("/posts/search/{text}")
-    public String searchPosts( @PathVariable("text") String searchStr, Model model) {
+    @GetMapping("/posts/search")
+    public String searchPosts( @RequestParam("searchStr") String searchStr, Model model) {
         log.debug( "search for posts with: " + searchStr );
 
         SearchResultPageCommand command = postService.searchPosts( searchStr, 0 );
@@ -38,7 +37,7 @@ public class SearchController {
 
     @GetMapping("/posts/search/results")
     public String searchPostsResults( @RequestParam("search") String searchStr, @RequestParam("page") Integer page, Model model ) {
-        log.debug( "search post results page=" + page );
+        log.debug( "search post results. page=" + page + " search=" + searchStr );
 
         SearchResultPageCommand command = postService.searchPosts( searchStr, page );
         model.addAttribute( "page",command );

@@ -103,7 +103,7 @@
                     </div>
                 </div>
             </div>
-            <!-- NEW POST -->
+            <!-- NEW POST Button -->
             <div class="col-md-4">
                 <a href="#" class="btn btn-primary btn-block" th:data-user-id="${user.id}" data-user-id="1"
                    data-toggle="modal" data-target="#newPostModal">
@@ -112,10 +112,10 @@
             </div>
             <!-- SEARCH -->
             <div class="col-md-4">
-                <form id="searchPostsForm" th:action="@{/posts/search}" method="post">
+                <form id="searchPostsForm" th:action="@{/posts/search}" method="get">
                     <div class="form-row">
                         <div class="form-inline ml-auto">
-                            <input type="text" name="searchText" class="form-control" placeholder="Search Posts"/>
+                            <input type="text" name="searchStr" class="form-control" placeholder="Search Post Title and Text"/>
                             <input type="submit" class="btn btn-primary" value="Search"/>
                         </div>
                     </div>
@@ -188,6 +188,7 @@
                             <a th:if="${childPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}" href="#" class="btn btn-outline-primary btn-sm"
                                th:data-edit-post-id="${childPost.id}" data-edit-post-id="2"
                                th:data-edit-user-id="${childPost.userId}" data-edit-user-id="3"
+                               th:data-edit-user-name="${childPost.userName}" data-edit-user-name="3"
                                th:data-edit-title="${childPost.title}" data-edit-title="Title"
                                th:data-edit-text="${childPost.text}" data-edit-text="Text"
                                th:data-edit-image-url="${childPost.imageUrl}" data-edit-image-url="http://blog.com"
@@ -387,7 +388,7 @@
                     <div class="form-group">
                         <label for="newPostImage">Image Link</label>
                         <input id="newPostImage" name="imageUrl" type="url" class="form-control" th:field="*{imageUrl}"/>
-                        <small class="form-text text-muted">Valid URL to an image</small>
+                        <small class="form-text text-muted">Valid URL to an image on the internet</small>
                     </div>
                     <div class="form-group">
                         <label for="newPostBody">Body</label>
@@ -440,6 +441,7 @@
     //sets the post id, user name, post title, image url, and post text for the edit form
     $('#editPostModal').on('show.bs.modal', function (event) {
         var postId = $(event.relatedTarget).data('edit-post-id');
+        var userId = $(event.relatedTarget).data('edit-user-id');
         var userName = $(event.relatedTarget).data('edit-user-name');
         var title = $(event.relatedTarget).data('edit-title');
         var text = $(event.relatedTarget).data('edit-text');

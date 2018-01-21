@@ -268,10 +268,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public SearchResultPageCommand searchPosts( String searchStr, int pageNum ) {
         //build page request that returns results sorted by created date in descending order
-        PageRequest pageRequest = pageRequestBuilder.buildPageRequest( 0, Sort.Direction.DESC,"created" );
+        PageRequest pageRequest = pageRequestBuilder.buildPageRequest( pageNum, Sort.Direction.DESC,"created" );
         SearchResultPageCommand command = new SearchResultPageCommand();
 
-        Page<Post> page = postRepository.findByTextOrTitleIgnoreCaseContaining( searchStr, pageRequest );
+        Page<Post> page = postRepository.findByTextOrTitleIgnoreCaseContaining( searchStr.toLowerCase(), pageRequest );
 
         //build PostCommand list
         List<PostCommand> postCommands = new ArrayList<>();
