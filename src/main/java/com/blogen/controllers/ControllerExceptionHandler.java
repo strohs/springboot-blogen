@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ControllerExceptionHandler {
 
     @ResponseStatus( HttpStatus.BAD_REQUEST )
-    @ExceptionHandler(NotFoundException.class )
+    @ExceptionHandler( NotFoundException.class )
     public ModelAndView handleNotFoundException( Exception exception ) {
         log.error("NotFoundException " + exception.getMessage() );
 
