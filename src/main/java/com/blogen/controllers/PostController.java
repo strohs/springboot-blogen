@@ -4,6 +4,7 @@ import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.UserCommand;
 import com.blogen.domain.User;
+import com.blogen.exceptions.NotFoundException;
 import com.blogen.services.CategoryService;
 import com.blogen.services.PageRequestBuilder;
 import com.blogen.services.PostService;
@@ -12,12 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 
@@ -42,8 +45,6 @@ public class PostController {
     }
 
 
-    //editPost - POST - /posts/{id}/edit  - edit an existing post
-
     //showPost - GET - /posts/{id} - show a specific post
 
     //showPostByCategory - GET - /posts/category/{id}
@@ -60,12 +61,20 @@ public class PostController {
         return "redirect:/posts/show?cat=0&page=0";
     }
 
-    //addNewPost - create a new post - POST - /posts
+    //saveUpdatePost - create a new post or save an existing post - POST - /posts
     @PostMapping("/posts")
     public String addNewPost( @ModelAttribute("postCommand") PostCommand postCommand, Principal principal ) {
-        log.debug( "received new post: \n" + postCommand );
+        log.debug( "addNewPost received post: \n" + postCommand );
         PostCommand savedPost = postService.savePostCommand( postCommand );
         log.debug( "new post saved: \n" + savedPost );
+        return "redirect:/posts";
+    }
+
+    @PostMapping("/posts/update")
+    public String updatePost( @ModelAttribute("postCommand") PostCommand postCommand, Principal principal ) {
+        log.debug( "updatePost " + postCommand );
+        PostCommand updatedPost = postService.updatePostCommand( postCommand );
+
         return "redirect:/posts";
     }
 
@@ -95,4 +104,23 @@ public class PostController {
         return "userPosts";
 
     }
+
+//    /**
+//     * handles NotFoundException
+//     *
+//     * @return ModelAndView with the view name set to the 404error page, and sets the Response Status code to 404
+//     */
+//    @ResponseStatus( HttpStatus.NOT_FOUND )
+//    @ExceptionHandler( NotFoundException.class )
+//    public ModelAndView handleNotFound( Exception exception ) {
+//        log.error( exception.getMessage() );
+//
+//        ModelAndView modelAndView = new ModelAndView();
+//
+//        modelAndView.setViewName( "404error" );
+//        modelAndView.addObject( "exception", exception );
+//
+//
+//        return modelAndView;
+//    }
 }

@@ -145,6 +145,17 @@
 
                     <span th:text="${parentPost.text}">Got one of these Amazon Echo things for Christmas. I don't think I'll leave the house.</span>
 
+                    <!--EDIT BUTTON - only users who created a post OR admins can edit it -->
+                    <a th:if="${parentPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}" href="#" class="btn btn-outline-primary btn-sm"
+                       th:data-edit-post-id="${parentPost.id}" data-edit-post-id="2"
+                       th:data-edit-user-name="${parentPost.userName}" data-edit-user-name="johndoe"
+                       th:data-edit-title="${parentPost.title}" data-edit-title="Title"
+                       th:data-edit-text="${parentPost.text}" data-edit-text="Text"
+                       th:data-edit-image-url="${parentPost.imageUrl}" data-edit-image-url="http://blog.com"
+                       data-toggle="modal" data-target="#editPostModal">
+                        Edit
+                    </a>
+
                     <!--REPLY BUTTON - any user can reply to a parent post -->
                     <a href="#" class="btn btn-outline-success btn-sm"
                        th:data-post-id="${parentPost.id}" data-post-id="2"
@@ -172,6 +183,17 @@
                                 at <small class="font-italic" th:text="${childPost.created}">date</small>
                             </h6>
                             <span th:text="${childPost.text}">Be careful...I don't trust those things. They're always on... :(</span>
+
+                            <!--EDIT BUTTON - only users who created a post OR admins can edit it -->
+                            <a th:if="${childPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}" href="#" class="btn btn-outline-primary btn-sm"
+                               th:data-edit-post-id="${childPost.id}" data-edit-post-id="2"
+                               th:data-edit-user-id="${childPost.userId}" data-edit-user-id="3"
+                               th:data-edit-title="${childPost.title}" data-edit-title="Title"
+                               th:data-edit-text="${childPost.text}" data-edit-text="Text"
+                               th:data-edit-image-url="${childPost.imageUrl}" data-edit-image-url="http://blog.com"
+                               data-toggle="modal" data-target="#editPostModal">
+                                Edit
+                            </a>
 
                             <!-- DELETE BUTTON only user that created a post can delete it -->
                             <a th:if="${childPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}"
@@ -208,7 +230,6 @@
         
         <!-- PAGINATION -->
         <nav class="ml-4 mt-5">
-            <!--TODO build pagination -->
             <ul class="pagination">
                 <li class="page-item disabled" th:class="${page.requestedPage == 0 ? 'page-item disabled' : 'page-item'}">
                     <a href="#" th:href="@{/posts/show(cat=${page.selectedCategoryId},page=${page.requestedPage - 1})}" class="page-link">Previous</a>
@@ -245,10 +266,8 @@
             </div>
 
             <div class="modal-body">
-                <!-- TODO correct action needed here -->
                 <form id="replyPostForm" th:object="${postCommand}" action="login.html" th:action="@{/posts}" method="post">
 
-                    <!--TODO probably need a hidden field with parent post id -->
                     <input id="parentId" name="parentId" type="hidden" value="" th:field="*{parentId}"/>
                     <!--<input id="categoryName" name="categoryName" type="hidden" value=""/>-->
 
@@ -288,6 +307,57 @@
     </div>
 </div>
 
+<!-- EDIT POST MODAL -->
+<div id="editPostModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Edit Post</h5>
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="editPostForm" action="userPosts.html" th:object="${postCommand}" th:action="@{/posts/update}" method="post">
+
+                    <input id="editPostId" name="id" type="hidden" value="" th:field="*{id}"/>
+                    <input id="editUserName" name="userName" type="hidden" value="" th:field="*{userName}"/>
+
+                    <div class="form-group">
+                        <label for="editPostTitle">Title</label>
+                        <input id="editPostTitle" th:field="*{title}" name="title" type="text" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPostCategory">Category</label>
+                        <select id="editPostCategory" name="categoryName" class="form-control" th:field="*{categoryName}">
+                            <option th:each="category : ${page.categories}"
+                                    th:value="${category.name}" value="Web Development"
+                                    th:text="${category.name}">Web Development</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPostImage">Image Link</label>
+                        <input id="editPostImage" name="imageUrl" type="url" class="form-control" th:field="*{imageUrl}"/>
+                        <small class="form-text text-muted">Valid URL to an image</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPostBody">Body</label>
+                        <!-- maybe we will use ckeditor here -->
+                        <textarea id="editPostBody" name="text" rows="5" class="form-control" th:field="*{text}"></textarea>
+                    </div>
+                    <div class="form-row justify-content-end">
+                        <button class="btn btn-secondary mx-2" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Save"/>
+                        <!--<button type="submit" class="btn btn-primary mx-2" data-dismiss="modal">Save</button>-->
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <!-- NEW POST MODAL -->
 <div id="newPostModal" class="modal fade">
     <div class="modal-dialog modal-lg">
@@ -299,7 +369,6 @@
             </div>
 
             <div class="modal-body">
-                <!--TODO set action here -->
                 <form id="newPostForm" action="userPosts.html" th:object="${postCommand}" th:action="@{/posts}" method="post">
 
 
@@ -364,6 +433,28 @@
         $(this).find("#parentId").val(postId);
         //no longer need to set category name
         //$(this).find("#categoryName").val(catName);
+    });
+</script>
+
+<script>
+    //sets the post id, user name, post title, image url, and post text for the edit form
+    $('#editPostModal').on('show.bs.modal', function (event) {
+        var postId = $(event.relatedTarget).data('edit-post-id');
+        var userName = $(event.relatedTarget).data('edit-user-name');
+        var title = $(event.relatedTarget).data('edit-title');
+        var text = $(event.relatedTarget).data('edit-text');
+        var imageUrl = $(event.relatedTarget).data('edit-image-url');
+        console.log("running editPostModal post-id:" + postId);
+        console.log("running editPostModal user-name:" + userName);
+        console.log("running editPostModal title:" + title);
+        console.log("running editPostModal text:" + text);
+        console.log("running editPostModal image-url:" + imageUrl);
+        $(this).find("#editPostId").val(postId);
+        $(this).find("#editUserName").val(userName);
+        $(this).find("#editPostTitle").val(title);
+        $(this).find("#editPostBody").val(text);
+        $(this).find("#editPostImage").val(imageUrl);
+
     });
 </script>
 

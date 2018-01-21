@@ -7,6 +7,7 @@ import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
+import com.blogen.exceptions.NotFoundException;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
@@ -232,7 +233,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void should_UpdatePostWithNewText_when_updatePostCommand() {
+    public void should_UpdatePostWithNewText_when_updatingExistingPost() {
         Post existingPost = getParentPost1();
         Category cat = getCategory1();
         String newText = "new post text";
@@ -252,6 +253,26 @@ public class PostServiceImplTest {
         then( postRepository ).should().findOne( anyLong() );
         assertThat( savedCommand.getId(), is(POST1_ID) );
         assertThat( savedCommand.getText(), is(newText) );
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void should_throwNotFoundException_when_updatingNonExistingPost() throws Exception {
+        Post existingPost = getParentPost1();
+        Category cat = getCategory1();
+        String newText = "new post text";
+
+        Post updatedPost = getParentPost1();
+        updatedPost.setText( newText );
+        //this post does not exist
+        updatedPost.setId( 99999L );
+        PostCommand command = postCommandMapper.postToPostCommand( updatedPost );
+
+        given( postRepository.findOne( anyLong() )).willReturn( null );
+        given( categoryRepository.findByName( anyString() )).willReturn( cat );
+        given( postRepository.saveAndFlush( Matchers.any(Post.class) )).willReturn( updatedPost );
+
+        PostCommand savedCommand = postService.updatePostCommand( command );
+
     }
 
     @Test

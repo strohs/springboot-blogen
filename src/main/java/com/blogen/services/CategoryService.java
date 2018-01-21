@@ -9,6 +9,7 @@ import java.util.List;
  * Data access methods for working with Blogen {@link Category}. Every post on blogen has an associated category.
  *
  * Categories can only be created by an admin of the Blogen site.
+ *
  * Blogen categories should not be deleted once created, so delete operation are not supported
  *
  * @author Cliff

@@ -8,12 +8,12 @@ import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
+import com.blogen.exceptions.NotFoundException;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 /**
  * Service for performing CRUD operations on Posts
+ *
  * @author Cliff
  */
 @Log4j
@@ -100,8 +101,10 @@ public class PostServiceImpl implements PostService {
         } else {
             //a specific category id was selected on the page
             page = postRepository.findAllByCategory_IdAndParentNullOrderByCreatedDesc( categoryId, pageRequest );
-            pageCommand.setSelectedCategoryName( categoryRepository.findOne( categoryId ).getName() );
-
+            Category selectedCategory = categoryRepository.findOne( categoryId );
+            if ( selectedCategory == null )
+                throw new NotFoundException( "Category not found with id " + categoryId );
+            pageCommand.setSelectedCategoryName( selectedCategory.getName() );
         }
         //build the pageCommand objects
         List<PostCommand> postCommands = new ArrayList<>();
@@ -139,7 +142,10 @@ public class PostServiceImpl implements PostService {
         } else {
             //a specific category id was selected on the page
             page = postRepository.findAllByUser_IdAndCategory_IdAndParentNull( userId, categoryId, pageRequest );
-            pageCommand.setSelectedCategoryName( categoryRepository.findOne( categoryId ).getName() );
+            Category selectedCategory = categoryRepository.findOne( categoryId );
+            if ( selectedCategory == null )
+                throw new NotFoundException( "Category not found with id " + categoryId );
+            pageCommand.setSelectedCategoryName( selectedCategory.getName() );
 
         }
         //build the pageCommand objects
@@ -187,22 +193,8 @@ public class PostServiceImpl implements PostService {
     }
 
 
-//    @Transactional
-//    public void deletePost( Long id ) {
-//        Post postToDelete = postRepository.findOne( id );
-//        if ( postToDelete.getParent() == null ) {
-//            //delete the parent post
-//            postRepository.delete( postToDelete.getId() );
-//        } else {
-//            //postToDelete is a child post, need to get the parent post object and remove the child from it.
-//            Post parent = postRepository.findOne( postToDelete.getParent().getId() );
-//            parent.removeChild( postToDelete );
-//            postRepository.delete( postToDelete.getId() );
-//        }
-//    }
-
-
     @Override
+    @Transactional
     public PostCommand savePostCommand( PostCommand pc ) {
         if ( isParentPost( pc ) ) {
             return saveNewParentPostCommand( pc );
@@ -211,7 +203,6 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    @Transactional
     public PostCommand saveNewParentPostCommand( PostCommand pc ) {
         //get the username of the currently logged in principal
         String userName = principalService.getPrincipalUserName();
@@ -237,7 +228,6 @@ public class PostServiceImpl implements PostService {
      * @param pc The PostCommand to save. It is assumed to be a child Post
      * @return the Parent PostCommand object for the child that was just saved
      */
-    @Transactional
     public PostCommand saveNewChildPostCommand( PostCommand pc ) {
         //get the username of the currently logged in principal
         String userName = principalService.getPrincipalUserName();
@@ -249,7 +239,7 @@ public class PostServiceImpl implements PostService {
         detachedPost.setUser( user );
         //get Parent Post
         Post parent = postRepository.findOne( pc.getParentId() );
-        //get category - child posts inherit the parents category
+        //get category - NOTE: child posts inherit the parents category
         Category cat = categoryRepository.findByName( parent.getCategory().getName() );
         detachedPost.setCategory( cat );
         parent.addChild( detachedPost );
@@ -260,19 +250,22 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+    @PreAuthorize( "hasAuthority('ADMIN') || #pc.userName == authentication.name" )
     public PostCommand updatePostCommand( PostCommand pc ) {
         Post detachedPost = postCommandMapper.postCommandToPost( pc );
         Post postToUpdate = postRepository.findOne( pc.getId() );
+        if ( postToUpdate == null )
+            throw new NotFoundException( "Post does not exist with id:" + pc.getId() );
+
+        detachedPost.setCategory( categoryRepository.findByName( pc.getCategoryName() ));
         //merge the updated fields from the web form
         mergePosts( detachedPost, postToUpdate );
-        postToUpdate.setCategory( categoryRepository.findByName( pc.getCategoryName() ));
-
         Post savedPost = postRepository.saveAndFlush( postToUpdate );
         return postCommandMapper.postToPostCommand( savedPost );
     }
 
     /**
-     *
+     * Get ten recently created posts
      * @return the ten most recent posts made
      */
     @Override
@@ -290,6 +283,7 @@ public class PostServiceImpl implements PostService {
         target.setImageUrl( source.getImageUrl() );
         target.setTitle( source.getTitle() );
         target.setText( source.getText() );
+        target.setCategory( source.getCategory() );
     }
 
 
