@@ -2,7 +2,6 @@ package com.blogen.controllers;
 
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.SearchResultPageCommand;
-import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.services.PostService;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,8 +29,6 @@ public class SearchControllerTest {
 
     @Mock
     PostService postService;
-
-    PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
 
     MockMvc mockMvc;
 
@@ -146,7 +143,7 @@ public class SearchControllerTest {
 
 
 
-    PostCommand getPostCommand1() {
+    private PostCommand getPostCommand1() {
         PostCommand pc1 = new PostCommand();
         pc1.setId( 1L );
         pc1.setText( "this is post one text" );
@@ -154,7 +151,7 @@ public class SearchControllerTest {
         return pc1;
     }
 
-    PostCommand getPostCommand2() {
+    private PostCommand getPostCommand2() {
         PostCommand pc2 = new PostCommand();
         pc2.setId( 2L );
         pc2.setText( "this is post two text" );
