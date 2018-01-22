@@ -1,14 +1,19 @@
 package com.blogen.services;
 
-import com.blogen.api.v1.mappers.CategoryMapper;
 import com.blogen.api.v1.model.CategoryDTO;
 import com.blogen.commands.CategoryCommand;
+import com.blogen.commands.CategoryPageCommand;
 import com.blogen.commands.mappers.CategoryCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.repositories.CategoryRepository;
+import com.blogen.services.utils.PageRequestBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,11 +27,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     private CategoryRepository categoryRepository;
     private CategoryCommandMapper categoryCommandMapper;
+    private PageRequestBuilder pageRequestBuilder;
 
     @Autowired
-    public CategoryServiceImpl( CategoryRepository categoryRepository, CategoryCommandMapper categoryCommandMapper ) {
+    public CategoryServiceImpl( CategoryRepository categoryRepository, CategoryCommandMapper categoryCommandMapper,
+                                PageRequestBuilder pageRequestBuilder ) {
         this.categoryRepository = categoryRepository;
         this.categoryCommandMapper = categoryCommandMapper;
+        this.pageRequestBuilder = pageRequestBuilder;
     }
 
     /**
@@ -41,6 +49,29 @@ public class CategoryServiceImpl implements CategoryService {
                  .map( categoryCommandMapper::categoryToCategoryCommand )
                  .collect( Collectors.toList());
     }
+
+    /**
+     *
+     * @param pageNum the page of category data to retrieve
+     * @return a CategoryPageCommand containing a {@link org.springframework.data.domain.Page} of {@link Category}
+     */
+    @Override
+    public CategoryPageCommand getAllCategories( int pageNum ) {
+        CategoryPageCommand command = new CategoryPageCommand();
+        List<CategoryCommand> categoryCommands = new ArrayList<>();
+        //build a PageRequest for Category data
+        PageRequest pageRequest = pageRequestBuilder.buildCategoryPageRequest( pageNum, Sort.Direction.ASC, "name" );
+        //retrieve a page worth of categories
+        Page<Category> page = categoryRepository.findAll( pageRequest );
+        page.forEach( category -> categoryCommands.add( categoryCommandMapper.categoryToCategoryCommand( category ) ) );
+        //build the page command object
+        command.setCategories( categoryCommands );
+        command.setRequestedPage( pageNum );
+        command.setTotalElements( page.getTotalElements() );
+        command.setTotalPages( page.getTotalPages() );
+        return command;
+    }
+
 
     /**
      * get a Blogen {@link Category} by name
@@ -63,5 +94,17 @@ public class CategoryServiceImpl implements CategoryService {
                 .stream()
                 .map( categoryCommandMapper::categoryToCategoryCommand )
                 .collect( Collectors.toList());
+    }
+
+    /**
+     * saves a new {@link Category} into the Database
+     * @param command command object of Category data to create in the DB
+     * @return {@link CategoryCommand} representing the newly saved category
+     */
+    @Override
+    public CategoryCommand addCategoryByCategoryCommand( CategoryCommand command ) {
+        Category categoryToSave = categoryCommandMapper.categoryCommandToCategory( command );
+        Category savedCategory = categoryRepository.save( categoryToSave );
+        return categoryCommandMapper.categoryToCategoryCommand( savedCategory );
     }
 }

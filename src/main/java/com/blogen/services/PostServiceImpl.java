@@ -13,6 +13,7 @@ import com.blogen.exceptions.NotFoundException;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
+import com.blogen.services.utils.PageRequestBuilder;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -91,7 +92,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PageCommand getAllPostsByCategoryForPage( Long categoryId, int pageNum ) {
         //build the PageRequest for the requested page
-        PageRequest pageRequest = pageRequestBuilder.buildPageRequest( pageNum, Sort.Direction.DESC, "created" );
+        PageRequest pageRequest = pageRequestBuilder.buildPostPageRequest( pageNum, Sort.Direction.DESC, "created" );
         PageCommand pageCommand = new PageCommand();
         Page<Post> page;
 
@@ -132,7 +133,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PageCommand getAllPostsByUserAndCategoryForPage( Long userId, Long categoryId, int pageNum ) {
         //build the PageRequest for the requested page
-        PageRequest pageRequest = pageRequestBuilder.buildPageRequest( pageNum, Sort.Direction.DESC, "created" );
+        PageRequest pageRequest = pageRequestBuilder.buildPostPageRequest( pageNum, Sort.Direction.DESC, "created" );
         PageCommand pageCommand = new PageCommand();
         Page<Post> page;
 
@@ -268,7 +269,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public SearchResultPageCommand searchPosts( String searchStr, int pageNum ) {
         //build page request that returns results sorted by created date in descending order
-        PageRequest pageRequest = pageRequestBuilder.buildPageRequest( pageNum, Sort.Direction.DESC,"created" );
+        PageRequest pageRequest = pageRequestBuilder.buildPostPageRequest( pageNum, Sort.Direction.DESC,"created" );
         SearchResultPageCommand command = new SearchResultPageCommand();
 
         Page<Post> page = postRepository.findByTextOrTitleIgnoreCaseContaining( searchStr.toLowerCase(), pageRequest );

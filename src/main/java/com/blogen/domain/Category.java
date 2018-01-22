@@ -3,8 +3,10 @@ package com.blogen.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * Domain Model for the Category of a Post
@@ -22,4 +24,7 @@ public class Category {
 
     @Column(unique = true)
     private String name;
+
+    private LocalDateTime created = LocalDateTime.now();
+
 }

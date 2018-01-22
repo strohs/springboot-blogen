@@ -22,6 +22,7 @@ import java.io.IOException;
 @Slf4j
 @ControllerAdvice
 public class ControllerExceptionHandler {
+//todo possibly add global ExceptionHandlers for other Spring MVC Exceptions
 
     @ResponseStatus( HttpStatus.NOT_FOUND )
     @ExceptionHandler( NotFoundException.class )

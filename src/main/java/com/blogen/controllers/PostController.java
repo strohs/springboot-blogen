@@ -3,24 +3,13 @@ package com.blogen.controllers;
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.UserCommand;
-import com.blogen.domain.User;
-import com.blogen.exceptions.NotFoundException;
-import com.blogen.services.CategoryService;
-import com.blogen.services.PageRequestBuilder;
 import com.blogen.services.PostService;
 import com.blogen.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 

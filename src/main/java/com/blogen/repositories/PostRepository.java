@@ -61,7 +61,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
    Page<Post> findAllByUser_IdAndCategory_IdAndParentNull( Long userId, Long categoryId, Pageable pageable);
 
     /**
-     * searches for searchStr in the text or title of a Post
+     * searches for searchStr in the text or title of a Post. This is a brute force search
      * @param searchStr - the substring to search for in post.text or post.title
      * @return {@link Page} containing Posts matching the searchStr
      */

@@ -12,6 +12,7 @@ import com.blogen.exceptions.NotFoundException;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
+import com.blogen.services.utils.PageRequestBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -116,7 +117,7 @@ public class PostServiceImplTest {
         given( postRepository.findAllByCategory_IdAndParentNullOrderByCreatedDesc( anyLong(), Matchers.any( Pageable.class ) )).willReturn( page );
         given( categoryRepository.findOne( anyLong() )).willReturn( cat1 );
         given( categoryRepository.findAll() ).willReturn( categories );
-        given( pageRequestBuilder.buildPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
+        given( pageRequestBuilder.buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
 
         PageCommand pageCommand = postService.getAllPostsByCategoryForPage( CAT1_ID,0 );
 
@@ -313,12 +314,12 @@ public class PostServiceImplTest {
         Page<Post> page = new PageImpl<Post>( posts );
 
         given( postRepository.findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) )).willReturn( page );
-        given( pageRequestBuilder.buildPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
+        given( pageRequestBuilder.buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
 
         SearchResultPageCommand command = postService.searchPosts( searchStr, 0 );
 
         then( postRepository ).should().findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) );
-        then( pageRequestBuilder ).should().buildPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString() );
+        then( pageRequestBuilder ).should().buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString() );
         assertThat( command, is(notNullValue()));
         assertThat( command.getTotalElements(), is( 2L));
         assertThat( command.getPosts().get( 0 ).getText().contains( searchStr ), is(true) );
@@ -338,12 +339,12 @@ public class PostServiceImplTest {
         Page<Post> page = new PageImpl<Post>( posts );
 
         given( postRepository.findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) )).willReturn( page );
-        given( pageRequestBuilder.buildPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
+        given( pageRequestBuilder.buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
 
         SearchResultPageCommand command = postService.searchPosts( searchStr, 0 );
 
         then( postRepository ).should().findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) );
-        then( pageRequestBuilder ).should().buildPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString() );
+        then( pageRequestBuilder ).should().buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString() );
         assertThat( command, is(notNullValue()));
         assertThat( command.getTotalElements(), is( 0L));
     }

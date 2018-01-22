@@ -1,7 +1,10 @@
 package com.blogen.services;
 
 import com.blogen.commands.CategoryCommand;
+import com.blogen.commands.CategoryPageCommand;
 import com.blogen.domain.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -23,6 +26,13 @@ public interface CategoryService {
     List<CategoryCommand> getAllCategories();
 
     /**
+     * Retrieve a page of category data
+     * @param pageNum the page of category data to retrieve
+     * @return
+     */
+    CategoryPageCommand getAllCategories( int pageNum );
+
+    /**
      * get a specific {@link Category} object
      * @param name - the name of the Category.name to search for
      * @return the {@link Category} containing the specified name
@@ -36,6 +46,13 @@ public interface CategoryService {
      * @return a list of Categories that match the passed in name
      */
     List<CategoryCommand> getCategoryByNameLike( String name );
+
+    /**
+     * adds a new category to the category table
+     * @param command command object of Category data to create in the DB
+     * @return a command object representing the Category that was just created
+     */
+    CategoryCommand addCategoryByCategoryCommand( CategoryCommand command );
 
 
 }

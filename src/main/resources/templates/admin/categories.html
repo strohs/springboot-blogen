@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -16,7 +16,7 @@
 
 <!-- NAVBAR -->
 <!-- really thin navbar with no padding: p-0 -->
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0" th:replace="~{/fragments/navbar :: navbar}">
     <div class="container">
         <a href="../index.html" class="navbar-brand">Blogen</a>
 
@@ -79,35 +79,38 @@
     </div>
 </header>
 
-<!-- SEARCH CATEGORIES -->
+<!-- HEADER Buttons -->
 <section id="search-categories" class="py-4 mb-4 bg-light">
     <div class="container">
-        <form id="searchCategoriesForm">
-            <div class="form-row">
-                <div class="form-inline ml-auto">
-                    <input type="text" class="form-control" placeholder="Search"/>
-                    <button type="submit" class="btn btn-success">Search</button>
-                </div>
+        <div class="row">
+
+            <div class="col-md-4">
             </div>
-        </form>
+
+            <!-- NEW Category Button -->
+            <div class="col-md-4">
+                <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#newCategoryModal">
+                    <i class="fa fa-plus"></i>New Category
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <!--<form id="searchCategoriesForm">-->
+                <!--<div class="form-row">-->
+                <!--<div class="form-inline ml-auto">-->
+                <!--<input type="text" class="form-control" placeholder="Search"/>-->
+                <!--<button type="submit" class="btn btn-success">Search</button>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</form>-->
+            </div>
+
+        </div>
     </div>
-    <!-- below is the original (non-form based) search input and button -->
-    <!--<div class="container">-->
-    <!--<div class="row">-->
-    <!--<div class="col-md-6 ml-auto">-->
-    <!--<div class="input-group">-->
-    <!--<input type="text" class="form-control" placeholder="Search"/>-->
-    <!--<span class="input-group-btn">-->
-    <!--<button class="btn btn-primary">Search</button>-->
-    <!--</span>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
 </section>
 
 <!-- POSTS -->
-<section id="posts">
+<section id="categories">
     <div class="container">
         <div class="row">
             <div class="col">
@@ -124,22 +127,22 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td scope="row">1</td>
-                            <td>Web Development</td>
-                            <td>July 12, 2017</td>
+                        <tr th:each="category,iterStat : ${page.categories}">
+                            <td scope="row" th:text="${iterStat.count}">1</td>
+                            <td th:text="${category.name}">Web Development</td>
+                            <td th:text="${category.created}">July 12, 2017</td>
                         </tr>
-                        <tr>
+                        <tr th:remove="all">
                             <td scope="row">2</td>
                             <td>Tech Gadgets</td>
                             <td>July 13, 2017</td>
                         </tr>
-                        <tr>
+                        <tr th:remove="all">
                             <td scope="row">4</td>
                             <td>Business</td>
                             <td>July 15, 2017</td>
                         </tr>
-                        <tr>
+                        <tr th:remove="all">
                             <td scope="row">6</td>
                             <td>Heath & Wellness</td>
                             <td>July 13, 2017</td>
@@ -150,20 +153,20 @@
                     <!-- PAGINATION -->
                     <nav class="ml-4">
                         <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a href="#" class="page-link">Previous</a>
+                            <li class="page-item disabled" th:class="${page.requestedPage == 0 ? 'page-item disabled' : 'page-item'}">
+                                <a href="#" th:href="@{/admin/categories/show(page=${page.requestedPage - 1})}" class="page-link">Previous</a>
                             </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">1</a>
+                            <li class="page-item" th:each="i: ${#numbers.sequence(0,page.totalPages - 1)}">
+                                <a href="#" th:href="@{/admin/categories/show(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
                             </li>
-                            <li class="page-item">
+                            <li class="page-item" th:remove="all">
                                 <a href="#" class="page-link">2</a>
                             </li>
-                            <li class="page-item">
+                            <li class="page-item" th:remove="all">
                                 <a href="#" class="page-link">3</a>
                             </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">Next</a>
+                            <li class="page-item" th:class="${page.requestedPage + 1 == page.totalPages ? 'page-item disabled' : 'page-item'}">
+                                <a href="#" th:href="@{/admin/categories/show(page=${page.requestedPage + 1})}" class="page-link">Next</a>
                             </li>
                         </ul>
                     </nav>
@@ -175,7 +178,7 @@
     </div>
 </section>
 
-<footer id="main-footer" class="bg-dark text-white mt-5">
+<footer id="main-footer" class="bg-dark text-white mt-5" th:replace="~{/fragments/footer :: footer}">
     <div class="container">
         <div class="row">
             <div class="col">
@@ -186,7 +189,35 @@
 </footer>
 
 
+<!-- NEW Category MODAL -->
+<div id="newCategoryModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
 
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">New Category</h5>
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="newCategoryForm" action="#" th:object="${categoryCommand}" th:action="@{/admin/categories}" method="post">
+
+                    <div class="form-group">
+                        <label for="newCategoryName">Name</label>
+                        <input id="newCategoryName" th:field="*{name}" name="name" type="text" class="form-control"/>
+                    </div>
+
+                    <div class="form-row justify-content-end">
+                        <button class="btn btn-secondary mx-2" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-success" value="Save"/>
+                        <!--<button type="submit" class="btn btn-primary mx-2" data-dismiss="modal">Save</button>-->
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
