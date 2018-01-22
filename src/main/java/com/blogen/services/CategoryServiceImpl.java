@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
     /**
      * gets all Blogen {@link Category} from the database and maps them to {@link CategoryDTO}
      *
-     * @return a List of CategoryDTOS
+     * @return a List of CategoryCommands
      */
     @Override
     public List<CategoryCommand> getAllCategories() {
@@ -86,7 +87,7 @@ public class CategoryServiceImpl implements CategoryService {
     /**
      * get all categories with the specified subString in their name
      * @param subStr the sub-string to search for in {@link Category} name should not contain wildcard characters (e.g. %)
-     * @return a List of {@link CategoryDTO} containing the subString in their name property
+     * @return a List of {@link CategoryCommand} containing the subString in their name property
      */
     @Override
     public List<CategoryCommand> getCategoryByNameLike( String subStr ) {
@@ -97,11 +98,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     /**
-     * saves a new {@link Category} into the Database
+     * saves a new {@link Category} into the Database.
+     * Only ADMINs are allowed to add new categories.
+     *
      * @param command command object of Category data to create in the DB
      * @return {@link CategoryCommand} representing the newly saved category
      */
     @Override
+    @PreAuthorize( "hasAuthority('ADMIN')" )
     public CategoryCommand addCategoryByCategoryCommand( CategoryCommand command ) {
         Category categoryToSave = categoryCommandMapper.categoryCommandToCategory( command );
         Category savedCategory = categoryRepository.save( categoryToSave );

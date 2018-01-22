@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * Controller for the /admin/categories page.
+ *
  * @author Cliff
  */
 @Log4j
