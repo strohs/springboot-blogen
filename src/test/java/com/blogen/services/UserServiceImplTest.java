@@ -60,7 +60,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void whenGetUserById_shouldReturnOneUser() {
+    public void should_returnOneUser_when_getUserById() {
         User user = buildUser( USER1_ID, USER1_USERNAME );
 
         given( userRepository.findOne( anyLong() ) ).willReturn( user );
@@ -72,7 +72,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void whenGetUserByNameLike_shouldReturnTwoUsers_containingString_doe() {
+    public void should_ReturnTwoUsersContainingString_doe_when_getUserByNameLike() {
         User user1 = buildUser( USER1_ID, USER1_USERNAME );
         User user2 = buildUser( USER2_ID, USER2_USERNAME );
         String likeName = "doe";
@@ -91,7 +91,7 @@ public class UserServiceImplTest {
     //TODO test case for when user name like, is NOT found, should throw exception
 
     @Test
-    public void whenGetAllUsers_shouldReturnThreeUsers() {
+    public void should_returnThreeUsers_when_GetAllUsers() {
         User user1 = buildUser( USER1_ID, USER1_USERNAME );
         User user2 = buildUser( USER2_ID, USER2_USERNAME );
         User user3 = buildUser( USER3_ID, USER3_USERNAME );
@@ -107,7 +107,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void whenSaveUserCommand_shouldSaveUser() throws Exception {
+    public void should_SaveUser_when_SaveUserCommand() throws Exception {
         UserPrefsCommand upc = buildUserPrefsCommand( USER_PREFS_ID, USER_PREFS_AVATAR );
         UserCommand commandToSave = buildUserCommand( USER1_ID, USER3_USERNAME, upc );
         User savedUser = buildUser( USER1_ID, USER3_USERNAME );

@@ -32,7 +32,7 @@ public class UserServiceImplIT {
 
     @Test
     @Transactional
-    public void saveUserCommand_shouldSaveFirstName() {
+    public void should_saveFirstName_when_saveUserCommand() {
         UserCommand johnDoeCommand = userService.getUserById( JOHN_DOE_ID );
         johnDoeCommand.setFirstName( "Jane" );
         UserCommand savedCommand = userService.saveUserCommand( johnDoeCommand );
@@ -43,7 +43,7 @@ public class UserServiceImplIT {
 
     @Test
     @Transactional
-    public void saveUserCommand_shouldSaveNewAvatarName() {
+    public void should_saveNewAvatarName_when_saveUserCommand() {
         UserCommand johnDoeCommand = userService.getUserById( JOHN_DOE_ID );
         johnDoeCommand.getUserPrefs().setAvatarImage( "Avatar99.jpg" );
 
