@@ -12,4 +12,5 @@ public interface UserPrefsRepository extends JpaRepository<UserPrefs,Long> {
 
     UserPrefs findByUser_Id( Long userId );
 
+
 }

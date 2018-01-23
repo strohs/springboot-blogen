@@ -1,6 +1,7 @@
 package com.blogen.services;
 
 import com.blogen.commands.UserCommand;
+import com.blogen.commands.UserProfileCommand;
 import com.blogen.domain.User;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public interface UserService {
 
     UserCommand getUserByUserName( String userName );
 
+    UserProfileCommand getUserProfileByUserName( String userName );
+
     User findByUserName( String name );
 
     User saveUser( User user );
@@ -25,4 +28,8 @@ public interface UserService {
     List<UserCommand> getAllUsers();
 
     UserCommand saveUserCommand( UserCommand command );
+
+    UserProfileCommand saveUserProfileCommand( UserProfileCommand command );
+
+    void savePassword( String userName, UserProfileCommand command );
 }

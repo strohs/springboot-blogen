@@ -15,7 +15,6 @@
 <body>
 
 <!-- NAVBAR -->
-<!-- really thin navbar with no padding: p-0 -->
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0" th:replace="~{/fragments/navbar :: navbar}">
     <div class="container">
         <a href="index.html" class="navbar-brand">Blogen</a>
@@ -88,17 +87,17 @@
                     <i class="fa fa-arrow-left"></i>Back to Posts
                 </a>
             </div>
-            <!--<div class="col-md-3">-->
-                <!--<a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#passwordModal">-->
-                    <!--<i class="fa fa-lock"></i>Change Password-->
-                <!--</a>-->
-            <!--</div>-->
-            <!-- only admins can delete accounts -->
-            <div class="col-md-3" sec:authorize="hasAuthority('ADMIN')">
-                <a href="#" class="btn btn-danger btn-block">
-                    <i class="fa fa-remove"></i>Delete Account
+            <div class="col-md-3">
+                <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#passwordModal">
+                    <i class="fa fa-lock"></i>Change Password
                 </a>
             </div>
+            <!-- only admins can delete accounts -->
+            <!--<div class="col-md-3" sec:authorize="hasAuthority('ADMIN')">-->
+                <!--<a href="#" class="btn btn-danger btn-block">-->
+                    <!--<i class="fa fa-remove"></i>Delete Account-->
+                <!--</a>-->
+            <!--</div>-->
         </div>
     </div>
 </section>
@@ -109,6 +108,7 @@
         <form id="edit-post-form" th:object="${user}" action="#" th:action="@{/profile}" method="post">
             <div class="row">
                 <div class="col-md-9">
+                    
                     <div class="card">
                         <div class="card-header">
                             <h4>Edit Profile</h4>
@@ -119,28 +119,33 @@
                             
                             <div class="form-group">
                                 <label for="firstName">First Name</label>
-                                <input id="firstName" name="firstName" type="text" class="form-control" value="John" th:field="*{firstName}"/>
+                                <input id="firstName" name="firstName" type="text" class="form-control" value="John" th:field="*{firstName}" th:errorclass="is-invalid"/>
+                                <div class="invalid-feedback">
+                                    Please fill in first name
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="lastName">Last Name</label>
-                                <input id="lastName" name="lastName" type="text" class="form-control" value="Doe" th:field="*{lastName}"/>
+                                <input id="lastName" name="lastName" type="text" class="form-control" value="Doe" th:field="*{lastName}" th:errorclass="is-invalid"/>
+                                <div class="invalid-feedback">
+                                    Please fill in last name
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input id="email" name="email" type="email" class="form-control" value="jdoe@gmail.com" th:field="*{email}"/>
+                                <input id="email" name="email" type="email" class="form-control" value="jdoe@gmail.com" th:field="*{email}" th:errorclass="is-invalid"/>
+                                <div class="invalid-feedback">
+                                    Please provide an email address
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="userName">User Name</label>
-                                <input id="userName" name="userName" type="text" class="form-control" value="coolName" th:field="*{userName}"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input id="password" name="password" type="password" class="form-control" value="" th:field="*{password}"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="confirmPassword">Confirm Password</label>
-                                <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" value="" th:field="*{confirmPassword}"/>
-                            </div>
+                            <!--<div class="form-group">-->
+                                <!--<label for="userName">User Name</label>-->
+                                <!--<input id="userName" name="userName" type="text" class="form-control" value="coolName" th:field="*{userName}" th:errorclass="is-invalid"/>-->
+                                <!--<div class="invalid-feedback">-->
+                                    <!--Please choose a username.-->
+                                <!--</div>-->
+                            <!--</div>-->
+
                             <div class="form-row justify-content-end">
                                 <input type="submit" class="btn btn-success" value="Save"/>
                                 <!--<button type="submit" class="btn btn-primary mx-2" data-dismiss="modal">Save</button>-->
@@ -151,10 +156,10 @@
                 </div>
                 <div class="col-md-3">
                     <h3>Your avatar</h3>
-                    <img id="avatarImage" src="/static/img/avatar1.jpg" th:src="@{'/img/' + ${user.getUserPrefs().avatarImage}}"
+                    <img id="avatarImage" src="/static/img/avatar1.jpg" th:src="@{'/img/' + ${user.avatarImage}}"
                           alt="" class="d-block img-fluid img-thumbnail mb-3"/>
                     <label for="avatarImageSelect">Avatar Images</label>
-                    <select id="avatarImageSelect" name="avatarImage" class="form-control my-2" th:field="*{userPrefs.avatarImage}">
+                    <select id="avatarImageSelect" name="avatarImage" class="form-control my-2" th:field="*{avatarImage}">
                         <option th:each="imageName : *{avatarImages}"
                                 th:value="${imageName}" value="avatar1.jpg"
                                 th:text="${imageName}">avatar1.jpg</option>
@@ -181,40 +186,55 @@
 </footer>
 
 <!-- PASSWORD MODAL -->
-<!--<div id="passwordModal" class="modal fade">-->
-    <!--<div class="modal-dialog modal-lg">-->
-        <!--<div class="modal-content">-->
+<div id="passwordModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+              <div class="modal-header bg-success text-white">
+                  <h5 class="modal-title">Change Password</h5>
+                  <button class="close" data-dismiss="modal"><span>&times;</span></button>
+              </div>
 
-            <!--<div class="modal-header bg-primary text-white">-->
-                <!--<h5 class="modal-title">Change Password</h5>-->
-                <!--<button class="close" data-dismiss="modal"><span>&times;</span></button>-->
+              <div class="modal-body">
+                  <form id="changePasswordModal" action="#" th:object="${user}" th:action="@{/profile/password}" method="post">
+
+                      <input type="hidden" name="" value="" th:field="*{id}" />
+                      <input type="hidden" name="" value="" th:field="*{firstName}" />
+                      <input type="hidden" name="" value="" th:field="*{lastName}" />
+                      <input type="hidden" name="" value="" th:field="*{email}" />
+                      <input type="hidden" name="" value="" th:field="*{avatarImage}" />
+
+                      <div class="form-group">
+                          <label for="password">Password</label>
+                          <input id="password" name="password" type="password" class="form-control" value="" th:field="*{password}" th:errorclass="is-invalid"/>
+                          <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}">
+                              <ul>
+                                  <li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
+                              </ul>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="confirmPassword">Confirm Password</label>
+                          <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" value="" th:field="*{confirmPassword}" th:errorclass="is-invalid"/>
+                          <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmPassword')}">
+                              <ul>
+                                  <li th:each="err : ${#fields.errors('confirmPassword')}" th:text="${err}"></li>
+                              </ul>
+                          </div>
+                      </div>
+                      <!-- NOTE: Example of moving form buttons within the <form> tag rather than using modal-footer -->
+                      <div class="form-row justify-content-end">
+                          <button class="btn btn-secondary mx-2" data-dismiss="modal">Close</button>
+                          <input type="submit" class="btn btn-success mx-2" value="Update Password"/>
+                      </div>
+                  </form>
+              </div>
+            <!--<div class="modal-footer">-->
+                <!--<button class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                <!--<button class="btn btn-warning" data-dismiss="modal">Save Changes</button>-->
             <!--</div>-->
-
-            <!--<div class="modal-body">-->
-                <!--<form id="changePasswordModal">-->
-                    <!--<div class="form-group">-->
-                        <!--<label for="userPassword">Password</label>-->
-                        <!--<input id="userPassword" type="password" class="form-control"/>-->
-                    <!--</div>-->
-                    <!--<div class="form-group">-->
-                        <!--<label for="userPasswordConfirm">Confirm Password</label>-->
-                        <!--<input id="userPasswordConfirm" type="password" class="form-control"/>-->
-                    <!--</div>-->
-                    <!--&lt;!&ndash; NOTE: Example of moving form buttons within the <form> tag rather than using modal-footer &ndash;&gt;-->
-                    <!--<div class="form-row justify-content-end">-->
-                        <!--<button class="btn btn-secondary mx-2" data-dismiss="modal">Close</button>-->
-                        <!--<button type="submit" class="btn btn-primary mx-2" data-dismiss="modal">Update Password</button>-->
-                    <!--</div>-->
-                <!--</form>-->
-            <!--</div>-->
-
-            <!--&lt;!&ndash;<div class="modal-footer">&ndash;&gt;-->
-                <!--&lt;!&ndash;<button class="btn btn-secondary" data-dismiss="modal">Close</button>&ndash;&gt;-->
-                <!--&lt;!&ndash;<button class="btn btn-warning" data-dismiss="modal">Save Changes</button>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
+        </div>
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         th:src="@{/webjars/jquery/3.2.1/dist/jquery.slim.min.js}"
@@ -245,5 +265,16 @@
         });
     });
 </script>
+<script th:inline="javascript">
+    //check for password validation errors, if true then display password modal automatically
+    var errors = [(${user.passwordError})];
+    $(document).ready(function(){
+
+       if (errors) $("#passwordModal").modal('show');
+
+    });
+</script>
+
+
 </body>
 </html>

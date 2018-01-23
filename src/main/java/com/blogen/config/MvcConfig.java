@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.validation.Validator;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -47,7 +48,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
     }
 
-//    @Bean
+    //    @Bean
 //    public ViewResolver viewResolver() {
 //        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
 //        resolver.setTemplateEngine(templateEngine());

@@ -1,12 +1,13 @@
 package com.blogen.services;
 
 import com.blogen.commands.UserCommand;
+import com.blogen.commands.UserProfileCommand;
 import com.blogen.commands.mappers.UserCommandMapper;
+import com.blogen.commands.mappers.UserProfileCommandMapper;
 import com.blogen.domain.User;
 import com.blogen.repositories.UserRepository;
 import com.blogen.services.security.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +24,15 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private UserCommandMapper userCommandMapper;
+    private UserProfileCommandMapper userProfileCommandMapper;
     private EncryptionService encryptionService;
 
     @Autowired
-    public UserServiceImpl( UserRepository userRepository, UserCommandMapper userCommandMapper, EncryptionService encryptionService ) {
+    public UserServiceImpl( UserRepository userRepository, UserCommandMapper userCommandMapper,
+                            UserProfileCommandMapper userProfileCommandMapper, EncryptionService encryptionService ) {
         this.userRepository = userRepository;
         this.userCommandMapper = userCommandMapper;
+        this.userProfileCommandMapper = userProfileCommandMapper;
         this.encryptionService = encryptionService;
     }
 
@@ -117,7 +121,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserCommand saveUserCommand( UserCommand command ) {
         User userToSave = userCommandMapper.userCommandToUser( command );
-        //todo may have to retrieve User and perform manual merge
         User fetchedUser = userRepository.findOne( command.getId() );
         mergeUsers( userToSave, fetchedUser );
         if( userToSave.getPassword() != null )
@@ -125,6 +128,33 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save( fetchedUser );
         return userCommandMapper.userToUserCommand( savedUser );
+    }
+
+    @Override
+    public UserProfileCommand getUserProfileByUserName( String userName ) {
+        User user = userRepository.findByUserName( userName );
+        
+        UserProfileCommand upc = userProfileCommandMapper.userToUserProfileCommand( user );
+        return upc;
+    }
+
+    @Override
+    public UserProfileCommand saveUserProfileCommand( UserProfileCommand command ) {
+        User userToSave = userRepository.findOne( command.getId() );
+        //merge fields from UserProfileCommand to User
+        userToSave.setFirstName( command.getFirstName() );
+        userToSave.setLastName( command.getLastName() );
+        userToSave.setEmail( command.getEmail() );
+        userToSave.getUserPrefs().setAvatarImage( command.getAvatarImage() );
+        User savedUser = userRepository.save( userToSave );
+        return userProfileCommandMapper.userToUserProfileCommand( savedUser );
+    }
+
+    @Override
+    public void savePassword( String userName, UserProfileCommand command ) {
+        //todo possible password check and encrypt
+        //todo write tests
+        
     }
 
     /**

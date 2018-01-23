@@ -3,6 +3,7 @@ package com.blogen.services;
 import com.blogen.commands.UserCommand;
 import com.blogen.commands.UserPrefsCommand;
 import com.blogen.commands.mappers.UserCommandMapper;
+import com.blogen.commands.mappers.UserProfileCommandMapper;
 import com.blogen.domain.User;
 import com.blogen.domain.UserPrefs;
 import com.blogen.repositories.UserRepository;
@@ -51,12 +52,13 @@ public class UserServiceImplTest {
 
 
     private UserCommandMapper userCommandMapper = UserCommandMapper.INSTANCE;
+    private UserProfileCommandMapper userProfileCommandMapper = UserProfileCommandMapper.INSTANCE;
 
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
-        userService = new UserServiceImpl( userRepository, userCommandMapper, encryptionService );
+        userService = new UserServiceImpl( userRepository, userCommandMapper, userProfileCommandMapper, encryptionService );
     }
 
     @Test
