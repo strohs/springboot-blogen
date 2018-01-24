@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -54,20 +55,20 @@ public class UserProfileController {
     }
 
     @PostMapping("/profile")
-    public String saveProfile( @Valid @ModelAttribute("user") UserProfileCommand userProfileCommand, BindingResult bindingResult ) {
+    public String saveProfile( @Valid @ModelAttribute("user") UserProfileCommand userProfileCommand, BindingResult bindingResult, RedirectAttributes redirectAttributes ) {
         log.debug( "saving user profile: " + userProfileCommand );
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach( objectError -> log.debug( objectError.toString() ) );
             return "profile";
         }
-
         userService.saveUserProfileCommand( userProfileCommand );
+        redirectAttributes.addFlashAttribute( "successMessage","Settings were saved" );
         return "redirect:/profile";
     }
 
     @PostMapping("/profile/password")
     public String savePassword( @Valid @ModelAttribute("user") UserProfileCommand command,
-                                BindingResult bindingResult, Principal principal ) {
+                                BindingResult bindingResult, RedirectAttributes redirectAttributes ) {
         log.debug( "changing password for user id: " + command.getId() );
         log.debug( "UserProfileCommand is: " + command );
         if (bindingResult.hasErrors()) {
@@ -76,6 +77,7 @@ public class UserProfileController {
             return "profile";
         }
         userService.savePassword( command );
+        redirectAttributes.addFlashAttribute( "successMessage","Password was saved" );
         return "redirect:/profile";
     }
 }

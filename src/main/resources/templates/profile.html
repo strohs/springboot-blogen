@@ -80,14 +80,22 @@
 
 <!-- ACTION BUTTONS -->
 <section id="action" class="py-4 mb-4 bg-light">
+
     <div class="container">
         <div class="row">
-            <div class="col-md-3 mr-auto">
+            <div class="col-md-3">
                 <a href="#" th:href="@{/posts}" class="btn btn-light btn-block">
                     <i class="fa fa-arrow-left"></i>Back to Posts
                 </a>
             </div>
-            <div class="col-md-3">
+
+            <div class="col-md-3" th:if="${successMessage}" >
+                <div class="alert alert-success text-center">
+                    <strong th:text="${successMessage}">Settings were saved</strong>
+                </div>
+            </div>
+            
+            <div class="col-md-3 ml-auto">
                 <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#passwordModal">
                     <i class="fa fa-lock"></i>Change Password
                 </a>

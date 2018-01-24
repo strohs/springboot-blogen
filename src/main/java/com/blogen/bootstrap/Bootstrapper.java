@@ -179,7 +179,7 @@ public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> 
         pb = new PostBuilder( maggie,health,"http://lorempixel.com/400/200/sports/3","What ever happened to Jazzercise?","It used to be all the rage, now I can't find a single gym that offers it",LocalDateTime.of( 2017, 5, 1, 10,11,12 ) );
         parent = pb.build();
         pb.addChildPost( william,"sounds gross", "Jazzercise? Really? What do you do, listen to jazz until you pass out?", IMG_SERVICE_FOOD,LocalDateTime.of( 2017, 5, 2, 10,11,12 ) );
-        pb.addChildPost( william, "on second thought...","I changed my mind. It looks kinda fun. Someone get me a leotard", IMG_SERVICE_GREY,LocalDateTime.of( 2017, 5, 3, 10,11,12 ) );
+        pb.addChildPost( william, "on second thought...","I changed my mind. It looks kinda fun. Someone get me leg warmers", IMG_SERVICE_GREY,LocalDateTime.of( 2017, 5, 3, 10,11,12 ) );
         postRepository.save( parent );
 
         pb = new PostBuilder( maggie, webDev,"http://lorempixel.com/400/200/technics/3","Is PHP dead?","Does anyone have stats on PHP usage in the wild?",LocalDateTime.of( 2017, 6, 1, 10,11,12 ) );
