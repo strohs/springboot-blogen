@@ -1,7 +1,9 @@
 package com.blogen.services;
 
+import com.blogen.builders.Builder;
 import com.blogen.commands.UserCommand;
 import com.blogen.commands.UserPrefsCommand;
+import com.blogen.commands.UserProfileCommand;
 import com.blogen.commands.mappers.UserCommandMapper;
 import com.blogen.commands.mappers.UserProfileCommandMapper;
 import com.blogen.domain.User;
@@ -35,12 +37,16 @@ public class UserServiceImplTest {
     private static final Long   USER1_ID = 1L;
     private static final Long   USER2_ID = 2L;
     private static final Long   USER3_ID = 3L;
-    private static final String USER1_USERNAME = "johndoe";
+    private static final String USER1_USERNAME  = "johndoe";
+    private static final String USER1_FIRSTNAME = "john";
+    private static final String USER1_LASTNANE  = "doe";
+    private static final String USER1_EMAIL     = "jd@yahoo.com";
     private static final String USER2_USERNAME = "janedoe";
     private static final String USER3_USERNAME = "william456";
     private static final Long   USER_PREFS_ID = 55L;
     private static final String USER_PREFS_AVATAR = "avatar1.jpg";
-    private static final String ENCRYPTED_PASSWORD = "encrypted";
+    private static final String PASSWORD = "secret";
+    private static final String ENCRYPTED_PASSWORD = "3he4n5c6rypted";
 
     private UserService userService;
 
@@ -63,7 +69,7 @@ public class UserServiceImplTest {
 
     @Test
     public void should_returnOneUser_when_getUserById() {
-        User user = buildUser( USER1_ID, USER1_USERNAME );
+        User user = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
 
         given( userRepository.findOne( anyLong() ) ).willReturn( user );
 
@@ -75,8 +81,8 @@ public class UserServiceImplTest {
 
     @Test
     public void should_ReturnTwoUsersContainingString_doe_when_getUserByNameLike() {
-        User user1 = buildUser( USER1_ID, USER1_USERNAME );
-        User user2 = buildUser( USER2_ID, USER2_USERNAME );
+        User user1 = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
+        User user2 = Builder.buildUser( USER2_ID, USER2_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
         String likeName = "doe";
         List<User> users = Arrays.asList( user1, user2 );
 
@@ -89,14 +95,13 @@ public class UserServiceImplTest {
         assertThat( commands.get(0).getUserName().contains( likeName ), is(true) );
         assertThat( commands.get(1).getUserName().contains( likeName ), is(true) );
     }
-
-    //TODO test case for when user name like, is NOT found, should throw exception
+    
 
     @Test
     public void should_returnThreeUsers_when_GetAllUsers() {
-        User user1 = buildUser( USER1_ID, USER1_USERNAME );
-        User user2 = buildUser( USER2_ID, USER2_USERNAME );
-        User user3 = buildUser( USER3_ID, USER3_USERNAME );
+        User user1 = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
+        User user2 = Builder.buildUser( USER2_ID, USER2_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
+        User user3 = Builder.buildUser( USER3_ID, USER3_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
         List<User> users = Arrays.asList( user1, user2, user3 );
 
         given( userRepository.findAll() ).willReturn( users );
@@ -110,11 +115,11 @@ public class UserServiceImplTest {
 
     @Test
     public void should_SaveUser_when_SaveUserCommand() throws Exception {
-        UserPrefsCommand upc = buildUserPrefsCommand( USER_PREFS_ID, USER_PREFS_AVATAR );
-        UserCommand commandToSave = buildUserCommand( USER1_ID, USER3_USERNAME, upc );
-        User savedUser = buildUser( USER1_ID, USER3_USERNAME );
-        savedUser.setUserPrefs( buildUserPrefs( USER_PREFS_ID, USER_PREFS_AVATAR ) );
-        User fetchedUser = buildUser( USER1_ID, USER1_USERNAME );
+        UserPrefsCommand upc = Builder.buildUserPrefsCommand( USER_PREFS_ID, USER_PREFS_AVATAR );
+        UserCommand commandToSave = Builder.buildUserCommand( USER1_ID, USER3_USERNAME, upc );
+        User savedUser = Builder.buildUser( USER1_ID, USER3_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
+        savedUser.setUserPrefs( Builder.buildUserPrefs( USER_PREFS_ID, USER_PREFS_AVATAR ) );
+        User fetchedUser = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
 
         given( userRepository.save( any( User.class ) )).willReturn( savedUser );
         given( userRepository.findOne( anyLong() )).willReturn( fetchedUser );
@@ -130,33 +135,44 @@ public class UserServiceImplTest {
 
     }
 
+    @Test
+    public void should_saveUserProfile_when_saveUserProfileCommand() {
+        UserProfileCommand upc = Builder.buildUserProfileCommand( USER_PREFS_ID, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, USER_PREFS_AVATAR, PASSWORD, PASSWORD);
+        UserPrefs userPrefs = Builder.buildUserPrefs( USER1_ID, USER_PREFS_AVATAR );
+        User savedUser = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
+        savedUser.setUserPrefs( userPrefs );
+        User fetchedUser = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
+        fetchedUser.setUserPrefs( userPrefs );
 
-    private User buildUser( Long id, String userName ) {
-        User user = new User();
-        user.setId( id );
-        user.setUserName( userName );
-        return user;
+        given( userRepository.save( any( User.class) )).willReturn( savedUser );
+        given( userRepository.findOne( anyLong() )).willReturn( fetchedUser );
+
+        UserProfileCommand savedCommand = userService.saveUserProfileCommand( upc );
+
+        then( userRepository ).should().save( any( User.class ) );
+        assertThat( savedCommand.getId(), is(USER1_ID) );
+        assertThat( savedCommand.getFirstName(), is(USER1_FIRSTNAME) );
+        assertThat( savedCommand.getLastName(), is(USER1_LASTNANE ) );
+        assertThat( savedCommand.getEmail(), is(USER1_EMAIL) );
+        assertThat( savedCommand.getAvatarImage(), is(USER_PREFS_AVATAR) );
     }
 
-    private UserPrefs buildUserPrefs( Long id, String avatarName ) {
-        UserPrefs prefs = new UserPrefs();
-        prefs.setId( id );
-        prefs.setAvatarImage( avatarName );
-        return prefs;
+    @Test
+    public void should_encryptAndSavePassword_when_savePassword() {
+        UserProfileCommand upc = Builder.buildUserProfileCommand( USER_PREFS_ID, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, USER_PREFS_AVATAR, PASSWORD, PASSWORD);
+        User savedUser = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, null, ENCRYPTED_PASSWORD );
+        User fetchedUser = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, null, ENCRYPTED_PASSWORD );
+
+        given( encryptionService.encrypt( anyString() )).willReturn( ENCRYPTED_PASSWORD );
+        given( userRepository.save( any( User.class) )).willReturn( savedUser );
+        given( userRepository.findByUserName( anyString() )).willReturn( fetchedUser );
+
+        userService.savePassword( USER1_USERNAME, upc );
+
+        then( userRepository ).should().findByUserName( anyString() );
+        then( encryptionService ).should().encrypt( anyString() );
+        then( userRepository ).should().save( any(User.class) );
+        assertThat( savedUser.getEncryptedPassword(), is(ENCRYPTED_PASSWORD));
     }
 
-    private UserCommand buildUserCommand( Long id, String userName, UserPrefsCommand userPrefs ) {
-        UserCommand command = new UserCommand();
-        command.setId( id );
-        command.setUserName( userName );
-        command.setUserPrefs( userPrefs );
-        return command;
-    }
-
-    private UserPrefsCommand buildUserPrefsCommand( Long id, String avatarName ) {
-        UserPrefsCommand prefs = new UserPrefsCommand();
-        prefs.setId( id );
-        prefs.setAvatarImage( avatarName );
-        return prefs;
-    }
 }

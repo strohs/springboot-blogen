@@ -151,10 +151,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void savePassword( String userName, UserProfileCommand command ) {
-        //todo possible password check and encrypt
-        //todo write tests
-        
+    public UserProfileCommand savePassword( String userName, UserProfileCommand command ) {
+        User userToSave = userRepository.findByUserName( userName );
+        String encryptedPassword = encryptionService.encrypt( command.getPassword() );
+        userToSave.setEncryptedPassword( encryptedPassword );
+        User savedUser = userRepository.save( userToSave );
+        return userProfileCommandMapper.userToUserProfileCommand( savedUser );
     }
 
     /**
