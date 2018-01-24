@@ -116,6 +116,7 @@
                         <div class="card-body">
 
                             <input type="hidden" name="id" value="" th:field="*{id}" />
+                            <input type="hidden" name="" value="" th:field="*{userName}" />
                             
                             <div class="form-group">
                                 <label for="firstName">First Name</label>
@@ -198,6 +199,7 @@
                   <form id="changePasswordModal" action="#" th:object="${user}" th:action="@{/profile/password}" method="post">
 
                       <input type="hidden" name="" value="" th:field="*{id}" />
+                      <input type="hidden" name="" value="" th:field="*{userName}" />
                       <input type="hidden" name="" value="" th:field="*{firstName}" />
                       <input type="hidden" name="" value="" th:field="*{lastName}" />
                       <input type="hidden" name="" value="" th:field="*{email}" />

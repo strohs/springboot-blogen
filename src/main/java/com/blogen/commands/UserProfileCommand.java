@@ -21,6 +21,8 @@ public class UserProfileCommand {
     //user id
     Long id;
 
+    String userName;
+
     @NotBlank
     String firstName;
 

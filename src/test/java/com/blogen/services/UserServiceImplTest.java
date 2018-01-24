@@ -167,7 +167,7 @@ public class UserServiceImplTest {
         given( userRepository.save( any( User.class) )).willReturn( savedUser );
         given( userRepository.findByUserName( anyString() )).willReturn( fetchedUser );
 
-        userService.savePassword( USER1_USERNAME, upc );
+        userService.savePassword( upc );
 
         then( userRepository ).should().findByUserName( anyString() );
         then( encryptionService ).should().encrypt( anyString() );

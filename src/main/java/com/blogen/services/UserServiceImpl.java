@@ -8,6 +8,7 @@ import com.blogen.domain.User;
 import com.blogen.repositories.UserRepository;
 import com.blogen.services.security.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -130,6 +131,12 @@ public class UserServiceImpl implements UserService {
         return userCommandMapper.userToUserCommand( savedUser );
     }
 
+    /**
+     * Returns a UserProfileCommand object using the userName parameter to look up the corresponding {@link User}
+     *
+     * @param userName
+     * @return A {@link UserProfileCommand} containing mapped properties from a {@link User}
+     */
     @Override
     public UserProfileCommand getUserProfileByUserName( String userName ) {
         User user = userRepository.findByUserName( userName );
@@ -138,6 +145,13 @@ public class UserServiceImpl implements UserService {
         return upc;
     }
 
+    /**
+     * saves the UserProfileCommand properties to the database. NOTE that passwords are not saved here, call
+     * savePassword() separately to save those
+     *
+     * @param command
+     * @return a UserProfileCommand representing the saved data
+     */
     @Override
     public UserProfileCommand saveUserProfileCommand( UserProfileCommand command ) {
         User userToSave = userRepository.findOne( command.getId() );
@@ -150,9 +164,17 @@ public class UserServiceImpl implements UserService {
         return userProfileCommandMapper.userToUserProfileCommand( savedUser );
     }
 
+    /**
+     * Saves the password from the UserProfileCommand into the database. The password is encrypted first and
+     * stored in the {@link User}.encryptedPassword property.
+     *
+     * @param command
+     * @return
+     */
     @Override
-    public UserProfileCommand savePassword( String userName, UserProfileCommand command ) {
-        User userToSave = userRepository.findByUserName( userName );
+    @PreAuthorize( "#command.userName == authentication.name" )
+    public UserProfileCommand savePassword( UserProfileCommand command ) {
+        User userToSave = userRepository.findByUserName( command.getUserName() );
         String encryptedPassword = encryptionService.encrypt( command.getPassword() );
         userToSave.setEncryptedPassword( encryptedPassword );
         User savedUser = userRepository.save( userToSave );

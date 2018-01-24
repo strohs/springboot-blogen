@@ -1,6 +1,7 @@
 package com.blogen.controllers;
 
 import com.blogen.commands.UserProfileCommand;
+import com.blogen.domain.User;
 import com.blogen.services.AvatarService;
 import com.blogen.services.UserService;
 import com.blogen.validators.PasswordValidator;
@@ -67,14 +68,14 @@ public class UserProfileController {
     @PostMapping("/profile/password")
     public String savePassword( @Valid @ModelAttribute("user") UserProfileCommand command,
                                 BindingResult bindingResult, Principal principal ) {
-        log.debug( "changing password for user: " + principal.getName() );
+        log.debug( "changing password for user id: " + command.getId() );
         log.debug( "UserProfileCommand is: " + command );
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach( objectError -> log.debug( objectError.toString() ) );
             command.setAvatarImages( avatarService.getAllAvatarImageNames() );
             return "profile";
         }
-        userService.savePassword( principal.getName(), command );
+        userService.savePassword( command );
         return "redirect:/profile";
     }
 }

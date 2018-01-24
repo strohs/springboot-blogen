@@ -31,5 +31,5 @@ public interface UserService {
 
     UserProfileCommand saveUserProfileCommand( UserProfileCommand command );
 
-    UserProfileCommand savePassword( String userName, UserProfileCommand command );
+    UserProfileCommand savePassword( UserProfileCommand command );
 }
