@@ -50,20 +50,5 @@ public class ControllerExceptionHandler {
 
         return modelAndView;
     }
-
-//    @Override
-//    protected ModelAndView handleMissingServletRequestParameter( MissingServletRequestParameterException ex,
-//                                                                 HttpServletRequest request, HttpServletResponse response,
-//                                                                 Object handler ) throws IOException {
-//        log.error("Handling missing servlet request parameter");
-//        log.error(ex.getMessage());
-//
-//        ModelAndView modelAndView = new ModelAndView();
-//
-//        modelAndView.setViewName("400error");
-//        modelAndView.addObject("exception", ex);
-//
-//
-//        return modelAndView;
-//    }
+    
 }

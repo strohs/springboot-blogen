@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.dialect.IDialect;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
@@ -24,13 +25,11 @@ import java.util.Set;
 
 
 /**
- * Configure the view used by this project.
+ * Configure some of the MVC defaults used by this project.
  *
  * @author Cliff
- * 1/6/18
  */
 @Configuration
-@EnableWebMvc
 public class MvcConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
@@ -48,6 +47,16 @@ public class MvcConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
     }
 
+    @Bean("simpleMappingExceptionResolver")
+    public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {
+        SimpleMappingExceptionResolver smer = new SimpleMappingExceptionResolver();
+
+        smer.setDefaultErrorView( "error" );
+        smer.setExceptionAttribute( "exception" );
+        smer.setWarnLogCategory( "com.blogen" );
+        return smer;
+    }
+
     //    @Bean
 //    public ViewResolver viewResolver() {
 //        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
@@ -61,7 +70,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 //    @Bean
 //    public TemplateEngine templateEngine() {
 //        SpringTemplateEngine engine = new SpringTemplateEngine();
-//        //TODO enable thymeleaf security tags
+//        
 //        Set<IDialect> dialects = new HashSet<>();
 //        dialects.add( new SpringSecurityDialect() );
 //        engine.setAdditionalDialects( dialects );

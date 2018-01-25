@@ -3,6 +3,7 @@ package com.blogen.controllers;
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.UserCommand;
+import com.blogen.exceptions.NotFoundException;
 import com.blogen.services.PostService;
 import com.blogen.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +70,8 @@ public class PostController {
         log.debug( "deleting post: " + postId );
         //get details of the post to be deleted
         PostCommand postCommand = postService.getPost( postId );
+        if ( postCommand == null )
+            throw new NotFoundException( "post not found with id:" + postId );
         postService.deletePost( postCommand );
         return "redirect:/posts";
     }
@@ -88,23 +91,5 @@ public class PostController {
         return "userPosts";
 
     }
-
-//    /**
-//     * handles NotFoundException
-//     *
-//     * @return ModelAndView with the view name set to the 404error page, and sets the Response Status code to 404
-//     */
-//    @ResponseStatus( HttpStatus.NOT_FOUND )
-//    @ExceptionHandler( NotFoundException.class )
-//    public ModelAndView handleNotFound( Exception exception ) {
-//        log.error( exception.getMessage() );
-//
-//        ModelAndView modelAndView = new ModelAndView();
-//
-//        modelAndView.setViewName( "404error" );
-//        modelAndView.addObject( "exception", exception );
-//
-//
-//        return modelAndView;
-//    }
+    
 }

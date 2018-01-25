@@ -183,6 +183,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @PreAuthorize( "hasAuthority('ADMIN') || #pc.userName == authentication.name" )
     public void deletePost( PostCommand pc ) {
+        //check if post exists
         if ( isParentPost( pc ) ) {
             //delete the parent post
             postRepository.delete( pc.getId() );
