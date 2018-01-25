@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Controller for the /admin/categories page.
@@ -39,9 +40,10 @@ public class CategoryController {
     }
 
     @PostMapping("/admin/categories")
-    public String addNewCategory( @ModelAttribute CategoryCommand categoryCommand ) {
-        log.debug( "posted new category: " + categoryCommand );
+    public String addNewCategory( @ModelAttribute CategoryCommand categoryCommand, RedirectAttributes redirectAttributes ) {
+        log.debug( "added new category: " + categoryCommand );
         CategoryCommand savedCategory = categoryService.addCategoryByCategoryCommand( categoryCommand );
+        redirectAttributes.addFlashAttribute( "successMessage","category created" );
         return "redirect:/admin/categories/show?page=0";
     }
 }

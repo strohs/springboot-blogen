@@ -14,8 +14,35 @@ Additionally users can link an image (hosted on the web) to their post, which wi
 Once a user has made a post, other users can then reply to the post, starting a thread of conversation.
 
 ![Blogen Main Page](https://github.com/strohs/springboot-blogen/blob/master/BlogenMain.jpg)
+![Blogen Posts Page](https://github.com/strohs/springboot-blogen/blob/master/BlogenPosts.jpg)
+
+
+## Running
+* You will need to have Java 1.8 installed on your system (JDK or JRE)
+* Clone the repository
+* cd into the main project directory and run maven wrapper:
+  1. ```./mvnw clean install```   (on windows systems run ```mvnw.cmd clean install```)
+  2. ```./mvnw springboot:run```  (on windows systems run ```mvnw.cmd springboot:run```)
+  3. open your web browser to ```http://localhost:8080```
+
 
 ## Using Blogen
+From the Blogen main page, use the Login link (on the upper right) to log into Blogen (see Blogen Users below).
+
+
+Once logged in you will be taken to the user posts page. This page presents a list of the most recent posts made and allows
+you to create a new post, reply to a post, edit an existing post, or delete a post. Note that users can only edit or
+delete posts they have made. Admins can edit or delete any post. Also note that for purposes of simplicity, replying to a
+post only goes one level deep, on other words, you cannot reply to a reply.
+
+
+Users can also filter posts by category or search post text and titles for a specific string. (The search is a brute f
+orce SQL *LIKE* search. A production site would probably use a proper search engine like Apache Lucene.)
+
+### Admin user
+In addition to the regular functionality provided above, admin users can create new categories. The link to create new
+ categories will be on the navbar.
+
 
 
 ### Blogen Users
@@ -39,7 +66,8 @@ The following users are provided out of the gate, including an admin user
 * Mockito
 * CircleCI to run integration tests
 * Codecov.io to provide code coverage reports
+* Bootstrap 4 (for the front-end web pages)
 
-## Running
+
 
 
