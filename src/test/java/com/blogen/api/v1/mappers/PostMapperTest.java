@@ -85,7 +85,7 @@ public class PostMapperTest {
     }
 
     @Test
-    public void postToPostDto() {
+    public void should_mapAllProperties_when_postToPostDto() {
 
         //when
         PostDTO postDTO = postMapper.postToPostDto( parent );

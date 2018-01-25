@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 
 /**
  * Integration test for making sure our CRUD operations on {@link com.blogen.domain.Post}(s) are working.
- * Want to make sure child posts are being created and deleted correctly
+ * Mainly want to make sure child posts are being created and deleted correctly
  * 
  * Author: Cliff
  */
@@ -63,11 +63,7 @@ public class PostRepositoryIT {
 
     @Before
     public void setUp() throws Exception {
-//        System.out.println("Bootstrapping data...");
-//        //bootstrap test data using our Bootstrap class
-//        BlogenBootstrap bootstrap = new BlogenBootstrap( categoryRepository, userRepository, userPrefsRepository, postRepository );
-//        bootstrap.initData();
-//        System.out.println("Bootstrapping done...");
+
     }
 
     @Test
@@ -141,7 +137,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void deletingOneChildPostShouldNotDeleteParent() {
+    public void should_notDeleteParentPost_when_deletingAChildPost() {
         Post parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
         Post child = postRepository.findOne( CHILD1_POST_ID );
 
@@ -154,7 +150,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void deletingAllChildPosts_ShouldNotDeleteParent() {
+    public void should_notDeleteParentPost_when_deletingAllChildPosts() {
         Post parent = postRepository.findOne( PARENT_POST_ID_TWO_CHILDREN );
         Post child1 = postRepository.findOne( CHILD5_POST_ID );
         Post child2 = postRepository.findOne( CHILD6_POST_ID );
@@ -172,7 +168,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void addingOneChildPostToAParentPostWithChildrenShouldSucceed() {
+    public void should_succeed_when_addingOneChildPostToAParentPostWithChildren() {
         Category cat = categoryRepository.findOne( 3L );
         User user = userRepository.findOne( 1L );
         Post child = buildPost( user, cat, "child text","http://foo.com" );
@@ -187,7 +183,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void addingChildPostToParentPostWithoutChildrenShouldSucceed() {
+    public void should_succeed_when_addingChildPostToParentPostWithoutChildren() {
         Category cat = categoryRepository.findOne( 3L );
         User user = userRepository.findOne( 1L );
         Post child = buildPost( user, cat, "child text","http://foo.com" );
@@ -202,7 +198,7 @@ public class PostRepositoryIT {
 
     @Test
     @Transactional
-    public void findAllParentPostsByUserId_ShouldFindThreeParentPosts() {
+    public void should_findThreeParentPosts_when_findAllParentPostsByUserId() {
         List<Post> posts = postRepository.findAllByUser_IdAndParentNullOrderByCreatedDesc( USER_WITH_THREE_PARENT_POSTS );
 
         assertNotNull( posts );

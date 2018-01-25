@@ -2,8 +2,6 @@ package com.blogen.commands.mappers;
 
 import com.blogen.commands.CategoryCommand;
 import com.blogen.commands.PostCommand;
-import com.blogen.commands.UserCommand;
-import com.blogen.commands.UserPrefsCommand;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
@@ -11,12 +9,10 @@ import com.blogen.domain.UserPrefs;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.List;
-
+import static com.blogen.builders.Builder.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.number.OrderingComparison.lessThan;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Unit Test mappings from {@link com.blogen.domain.Post} to {@link com.blogen.commands.PostCommand}
@@ -58,7 +54,7 @@ public class PostCommandMapperTest {
     public void postToPostCommand_shouldCorrectlyMapPostFieldsToPostCommand() {
         Category cat = buildCategory( CAT_ID, CAT_NAME );
         UserPrefs up = buildUserPrefs( USER_PREF_ID, USER_PREF_AVATAR );
-        User user = buildUser( USER_ID, USER_NAME, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL,USER_PASSWORD );
+        User user = buildUser( USER_ID, USER_NAME, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL,USER_PASSWORD,null );
         user.setUserPrefs( up );
         Post parent = buildPost( POST_ID, POST_TITLE, POST_TEXT, POST_IMAGE_URL, cat, user, null);
         Post child = buildPost( CHILD_ID, CHILD_TITLE, CHILD_TEXT, CHILD_IMAGE_URL, cat, user, parent );
@@ -124,79 +120,6 @@ public class PostCommandMapperTest {
     }
 
 
-    private Post buildPost( Long id, String title, String text, String image, Category cat, User user, Post parent ) {
-        Post post = new Post();
-        post.setId( id );
-        post.setTitle( title );
-        post.setText( text );
-        post.setImageUrl( image );
-        post.setCategory( cat );
-        post.setUser( user );
-        post.setParent( parent );
-        return post;
-    }
 
-    private PostCommand buildPostCommand( Long id, String title, String text, String image, String catName, Long userId, String userName, String avatarName, Long parentId ) {
-        PostCommand pc = new PostCommand();
-        pc.setId( id );
-        pc.setTitle( title );
-        pc.setText( text );
-        pc.setImageUrl( image );
-        pc.setCategoryName( catName );
-        pc.setUserId( userId );
-        pc.setUserAvatar( avatarName );
-        pc.setUserName( userName );
-        pc.setParentId( parentId );
-        return pc;
-    }
 
-    private Category buildCategory( Long id, String name ) {
-        Category cat = new Category();
-        cat.setId( id );
-        cat.setName( name );
-        return cat;
-    }
-
-    private CategoryCommand buildCategoryCommand( Long id, String name ) {
-        CategoryCommand cc = new CategoryCommand();
-        cc.setId( id );
-        cc.setName( name );
-        return cc;
-    }
-
-    private UserPrefs buildUserPrefs( Long id, String avatar ) {
-        UserPrefs up = new UserPrefs();
-        up.setId( id );
-        up.setAvatarImage( avatar );
-        return up;
-    }
-
-    private UserPrefsCommand buildUserPrefsCommand( Long id, String avatar ) {
-        UserPrefsCommand upc = new UserPrefsCommand();
-        upc.setId( id );
-        upc.setAvatarImage( avatar );
-        return upc;
-    }
-
-    private User buildUser( Long id, String username, String firstname, String lastname, String email, String password ) {
-        User user = new User();
-        user.setId( id );
-        user.setUserName( username );
-        user.setFirstName( firstname );
-        user.setLastName( lastname );
-        user.setEmail( email );
-        user.setPassword( password );
-        return user;
-    }
-
-    private UserCommand buildUserCommand( Long id, String username, String firstname, String lastname, String email, String password ) {
-        UserCommand uc = new UserCommand();
-        uc.setId( id );
-        uc.setUserName( username );
-        uc.setFirstName( firstname );
-        uc.setLastName( lastname );
-        uc.setEmail( email );
-        uc.setPassword( password );;
-        return uc;
-    }
 }
