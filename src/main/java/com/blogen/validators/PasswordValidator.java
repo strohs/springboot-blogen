@@ -33,21 +33,18 @@ public class PasswordValidator implements Validator {
         if( command.getPassword() != null && command.getPassword().length() > 0 ) {
             if ( !passwordLengthOk( command.getPassword() ) ) {
                 errors.rejectValue( "password","size.password", "size must be between 8 and 30 characters" );
-                command.setPasswordError( true );
             }
         }
         //if something was entered in the password confirmation field
         if( command.getConfirmPassword() != null && command.getConfirmPassword().length() > 0 ) {
             if ( !passwordLengthOk( command.getConfirmPassword() ) ) {
                 errors.rejectValue( "confirmPassword","size.password", "size must be between 8 and 30 characters" );
-                command.setPasswordError( true );
             }
         }
 
         if ( command.getPassword() != null ) {
             if( !(command.getPassword().equals( command.getConfirmPassword() )) ) {
                 errors.rejectValue( "password","nomatch.password" );
-                command.setPasswordError( true );
             }
         }
 

@@ -6,6 +6,10 @@ import com.blogen.commands.UserProfileCommand;
 import com.blogen.domain.User;
 import com.blogen.domain.UserPrefs;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Helper methods for building various domain objects used in blogen tests
  *
@@ -58,5 +62,9 @@ public class Builder {
         prefs.setId( id );
         prefs.setAvatarImage( avatarName );
         return prefs;
+    }
+
+    public static List<String> buildAvatarImages( String ... names ) {
+        return Arrays.stream( names ).collect( Collectors.toList());
     }
 }

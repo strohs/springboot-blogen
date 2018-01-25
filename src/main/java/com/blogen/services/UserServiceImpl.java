@@ -37,10 +37,7 @@ public class UserServiceImpl implements UserService {
         this.encryptionService = encryptionService;
     }
 
-//    @Autowired
-//    public void setEncryptionService( EncryptionService encryptionService ) {
-//        this.encryptionService = encryptionService;
-//    }
+
 
     /**
      * get a user by their id

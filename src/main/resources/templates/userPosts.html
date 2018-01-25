@@ -144,31 +144,31 @@
                     </h6>
 
                     <span th:text="${parentPost.text}">Got one of these Amazon Echo things for Christmas. I don't think I'll leave the house.</span>
+                    <div class="my-2">
+                        <!--EDIT BUTTON - only users who created a post OR admins can edit it -->
+                        <a th:if="${parentPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}" href="#" class="btn btn-outline-primary btn-sm"
+                           th:data-edit-post-id="${parentPost.id}" data-edit-post-id="2"
+                           th:data-edit-user-name="${parentPost.userName}" data-edit-user-name="johndoe"
+                           th:data-edit-title="${parentPost.title}" data-edit-title="Title"
+                           th:data-edit-text="${parentPost.text}" data-edit-text="Text"
+                           th:data-edit-image-url="${parentPost.imageUrl}" data-edit-image-url="http://blog.com"
+                           data-toggle="modal" data-target="#editPostModal">
+                            Edit
+                        </a>
 
-                    <!--EDIT BUTTON - only users who created a post OR admins can edit it -->
-                    <a th:if="${parentPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}" href="#" class="btn btn-outline-primary btn-sm"
-                       th:data-edit-post-id="${parentPost.id}" data-edit-post-id="2"
-                       th:data-edit-user-name="${parentPost.userName}" data-edit-user-name="johndoe"
-                       th:data-edit-title="${parentPost.title}" data-edit-title="Title"
-                       th:data-edit-text="${parentPost.text}" data-edit-text="Text"
-                       th:data-edit-image-url="${parentPost.imageUrl}" data-edit-image-url="http://blog.com"
-                       data-toggle="modal" data-target="#editPostModal">
-                        Edit
-                    </a>
+                        <!--REPLY BUTTON - any user can reply to a parent post -->
+                        <a href="#" class="btn btn-outline-success btn-sm"
+                           th:data-post-id="${parentPost.id}" data-post-id="2"
+                           th:data-cat-name="${parentPost.categoryName}" data-cat-name="Business" data-toggle="modal" data-target="#replyPostModal">
+                            Reply
+                        </a>
 
-                    <!--REPLY BUTTON - any user can reply to a parent post -->
-                    <a href="#" class="btn btn-outline-success btn-sm"
-                       th:data-post-id="${parentPost.id}" data-post-id="2"
-                       th:data-cat-name="${parentPost.categoryName}" data-cat-name="Business" data-toggle="modal" data-target="#replyPostModal">
-                        Reply
-                    </a>
-
-                    <!-- DELETE BUTTON only user that created a post can delete it -->
-                    <a th:if="${parentPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}" href="#" th:href="@{'/posts/'+${parentPost.id}+'/delete'}"
-                           class="btn btn-outline-danger btn-sm" th:data-val="${parentPost.id}" data-val="2">
-                            Delete
-                    </a>
-
+                        <!-- DELETE BUTTON only user that created a post can delete it -->
+                        <a th:if="${parentPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}" href="#" th:href="@{'/posts/'+${parentPost.id}+'/delete'}"
+                               class="btn btn-outline-danger btn-sm" th:data-val="${parentPost.id}" data-val="2">
+                                Delete
+                        </a>
+                    </div>
 
 
                     <!--CHILD POSTS start here -->
@@ -183,25 +183,26 @@
                                 at <small class="font-italic" th:text="${childPost.created}">date</small>
                             </h6>
                             <span th:text="${childPost.text}">Be careful...I don't trust those things. They're always on... :(</span>
+                            <div class="my-2">
+                                <!--EDIT BUTTON - only users who created a post OR admins can edit it -->
+                                <a th:if="${childPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}" href="#" class="btn btn-outline-primary btn-sm"
+                                   th:data-edit-post-id="${childPost.id}" data-edit-post-id="2"
+                                   th:data-edit-user-id="${childPost.userId}" data-edit-user-id="3"
+                                   th:data-edit-user-name="${childPost.userName}" data-edit-user-name="3"
+                                   th:data-edit-title="${childPost.title}" data-edit-title="Title"
+                                   th:data-edit-text="${childPost.text}" data-edit-text="Text"
+                                   th:data-edit-image-url="${childPost.imageUrl}" data-edit-image-url="http://blog.com"
+                                   data-toggle="modal" data-target="#editPostModal">
+                                    Edit
+                                </a>
 
-                            <!--EDIT BUTTON - only users who created a post OR admins can edit it -->
-                            <a th:if="${childPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}" href="#" class="btn btn-outline-primary btn-sm"
-                               th:data-edit-post-id="${childPost.id}" data-edit-post-id="2"
-                               th:data-edit-user-id="${childPost.userId}" data-edit-user-id="3"
-                               th:data-edit-user-name="${childPost.userName}" data-edit-user-name="3"
-                               th:data-edit-title="${childPost.title}" data-edit-title="Title"
-                               th:data-edit-text="${childPost.text}" data-edit-text="Text"
-                               th:data-edit-image-url="${childPost.imageUrl}" data-edit-image-url="http://blog.com"
-                               data-toggle="modal" data-target="#editPostModal">
-                                Edit
-                            </a>
-
-                            <!-- DELETE BUTTON only user that created a post can delete it -->
-                            <a th:if="${childPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}"
-                               href="#" th:href="@{'/posts/'+${childPost.id}+'/delete'}" class="btn btn-outline-danger btn-sm"
-                               th:data-val="${parentPost.id}" data-val="2">
-                                Delete
-                            </a>
+                                <!-- DELETE BUTTON only user that created a post can delete it -->
+                                <a th:if="${childPost.userId == user.id || #authorization.expression('hasAuthority(''ADMIN'')')}"
+                                   href="#" th:href="@{'/posts/'+${childPost.id}+'/delete'}" class="btn btn-outline-danger btn-sm"
+                                   th:data-val="${parentPost.id}" data-val="2">
+                                    Delete
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -267,7 +268,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="replyPostForm" th:object="${postCommand}" action="login.html" th:action="@{/posts}" method="post">
+                <form id="replyPostForm" th:object="${postCommand}" action="login.html" th:action="@{/posts(page=${page.requestedPage})}" method="post">
 
                     <input id="parentId" name="parentId" type="hidden" value="" th:field="*{parentId}"/>
                     <!--<input id="categoryName" name="categoryName" type="hidden" value=""/>-->
@@ -320,7 +321,7 @@
 
             <div class="modal-body">
 
-                <form id="editPostForm" action="userPosts.html" th:object="${postCommand}" th:action="@{/posts/update}" method="post">
+                <form id="editPostForm" action="userPosts.html" th:object="${postCommand}" th:action="@{/posts/update(page=${page.requestedPage})}" method="post">
 
                     <input id="editPostId" name="id" type="hidden" value="" th:field="*{id}"/>
                     <input id="editUserName" name="userName" type="hidden" value="" th:field="*{userName}"/>
@@ -370,7 +371,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="newPostForm" action="userPosts.html" th:object="${postCommand}" th:action="@{/posts}" method="post">
+                <form id="newPostForm" action="userPosts.html" th:object="${postCommand}" th:action="@{/posts(page=0)}" method="post">
 
 
                     <div class="form-group">

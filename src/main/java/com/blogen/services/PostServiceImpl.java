@@ -23,6 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -260,6 +261,7 @@ public class PostServiceImpl implements PostService {
             throw new NotFoundException( "Post does not exist with id:" + pc.getId() );
 
         detachedPost.setCategory( categoryRepository.findByName( pc.getCategoryName() ));
+        postToUpdate.setCreated( LocalDateTime.now() );
         //merge the updated fields from the web form
         mergePosts( detachedPost, postToUpdate );
         Post savedPost = postRepository.saveAndFlush( postToUpdate );

@@ -277,7 +277,7 @@
 </script>
 <script th:inline="javascript">
     //check for password validation errors, if true then display password modal automatically
-    var errors = [(${user.passwordError})];
+    var errors = [(${passwordError})];
     $(document).ready(function(){
 
        if (errors) $("#passwordModal").modal('show');

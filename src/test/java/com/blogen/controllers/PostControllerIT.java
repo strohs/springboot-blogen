@@ -156,7 +156,10 @@ public class PostControllerIT {
     @Rollback
     @WithMockUser( username = USER2_NAME,password = USER2_PW, authorities = {"USER"})
     public void should_updatedPostDataAndRedirect_when_userThatCreatedPostUpdatesIt() throws Exception {
+        //the current page being viewed
+        String page = "0";
         mockMvc.perform( post("/posts/update")
+                .param( "page", page )
                 .param( "id","11" )
                 .param( "userName",USER2_NAME )
                 .param( "title","title" )
@@ -165,7 +168,7 @@ public class PostControllerIT {
                 .param("categoryName","Business")
         )
                 .andExpect( status().is3xxRedirection() )
-                .andExpect( view().name( "redirect:/posts" ) );
+                .andExpect( view().name( "redirect:/posts/show?cat=0&page="+page ) );
     }
 
     @Test
@@ -173,7 +176,10 @@ public class PostControllerIT {
     @Rollback
     @WithMockUser( username = ADMIN_NAME,password = ADMIN_PW, authorities = {"ADMIN"})
     public void should_allowAdminToEditPost_when_updatingExistingPostId() throws Exception {
+        //the current page being viewed
+        String page = "0";
         mockMvc.perform( post("/posts/update")
+                .param( "page", page )
                 .param( "id","14" )
                 .param( "userName",ADMIN_NAME )
                 .param( "title","title" )
@@ -182,7 +188,7 @@ public class PostControllerIT {
                 .param("categoryName","Business")
         )
                 .andExpect( status().is3xxRedirection() )
-                .andExpect( view().name( "redirect:/posts" ) );
+                .andExpect( view().name( "redirect:/posts/show?cat=0&page="+page ) );
     }
 
     @Test

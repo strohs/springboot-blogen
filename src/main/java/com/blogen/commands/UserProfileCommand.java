@@ -32,16 +32,13 @@ public class UserProfileCommand {
     @Email
     String email;
 
-    //validation for password done by PasswordValidator class
+    //validation for password/confirmPassword done by PasswordValidator class
     String password;
 
     String confirmPassword;
 
     //list of avatar image names to display on user profile page
     List<String> avatarImages;
-
-    //set to true if password validation errors
-    boolean isPasswordError = false;
 
     @NotBlank
     String avatarImage;

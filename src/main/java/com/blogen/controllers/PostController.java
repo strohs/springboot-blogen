@@ -34,13 +34,6 @@ public class PostController {
     }
 
 
-    //showPost - GET - /posts/{id} - show a specific post
-
-    //showPostByCategory - GET - /posts/category/{id}
-
-    //searchForPosts - POST - /posts/search  form param is 'searchText'
-
-    //showAllPosts - GET /post - get all posts in descending order by date posted
     @GetMapping("/posts")
     public String showAllPosts( Model model, Principal principal ) {
         log.debug( "show all posts" );
@@ -50,21 +43,23 @@ public class PostController {
         return "redirect:/posts/show?cat=0&page=0";
     }
 
-    //saveUpdatePost - create a new post or save an existing post - POST - /posts
+    //saveUpdatePost - create a new post - POST - /posts
     @PostMapping("/posts")
-    public String addNewPost( @ModelAttribute("postCommand") PostCommand postCommand, Principal principal ) {
-        log.debug( "addNewPost received post: \n" + postCommand );
+    public String addNewPost( @RequestParam("page") int page, @ModelAttribute("postCommand") PostCommand postCommand ) {
+        log.debug( "addNewPost received post: " + postCommand );
+        log.debug( "addNewPost page: " + page );
         PostCommand savedPost = postService.savePostCommand( postCommand );
         log.debug( "new post saved: \n" + savedPost );
-        return "redirect:/posts";
+        return "redirect:/posts/show?cat=0&page=" + page;
     }
 
     @PostMapping("/posts/update")
-    public String updatePost( @ModelAttribute("postCommand") PostCommand postCommand, Principal principal ) {
+    public String updatePost( @RequestParam("page") int page, @ModelAttribute("postCommand") PostCommand postCommand ) {
         log.debug( "updatePost " + postCommand );
-        PostCommand updatedPost = postService.updatePostCommand( postCommand );
+        log.debug( "updatePost page: " + page );
+        postService.updatePostCommand( postCommand );
 
-        return "redirect:/posts";
+        return "redirect:/posts/show?cat=0&page=" + page;
     }
 
 
@@ -82,7 +77,7 @@ public class PostController {
     @GetMapping("/posts/show")
     public String showPostsForPage( @RequestParam("cat") Long categoryId, @RequestParam("page") Integer page,
                                     Principal principal, Model model ) {
-        log.debug( "showing posts for category: " + categoryId + " page:" + page );
+        log.debug( "showing posts for category:" + categoryId + " page:" + page );
 
         PageCommand pageCommand = postService.getAllPostsByCategoryForPage( categoryId, page );
         UserCommand userCommand = userService.getUserByUserName( principal.getName() );
