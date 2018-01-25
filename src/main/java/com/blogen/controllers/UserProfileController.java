@@ -29,16 +29,18 @@ public class UserProfileController {
 
     private UserService userService;
     private AvatarService avatarService;
+    private PasswordValidator passwordValidator;
 
     @Autowired
-    public UserProfileController( UserService userService, AvatarService avatarService ) {
+    public UserProfileController( UserService userService, AvatarService avatarService, PasswordValidator passwordValidator ) {
         this.userService = userService;
         this.avatarService = avatarService;
+        this.passwordValidator = passwordValidator;
     }
 
     @InitBinder("user")
     protected void initBinder( WebDataBinder binder ) {
-        binder.addValidators( new PasswordValidator() );
+        binder.addValidators( passwordValidator );
         
     }
 

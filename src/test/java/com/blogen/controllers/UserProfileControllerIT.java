@@ -90,7 +90,6 @@ public class UserProfileControllerIT {
                 .andExpect( status().is3xxRedirection() )
                 .andExpect( view().name( "redirect:/profile" ) )
                 .andExpect( flash().attributeExists( "successMessage" ) );
-
     }
 
     @Test
@@ -109,7 +108,6 @@ public class UserProfileControllerIT {
                 .andExpect( status().isOk() )
                 .andExpect( view().name( "profile" ) )
                 .andExpect( model().hasErrors() );
-
     }
 
     @Test
@@ -136,7 +134,7 @@ public class UserProfileControllerIT {
 
     @Test
     @WithMockUser( username = USER1_USERNAME, authorities = {"USER"})
-    public void should_displayProfilePage_when_passwordsDoNotMatch() throws Exception {
+    public void should_setNoMatchPasswordError_when_passwordsDoNotMatch() throws Exception {
         mockMvc.perform( post( "/profile/password" )
                 .contentType( MediaType.APPLICATION_FORM_URLENCODED )
                 .param("id", USER1_ID )
@@ -150,6 +148,27 @@ public class UserProfileControllerIT {
         )
                 .andExpect( status().isOk() )
                 .andExpect( view().name( "profile" ) )
+                .andExpect( model().attributeHasFieldErrorCode( "user","password","nomatch.password" ) )
+                .andExpect( model().attributeExists( "passwordError" ) );
+    }
+
+    @Test
+    @WithMockUser( username = USER1_USERNAME, authorities = {"USER"})
+    public void should_setPasswordSizeError_when_passwordIsIncorrectLength() throws Exception {
+        mockMvc.perform( post( "/profile/password" )
+                .contentType( MediaType.APPLICATION_FORM_URLENCODED )
+                .param("id", USER1_ID )
+                .param("userName",USER1_USERNAME )
+                .param( "firstName",USER1_FIRSTNAME )
+                .param( "lastName", USER1_LASTNAME )
+                .param( "email", USER1_EMAIL )
+                .param( "avatarImage",AVATAR1 )
+                .param( "pass",USER1_PW )
+                .param( "confirmPassword", "pass" )
+        )
+                .andExpect( status().isOk() )
+                .andExpect( view().name( "profile" ) )
+                .andExpect( model().attributeHasFieldErrorCode( "user","confirmPassword","size.password" ) )
                 .andExpect( model().attributeExists( "passwordError" ) );
     }
 
