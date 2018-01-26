@@ -21,6 +21,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 
@@ -47,15 +48,18 @@ public class MvcConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
     }
 
-    @Bean("simpleMappingExceptionResolver")
-    public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {
-        SimpleMappingExceptionResolver smer = new SimpleMappingExceptionResolver();
-
-        smer.setDefaultErrorView( "error" );
-        smer.setExceptionAttribute( "exception" );
-        smer.setWarnLogCategory( "com.blogen" );
-        return smer;
-    }
+//    @Bean("simpleMappingExceptionResolver")
+//    public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {
+//        SimpleMappingExceptionResolver smer = new SimpleMappingExceptionResolver();
+//        Properties props = new Properties(  );
+//        props.setProperty( "AccessDeniedException","403error" );
+//
+//        smer.setExceptionMappings( props );
+//        smer.setDefaultErrorView( "error" );
+//        smer.setExceptionAttribute( "exception" );
+//        smer.setWarnLogCategory( "com.blogen" );
+//        return smer;
+//    }
 
     //    @Bean
 //    public ViewResolver viewResolver() {
