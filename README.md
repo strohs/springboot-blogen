@@ -18,7 +18,7 @@ Once a user has made a post, other users can then reply to the post, starting a 
 
 
 ## Running
-* You will need to have Java 1.8 installed on your system (JDK or JRE)
+* You will need to have Java 1.8 installed on your system (JDK or JRE) and have the **JAVA_HOME** environment variable set
 * Clone the repository
 * cd into the main project directory and run maven wrapper:
   1. ```./mvnw clean install```   (on windows systems run ```mvnw.cmd clean install```)
