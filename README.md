@@ -57,6 +57,8 @@ The following users are provided out of the gate, including an admin user
 * Spring Boot (1.5.9)
 * Spring MVC
 * Spring Data JPA
+* Project Lombok
+* MapStruct
 * Hibernate (as the JPA provider)
 * Spring Security
 * Thymeleaf (for the view layer)
