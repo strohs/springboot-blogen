@@ -47,15 +47,15 @@ public class MvcConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
     }
 
-    @Bean("simpleMappingExceptionResolver")
-    public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {
-        SimpleMappingExceptionResolver smer = new SimpleMappingExceptionResolver();
-
-        smer.setDefaultErrorView( "error" );
-        smer.setExceptionAttribute( "exception" );
-        smer.setWarnLogCategory( "com.blogen" );
-        return smer;
-    }
+//    @Bean("simpleMappingExceptionResolver")
+//    public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {
+//        SimpleMappingExceptionResolver smer = new SimpleMappingExceptionResolver();
+//
+//        smer.setDefaultErrorView( "error" );
+//        smer.setExceptionAttribute( "exception" );
+//        smer.setWarnLogCategory( "com.blogen" );
+//        return smer;
+//    }
 
     //    @Bean
 //    public ViewResolver viewResolver() {
