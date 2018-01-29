@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,32 +18,27 @@ import java.util.List;
 @AllArgsConstructor
 public class PostDTO {
 
-    private Long id;
-
-    private Long parentId;
-
-    private Long userId;
-
-    private String userName;
-
+    @NotNull
     private String title;
 
+    @NotNull
     private String text;
 
     private String imageUrl;
 
+    @NotNull
     private String categoryName;
+
+    @NotNull
+    private String userName;
 
     private LocalDateTime created;
 
-    private List<PostDTO> children;
+    private String postUrl;
 
-    /**
-     * A parent post will have a parentId == null.
-     * @return true if this is a 'parent' post, false otherwise (indicating that this post is a 'child' post)
-     */
-    public boolean isParentPost() {
-        return parentId == null;
-    }
+    private String parentPostUrl;
+
+    private List<PostDTO> children;
+    
 
 }

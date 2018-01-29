@@ -123,12 +123,9 @@ public class Builder {
     }
 
     //Builders for REST API
-    public static PostDTO buildPostDTO( Long id, Long parentId, Long userId, String userName, String title, String text,
+    public static PostDTO buildPostDTO( String userName, String title, String text,
                                         String imageUrl, String categoryName, LocalDateTime created, List<PostDTO> children) {
         PostDTO postDTO = new PostDTO();
-        postDTO.setId( id );
-        postDTO.setParentId( parentId );
-        postDTO.setUserId( userId );
         postDTO.setUserName( userName );
         postDTO.setCategoryName( categoryName );
         postDTO.setText( text );

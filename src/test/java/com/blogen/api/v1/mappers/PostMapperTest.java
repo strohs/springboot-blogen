@@ -1,5 +1,6 @@
 package com.blogen.api.v1.mappers;
 
+import com.blogen.api.v1.controllers.PostRestController;
 import com.blogen.api.v1.model.PostDTO;
 import com.blogen.builders.Builder;
 import com.blogen.domain.Category;
@@ -43,12 +44,14 @@ public class PostMapperTest {
     private static final String   PARENT_POST_TITLE = "Title for Post";
     private static final String   PARENT_POST_IMAGE_URL = "http://pexels.com/technics/400/200/1";
 
+
     private static final Long    CHILD1_POST_ID   = 5L;
     private static final String  CHILD1_POST_TEXT = "sample child text";
     private static final String  CHILD1_POST_TITLE = "Child Title";
     private static final String  CHILD1_POST_IMAGE_URL = null;
     private static final LocalDateTime CHILD1_POST_CREATED = LocalDateTime.of( 2017,1,1,10,15,15 );
     private static final String  CHILD1_POST_CREATED_FORMAT = "Sun Jan 01, 2017 10:15 AM";
+
 
     private PostMapper postMapper = PostMapper.INSTANCE;
 
@@ -100,31 +103,26 @@ public class PostMapperTest {
 
         //when
         PostDTO postDTO = postMapper.postToPostDto( parent );
-        System.out.println( postDTO );
-        System.out.println( postDTO.isParentPost() );
 
         //then
         assertNotNull( postDTO );
-        assertThat( postDTO.getId(), is( PARENT_POST_ID ) );
+
 
         assertThat( postDTO.getCategoryName(), is(CAT1_NAME) );
         assertThat( postDTO.getText(), is( PARENT_POST_TEXT) );
         assertThat( postDTO.getImageUrl(), is( PARENT_POST_IMAGE_URL) );
         assertThat( postDTO.getCreated(), is( PARENT_POST_CREATED) );
-        assertThat( postDTO.getUserId(), is( USER1_ID) );
+
         assertThat( postDTO.getUserName(), is( USER1_USERNAME) );
-        assertThat( postDTO.isParentPost(), is( true ) );
         assertThat( postDTO.getChildren().size(), is( 1 ) );
 
         //test child posts
         PostDTO child1 = postDTO.getChildren().get( 0 );
-        assertThat( child1.isParentPost(), is( false ) );
-        assertThat( child1.getId(), is(CHILD1_POST_ID) );
-        assertThat( child1.getParentId(), is( PARENT_POST_ID ) );
+
         assertThat( child1.getCreated(), is(CHILD1_POST_CREATED) );
         assertThat( child1.getText(), is( CHILD1_POST_TEXT) );
         assertThat( child1.getImageUrl(), is( nullValue()) );
-        assertThat( child1.getUserId(), is( USER2_ID ) );
+
         assertThat( child1.getUserName(), is( USER2_USERNAME) );
 
         assertThat( child1.getCategoryName(), is(CAT1_NAME) );
@@ -135,16 +133,13 @@ public class PostMapperTest {
     @Test
     public void should_mapPostDTOtoPost_when_postDTOtoPost() {
         //given
-        PostDTO postDTO = Builder.buildPostDTO( POST_ID, PARENT_POST_ID,USER1_ID,USER1_USERNAME,PARENT_POST_TITLE,
+        PostDTO postDTO = Builder.buildPostDTO( USER1_USERNAME,PARENT_POST_TITLE,
                 PARENT_POST_TEXT, PARENT_POST_IMAGE_URL,CAT1_NAME,PARENT_POST_CREATED, new ArrayList<>( ) );
         //when
         Post post = postMapper.postDtoToPost( postDTO );
 
         //then
         assertNotNull( postDTO );
-        assertThat( post.getId(), is( POST_ID) );
-        assertThat( post.getParent().getId(), is( PARENT_POST_ID) );
-        assertThat( post.getUser().getId(), is( USER1_ID ));
         assertThat( post.getUser().getUserName(), is(USER1_USERNAME) );
         assertThat( post.getTitle(), is(PARENT_POST_TITLE));
         assertThat( post.getText(), is( PARENT_POST_TEXT) );
@@ -158,10 +153,10 @@ public class PostMapperTest {
     @Test
     public void should_mapPostDTOChildtoPostChild_when_postDTOtoPost() {
         //given
-        PostDTO childDTO = Builder.buildPostDTO( CHILD1_POST_ID, PARENT_POST_ID,USER1_ID,USER1_USERNAME,CHILD1_POST_TITLE,
+        PostDTO childDTO = Builder.buildPostDTO( USER1_USERNAME,CHILD1_POST_TITLE,
                 CHILD1_POST_TEXT, CHILD1_POST_IMAGE_URL,CAT1_NAME,CHILD1_POST_CREATED, new ArrayList<>( ) );
         List<PostDTO> children = Arrays.asList( childDTO );
-        PostDTO postDTO = Builder.buildPostDTO( POST_ID, null,USER1_ID,USER1_USERNAME,PARENT_POST_TITLE,
+        PostDTO postDTO = Builder.buildPostDTO(USER1_USERNAME,PARENT_POST_TITLE,
                 PARENT_POST_TEXT, PARENT_POST_IMAGE_URL,CAT1_NAME,PARENT_POST_CREATED, children );
         //when
         Post post = postMapper.postDtoToPost( postDTO );
@@ -169,7 +164,6 @@ public class PostMapperTest {
         //then
         assertNotNull( postDTO );
         assertThat( post.getChildren().size(), is(1));
-        assertThat( post.getChildren().get( 0 ).getParent().getId(), is( PARENT_POST_ID) );
         assertThat( post.getChildren().get( 0 ).getTitle(), is( CHILD1_POST_TITLE ) );
         assertThat( post.getChildren().get( 0 ).getText(), is( CHILD1_POST_TEXT ) );
         assertThat( post.getChildren().get( 0 ).getChildren().size(), is( 0) );

@@ -1,6 +1,7 @@
 package com.blogen.api.v1.services;
 
 import com.blogen.api.v1.model.PostDTO;
+import com.blogen.api.v1.model.PostListDTO;
 
 import java.util.List;
 
@@ -13,17 +14,17 @@ public interface PostService {
 
     /**
      * get 'size' amount of Post(s)
-     * @param size the number of Posts to retrieve. If <= 0 then all posts will be retrieved
+     * @param limit the number of Posts to retrieve. If <= 0 then by default 5 posts will be retrieved
      * @return a List of PostDTO ordered by Post.created date. The most recent posts made will be at the beginning of
      * the list
      */
-    List<PostDTO> getPosts(int size);
+    PostListDTO getPosts( int limit);
 
     /**
      * get a specific post by its ID
      *
      * @param id The id of the post to retrieve. If the id refers to a parent post, then the parent post and its
-     *           children will be returned. If the ID refers to a child post, then only that child post will be retrieved
+     *           children will be returned. If the ID refers to a child post, then only that child post will be returned
      * @return
      */
     PostDTO getPost(Long id);
