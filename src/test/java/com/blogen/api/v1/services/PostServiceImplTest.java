@@ -240,7 +240,42 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void createNewChildPost() {
+    public void should_saveParentAndChild_AndSetURLs_when_createNewChildPost() {
+        Post post1 = buildPost1();
+        Post child1 = buildChild1();
+        Post savedPost = buildPost1();
+        savedPost.addChild( child1 );
+        PostDTO childDTO = buildChild1DTO();
+
+        given( postRepository.findOne( anyLong() ) ).willReturn( post1 );
+        given( categoryRepository.findByName( anyString() )).willReturn( child1.getCategory() );
+        given( userRepository.findByUserName( anyString() )).willReturn( child1.getUser() );
+        given( postRepository.save( any(Post.class) )).willReturn( savedPost );
+
+        PostDTO savedDTO = postService.createNewChildPost( POST1_ID, childDTO );
+
+        then( postRepository ).should().findOne( anyLong() );
+        then( categoryRepository ).should().findByName( anyString() );
+        then( userRepository ).should().findByUserName( anyString() );
+        then( postRepository ).should().save( any( Post.class ) );
+        assertThat( savedDTO, is( notNullValue() ));
+        assertThat( savedDTO.getChildren().size(), is( 1 ));
+        assertThat( savedDTO.getPostUrl(), is(POST1_URL) );
+        assertThat( savedDTO.getChildren().get( 0 ).getPostUrl(), is( CHILD1_POST_URL) );
+        assertThat( savedDTO.getChildren().get( 0 ).getParentPostUrl(), is( CHILD1_PARENT_POST_URL) );
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void should_throwException_when_parentPostId_doesNotExist() {
+        Post post1 = buildPost1();
+        Post child1 = buildChild1();
+        Post savedPost = buildPost1();
+        savedPost.addChild( child1 );
+        PostDTO childDTO = buildChild1DTO();
+
+        given( postRepository.findOne( anyLong() ) ).willReturn( null );
+
+        PostDTO savedDTO = postService.createNewChildPost( 45342L, childDTO );
     }
 
     @Test
@@ -254,6 +289,7 @@ public class PostServiceImplTest {
     @Test
     public void deletePost() {
     }
+
 
     private Post buildPost1() {
         Category cat1 = Builder.buildCategory( CAT1_ID, CAT1_NAME );
@@ -273,5 +309,8 @@ public class PostServiceImplTest {
 
     private PostDTO buildPost1DTO() {
         return Builder.buildPostDTO( USER_NAME, POST1_TITLE, POST1_TEXT, null, CAT1_NAME, LocalDateTime.now(), new ArrayList<>() );
+    }
+    private PostDTO buildChild1DTO() {
+        return Builder.buildPostDTO( USER_NAME, CHILD1_TITLE, CHILD1_TEXT, null, CAT1_NAME, LocalDateTime.now(), new ArrayList<>() );
     }
 }

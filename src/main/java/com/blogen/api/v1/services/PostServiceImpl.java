@@ -87,7 +87,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostDTO createNewChildPost( Long parentId, PostDTO postDTO ) {
         Post parentPost = postRepository.findOne( parentId );
-        if ( parentPost == null ) throw new NotFoundException( "Parent post with id " + parentId + " was not found" );
+        if ( parentPost == null ) throw new NotFoundException( "Post with id " + parentId + " was not found" );
         Post childPost = buildNewPost( postDTO );
         parentPost.addChild( childPost );
         Post savedPost = postRepository.save( parentPost );
@@ -96,17 +96,31 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDTO saveUpdatePost( Long id, PostDTO postDTO ) {
-        return null;
+        Post postToUpdate = postRepository.findOne( id );
+        if ( postToUpdate == null ) throw new NotFoundException( "Post with id " + id + " was not found" );
+        //any child posts set in dto should be ignored, may want to throw exception in the future
+        postDTO.getChildren().clear();
+        //todo may need to check postDTO for required fields
+        postToUpdate = postMapper.updatePostFromDTO( postDTO, postToUpdate );
+        Post savedPost = postRepository.save( postToUpdate );
+        return buildReturnDto( savedPost );
     }
 
     @Override
     public PostDTO patchPost( Long id, PostDTO postDTO ) {
-        return null;
+        Post postToUpdate = postRepository.findOne( id );
+        if ( postToUpdate == null ) throw new NotFoundException( "Post with id " + id + " was not found" );
+        postToUpdate = postMapper.mergePostDtoToPost( postToUpdate, postDTO );
+        Post savedPost = postRepository.save( postToUpdate );
+        return buildReturnDto( savedPost );
     }
 
     @Override
+    @Transactional
     public void deletePost( Long id ) {
-
+        Post post = postRepository.findOne( id );
+        if ( post == null ) throw new NotFoundException( "Post with id " + id + " was not found" );
+        postRepository.delete( post );
     }
 
     /**

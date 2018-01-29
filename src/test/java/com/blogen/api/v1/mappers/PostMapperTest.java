@@ -170,4 +170,21 @@ public class PostMapperTest {
         
     }
 
+    @Test
+    public void should_onlyUpdateNonNullDtoFields_when_updatePostFromDTO() {
+        Category category = Builder.buildCategory( CAT1_ID, CAT1_NAME );
+        User user = Builder.buildUser( USER1_ID,USER1_USERNAME,"first","last","email","","secret" );
+        Post post = Builder.buildPost( PARENT_POST_ID, PARENT_POST_TITLE, PARENT_POST_TEXT, null, category, user, null  );
+        PostDTO postDTO = Builder.buildPostDTO( USER1_USERNAME, null, "NEW TEXT","NEW URL", "NEW CAT", LocalDateTime.now(), new ArrayList<>() );
+
+        post = postMapper.updatePostFromDTO( postDTO,post );
+
+        assertThat( post.getId(), is( PARENT_POST_ID) );
+        assertThat( post.getTitle(), is( nullValue() ) );
+        assertThat( post.getText(), is("NEW TEXT") );
+        assertThat( post.getImageUrl(), is("NEW URL") );
+        assertThat( post.getCategory().getName(), is( "NEW CAT") );
+        assertThat( post.getCategory().getId(), is( CAT1_ID) );
+    }
+
 }

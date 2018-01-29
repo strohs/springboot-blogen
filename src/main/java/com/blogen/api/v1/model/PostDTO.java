@@ -3,6 +3,7 @@ package com.blogen.api.v1.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -18,18 +19,14 @@ import java.util.List;
 @AllArgsConstructor
 public class PostDTO {
 
-    @NotNull
     private String title;
 
-    @NotNull
     private String text;
 
     private String imageUrl;
 
-    @NotNull
     private String categoryName;
 
-    @NotNull
     private String userName;
 
     private LocalDateTime created;

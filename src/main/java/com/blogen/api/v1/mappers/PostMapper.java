@@ -4,6 +4,7 @@ import com.blogen.api.v1.model.PostDTO;
 import com.blogen.domain.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -24,6 +25,11 @@ public interface PostMapper {
     @Mapping( target = "user.userName", source = "userName")
     @Mapping( target = "category.name",  source = "categoryName")
     Post postDtoToPost( PostDTO postDTO );
+
+    @Mapping( target = "user.userName", source = "userName")
+    @Mapping( target = "category.name",  source = "categoryName")
+    //null fields in postDTO will set corresponding Post fields to null
+    Post updatePostFromDTO( PostDTO postDTO, @MappingTarget Post post );
 
     /**
      * Merge non-null fields of PostDTO into a {@link Post} object
