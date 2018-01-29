@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -30,9 +31,9 @@ public class PostDTO {
 
     private String imageUrl;
 
-    private CategoryDTO category;
+    private String categoryName;
 
-    private String created;
+    private LocalDateTime created;
 
     private List<PostDTO> children;
 

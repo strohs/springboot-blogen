@@ -1,0 +1,6 @@
+/**
+ * The classes in this package (and sub packages) are for Data Transfer Objects used by the REST API
+ *
+ * @author Cliff
+ */
+package com.blogen.api;

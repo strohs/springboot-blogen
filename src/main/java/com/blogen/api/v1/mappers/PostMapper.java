@@ -19,10 +19,14 @@ public interface PostMapper {
     @Mapping( source = "parent.id", target = "parentId" )
     @Mapping( source = "user.id", target = "userId")
     @Mapping( source = "user.userName", target = "userName")
-    @Mapping( target = "created", dateFormat = "EEE MMM dd, yyyy hh:mm a")
+    @Mapping( source = "category.name", target = "categoryName")
+    //@Mapping( target = "created", dateFormat = "EEE MMM dd, yyyy hh:mm a")
     PostDTO postToPostDto( Post post );
 
-    //TODO decide if this would actually be needed in the REST API
-    //Post postDtoToPost( PostDTO postDTO );
+    @Mapping( target = "parent.id", source = "parentId")
+    @Mapping( target = "user.id", source = "userId")
+    @Mapping( target = "user.userName", source = "userName")
+    @Mapping( target = "category.name",  source = "categoryName")
+    Post postDtoToPost( PostDTO postDTO );
 
 }

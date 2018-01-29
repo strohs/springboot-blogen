@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author Cliff
  */
 @Slf4j
-@ControllerAdvice
+@ControllerAdvice("com.blogen.controllers")
 public class ControllerExceptionHandler {
 //todo possibly add global ExceptionHandlers for other Spring MVC Exceptions
 

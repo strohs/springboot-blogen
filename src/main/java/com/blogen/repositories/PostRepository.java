@@ -37,6 +37,13 @@ public interface PostRepository extends JpaRepository<Post,Long> {
    Page<Post> findAllByParentNullOrderByCreatedDesc( Pageable pageable );
 
     /**
+     * get a Page of posts, parent or child, ordered by created date
+     * @param pageable used to specify the number of posts to retrieve
+     * @return
+     */
+   Page<Post> findAllByOrderByCreatedDesc( Pageable pageable );
+
+    /**
      * get a page of posts belonging to the specified category
      * @param pageable
      * @return a Page of posts having the specified category
