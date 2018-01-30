@@ -3,8 +3,6 @@ package com.blogen.api.v1.services;
 import com.blogen.api.v1.model.PostDTO;
 import com.blogen.api.v1.model.PostListDTO;
 
-import java.util.List;
-
 /**
  * Service interface for REST methods that operate on Blogen {@link com.blogen.domain.Post}(s)
  *
@@ -13,10 +11,10 @@ import java.util.List;
 public interface PostService {
 
     /**
-     * get 'size' amount of Post(s)
+     * get Parent Post(s)
      * @param limit the number of Posts to retrieve. If <= 0 then by default 5 posts will be retrieved
-     * @return a List of PostDTO ordered by Post.created date. The most recent posts made will be at the beginning of
-     * the list
+     * @return a List of PostDTO ordered by Post.created date. The most recent parent posts made will be at the beginning of
+     * the list. Children of parent posts will also be returned and are not included in the limit count
      */
     PostListDTO getPosts( int limit);
 

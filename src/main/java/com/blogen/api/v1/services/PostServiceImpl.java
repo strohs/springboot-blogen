@@ -56,12 +56,10 @@ public class PostServiceImpl implements PostService {
         //create a PageRequest
         PageRequest pageRequest = pageRequestBuilder.buildPageRequest( 0, pageSize, Sort.Direction.DESC,"created" );
         //retrieve the posts
-        Page<Post> page = postRepository.findAllByOrderByCreatedDesc( pageRequest );
+        Page<Post> page = postRepository.findAllByParentNullOrderByCreatedDesc( pageRequest );
         List<PostDTO> postDTOS = new ArrayList<>();
         page.forEach( post -> {
-            PostDTO dto = postMapper.postToPostDto( post );
-            dto.setPostUrl( buildPostUrl( post ) );
-            dto.setParentPostUrl( buildParentPostUrl( post ) );
+            PostDTO dto = buildReturnDto( post );
             postDTOS.add( dto );
         } );
         return new PostListDTO( postDTOS );
