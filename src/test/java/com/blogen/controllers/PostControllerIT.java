@@ -44,7 +44,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * MockMVC integration tests for PostController
  *
- * 
  * @author Cliff
  */
 @RunWith(SpringRunner.class)

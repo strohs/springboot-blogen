@@ -31,26 +31,6 @@ public interface PostMapper {
     //null fields in postDTO will set corresponding Post fields to null
     Post updatePostFromDTO( PostDTO postDTO, @MappingTarget Post post );
 
-    /**
-     * Merge non-null fields of PostDTO into a {@link Post} object
-     * @param target Post object to merge fields into
-     * @param source PostDTO containing the non-null fields you want to merge
-     * @return a Post object containing the merged fields
-     */
-    default Post mergePostDtoToPost( Post target, PostDTO source ) {
-        if ( source.getImageUrl() != null )
-            target.setImageUrl( source.getImageUrl() );
-        if ( source.getCategoryName() != null )
-            target.getCategory().setName( source.getCategoryName() );
-        if ( source.getUserName() != null )
-            target.getUser().setUserName( source.getUserName() );
-        if ( source.getCreated() != null )
-            target.setCreated( source.getCreated() );
-        if ( source.getTitle() != null )
-            target.setTitle( source.getTitle() );
-        if ( source.getText() != null )
-            target.setText( source.getText() );
-        return target;
-    }
+
 
 }

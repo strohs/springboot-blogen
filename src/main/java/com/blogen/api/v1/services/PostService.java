@@ -57,7 +57,7 @@ public interface PostService {
      * @param postDTO contains the fields to update. Only fields you want to update should be set
      * @return a {@link PostDTO} containing the newly updated post data
      */
-    PostDTO patchPost( Long id, PostDTO postDTO );
+    //PostDTO patchPost( Long id, PostDTO postDTO );
 
     /**
      * Delete the post with the parentId
