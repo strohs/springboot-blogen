@@ -5,6 +5,7 @@ import com.blogen.api.v1.model.ApiFieldError;
 import com.blogen.api.v1.model.ApiGlobalError;
 import com.blogen.exceptions.BadRequestException;
 import com.blogen.exceptions.NotFoundException;
+import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,10 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * Controller Advice for REST Controllers
  * @author Cliff
  */
+@Log4j
 @ControllerAdvice("com.blogen.api.v1.controllers")
 public class RestControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -43,6 +46,13 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
         return new ResponseEntity<>( errorsView, new HttpHeaders(), HttpStatus.BAD_REQUEST );
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleOtherExceptions( Exception exception ) {
+        ApiGlobalError globalError = new ApiGlobalError( exception.getMessage() );
+        List<ApiGlobalError> globalErrors = Arrays.asList( globalError );
+        ApiErrorsView errorsView = new ApiErrorsView( null, globalErrors );
+        return new ResponseEntity<>( errorsView, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR );
+    }
 
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid( MethodArgumentNotValidException exception,

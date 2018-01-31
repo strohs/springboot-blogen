@@ -13,10 +13,8 @@ import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
 import com.blogen.services.utils.PageRequestBuilder;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Not;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,7 +28,7 @@ import java.util.List;
 /**
  * @author Cliff
  */
-@Slf4j
+@Log4j
 @Service("postRestService")
 public class PostServiceImpl implements PostService {
 

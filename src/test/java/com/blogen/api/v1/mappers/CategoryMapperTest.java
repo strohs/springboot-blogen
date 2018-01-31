@@ -17,7 +17,6 @@ import static org.junit.Assert.*;
 public class CategoryMapperTest {
 
     private final static String NAME = "Business";
-    private final static Long ID = 22L;
 
     private CategoryMapper categoryMapper = CategoryMapper.INSTANCE;
 
@@ -30,14 +29,14 @@ public class CategoryMapperTest {
     public void categoryToCategoryDto() {
         //given
         Category category = new Category();
-        category.setId( ID );
+        //category.setId( ID );
         category.setName( NAME );
 
         //when
         CategoryDTO categoryDTO = categoryMapper.categoryToCategoryDto( category );
 
         //then
-        assertThat( categoryDTO.getId(), equalTo( ID ) );
+       // assertThat( categoryDTO.getId(), equalTo( ID ) );
         assertThat( categoryDTO.getName(), equalTo( NAME ) );
 
     }
@@ -45,13 +44,13 @@ public class CategoryMapperTest {
     @Test
     public void categoryDtoToCategory() {
         //given
-        CategoryDTO categoryDTO = new CategoryDTO( ID, NAME );
+        CategoryDTO categoryDTO = new CategoryDTO( NAME, null );
 
         //when
         Category category = categoryMapper.categoryDtoToCategory( categoryDTO );
 
         //then
-        assertThat( category.getId(), equalTo( ID ) );
+        //assertThat( category.getId(), equalTo( ID ) );
         assertThat( category.getName(), equalTo( NAME ) );
     }
 }

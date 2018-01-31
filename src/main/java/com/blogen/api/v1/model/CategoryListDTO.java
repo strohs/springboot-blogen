@@ -4,17 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
- * Data Transfer Object containing {@link com.blogen.domain.Category} data to be exposed to clients.
- *
  * @author Cliff
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDTO {
+public class CategoryListDTO {
 
-    private String name;
+    List<CategoryDTO> categories;
 
-    private String categoryUrl;
 }
