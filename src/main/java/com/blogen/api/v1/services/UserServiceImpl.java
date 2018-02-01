@@ -12,6 +12,7 @@ import com.blogen.repositories.UserRepository;
 import com.blogen.services.security.EncryptionService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,7 +68,12 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.userDtoToUser( userDTO );
         user.setUserPrefs( buildDefaultUserPrefs() );
         user.setEncryptedPassword( encryptionService.encrypt( user.getPassword() ) );
-        User savedUser = userRepository.save( user );
+        User savedUser;
+        try {
+            savedUser = userRepository.save( user );
+        } catch ( DataIntegrityViolationException ex ) {
+            throw new BadRequestException( "user with userName=" + userDTO.getUserName() + " already exists" );
+        }
         UserDTO returnDto = userMapper.userToUserDto( savedUser );
         returnDto.setUserUrl( buildUserUrl( savedUser ) );
         //todo set password to null? and normally use SSL in production to send secure data
@@ -111,6 +117,7 @@ public class UserServiceImpl implements UserService {
         if ( user == null ) throw new BadRequestException( "user with id=" + id + " does not exist" );
         return user;
     }
+
 
     /**
      * build a default user preferences object with default avatar image set

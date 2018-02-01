@@ -4,10 +4,7 @@ import com.blogen.api.v1.model.CategoryDTO;
 import com.blogen.api.v1.model.CategoryListDTO;
 import com.blogen.api.v1.services.CategoryService;
 import com.blogen.api.v1.validators.CategoryDtoValidator;
-import com.blogen.builders.Builder;
-import com.blogen.domain.Category;
 import com.blogen.exceptions.BadRequestException;
-import com.blogen.repositories.CategoryRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,13 +16,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 
 import static com.blogen.api.v1.controllers.AbstractRestControllerTest.asJsonString;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -48,9 +43,6 @@ public class CategoryRestControllerTest {
     private CategoryService categoryService;
 
     @Autowired
-    private WebApplicationContext webCtx;
-
-    @Autowired
     MockMvc mockMvc;
 
     private CategoryDTO catDto_1;
@@ -68,7 +60,7 @@ public class CategoryRestControllerTest {
     public void should_getAllCategoriesAndReturnOK_when_getAllCategories() throws Exception {
         CategoryListDTO categoryListDTO = new CategoryListDTO( Arrays.asList( catDto_1, catDto_2) );
 
-        given( categoryService .getAllCategories() ).willReturn( categoryListDTO );
+        given( categoryService.getAllCategories() ).willReturn( categoryListDTO );
 
         mockMvc.perform( get( CategoryRestController.BASE_URL ) )
                 .andExpect( status().isOk() )

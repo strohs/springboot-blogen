@@ -6,6 +6,7 @@ import com.blogen.api.v1.model.ApiGlobalError;
 import com.blogen.exceptions.BadRequestException;
 import com.blogen.exceptions.NotFoundException;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +34,7 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
 
     @ExceptionHandler( {NotFoundException.class} )
     public ResponseEntity<Object> handleNotFoundException( Exception exception, WebRequest request ){
+        log.error( exception.getMessage() );
         ApiGlobalError globalError = new ApiGlobalError( exception.getMessage() );
         List<ApiGlobalError> globalErrors = Arrays.asList( globalError );
         ApiErrorsView errorsView = new ApiErrorsView( null, globalErrors );
@@ -40,18 +44,26 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
 
     @ExceptionHandler( {BadRequestException.class} )
     public ResponseEntity<Object> handleBadRequestException( Exception exception, WebRequest request ) {
+        log.error( exception.getMessage() );
         ApiGlobalError globalError = new ApiGlobalError( exception.getMessage() );
         List<ApiGlobalError> globalErrors = Arrays.asList( globalError );
         ApiErrorsView errorsView = new ApiErrorsView( null, globalErrors );
         return new ResponseEntity<>( errorsView, new HttpHeaders(), HttpStatus.BAD_REQUEST );
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleOtherExceptions( Exception exception ) {
-        ApiGlobalError globalError = new ApiGlobalError( exception.getMessage() );
-        List<ApiGlobalError> globalErrors = Arrays.asList( globalError );
-        ApiErrorsView errorsView = new ApiErrorsView( null, globalErrors );
-        return new ResponseEntity<>( errorsView, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR );
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch( TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request ) {
+        log.error( ex.getMessage() );
+        String methodParamName = ( ex instanceof MethodArgumentTypeMismatchException) ? (( MethodArgumentTypeMismatchException ) ex).getName() : "";
+        List<ApiFieldError> apiFieldErrors = new ArrayList<>();
+        List<ApiGlobalError> apiGlobalErrors = new ArrayList<>();
+        ApiGlobalError globalError = new ApiGlobalError();
+        globalError.setMessage( "invalid type sent for parameter: " + methodParamName + "  with value:" + ex.getValue() );
+        apiGlobalErrors.add( globalError );
+
+        ApiErrorsView apiErrorsView = new ApiErrorsView(apiFieldErrors, apiGlobalErrors);
+
+        return new ResponseEntity<>(apiErrorsView, HttpStatus.BAD_REQUEST);
     }
 
     @Override
@@ -59,7 +71,7 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
                                                                 HttpHeaders headers,
                                                                 HttpStatus status,
                                                                 WebRequest request ) {
-
+        log.error( exception.getMessage() );
         BindingResult bindingResult = exception.getBindingResult();
 
         List<ApiFieldError> apiFieldErrors = bindingResult
@@ -80,5 +92,14 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
         ApiErrorsView apiErrorsView = new ApiErrorsView(apiFieldErrors, apiGlobalErrors);
 
         return new ResponseEntity<>(apiErrorsView, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleOtherExceptions( Exception exception ) {
+        log.error( exception.getMessage() );
+        ApiGlobalError globalError = new ApiGlobalError( exception.getMessage() );
+        List<ApiGlobalError> globalErrors = Arrays.asList( globalError );
+        ApiErrorsView errorsView = new ApiErrorsView( null, globalErrors );
+        return new ResponseEntity<>( errorsView, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR );
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 /**
+ * Controller for REST operations in Blogen {@link com.blogen.domain.User}
+ *
  * @author Cliff
  */
 @Log4j
@@ -27,7 +29,7 @@ public class UserRestController {
 
     @GetMapping( BASE_URL )
     @ResponseStatus(HttpStatus.OK)
-    public UserListDTO getAllUser() {
+    public UserListDTO getAllUsers() {
         log.debug( "getAllUsers" );
         return userService.getAllUsers();
     }

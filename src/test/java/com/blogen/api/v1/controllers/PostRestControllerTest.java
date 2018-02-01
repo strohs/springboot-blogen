@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith( SpringRunner.class )
 @WebMvcTest(controllers = {PostRestController.class}, secure = false)
 @Import( {PostDtoValidator.class} )
-public class PostRestControllerIT {
+public class PostRestControllerTest {
 
     @MockBean
     @Qualifier("postRestService")
