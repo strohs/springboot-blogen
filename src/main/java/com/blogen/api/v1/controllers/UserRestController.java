@@ -3,6 +3,8 @@ package com.blogen.api.v1.controllers;
 import com.blogen.api.v1.model.UserDTO;
 import com.blogen.api.v1.model.UserListDTO;
 import com.blogen.api.v1.services.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
  *
  * @author Cliff
  */
+@Api
 @Log4j
 @RestController
 public class UserRestController {
@@ -27,6 +30,7 @@ public class UserRestController {
         this.userService = userService;
     }
 
+    @ApiOperation( value = "get a list of all users", produces = "application/json")
     @GetMapping( BASE_URL )
     @ResponseStatus(HttpStatus.OK)
     public UserListDTO getAllUsers() {
@@ -34,6 +38,7 @@ public class UserRestController {
         return userService.getAllUsers();
     }
 
+    @ApiOperation( value = "get a specific user by id", produces = "application/json")
     @GetMapping( BASE_URL + "/{id}" )
     @ResponseStatus( HttpStatus.OK )
     public UserDTO getUser( @PathVariable("id") Long id ) {
@@ -41,6 +46,7 @@ public class UserRestController {
         return userService.getUser( id );
     }
 
+    @ApiOperation( value = "create a new user", consumes = "application/json", produces = "application/json")
     @PostMapping( BASE_URL )
     @ResponseStatus( HttpStatus.CREATED )
     public UserDTO createNewUser( @RequestBody UserDTO userDTO ) {
@@ -48,6 +54,7 @@ public class UserRestController {
         return userService.createNewUser( userDTO );
     }
 
+    @ApiOperation( value = "update field(s) of an existing user", consumes = "application/json", produces = "application/json")
     @PatchMapping( BASE_URL + "/{id}" )
     @ResponseStatus( HttpStatus.OK )
     public UserDTO updateUser( @PathVariable("id") Long id, @RequestBody UserDTO userDTO ) {

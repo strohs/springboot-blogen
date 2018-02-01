@@ -4,6 +4,8 @@ import com.blogen.api.v1.model.PostDTO;
 import com.blogen.api.v1.model.PostListDTO;
 import com.blogen.api.v1.services.PostService;
 import com.blogen.api.v1.validators.PostDtoValidator;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,6 +21,7 @@ import javax.websocket.server.PathParam;
  *
  * @author Cliff
  */
+@Api
 @Log4j
 @RestController
 public class PostRestController {
@@ -39,6 +42,7 @@ public class PostRestController {
         binder.addValidators( postDtoValidator );
     }
 
+    @ApiOperation( value = "get a list of parent posts", produces = "application/json")
     @GetMapping( BASE_URL + "{limit}")
     @ResponseStatus(HttpStatus.OK)
     public PostListDTO getPosts( @RequestParam(value = "limit", defaultValue = "5") int limit ) {
@@ -46,6 +50,7 @@ public class PostRestController {
         return postService.getPosts( limit );
     }
 
+    @ApiOperation( value = "get a post by id", produces = "application/json")
     @GetMapping( BASE_URL + "/{id}" )
     @ResponseStatus( HttpStatus.OK )
     public PostDTO getPost( @PathVariable("id") Long id) {
@@ -53,6 +58,7 @@ public class PostRestController {
         return postService.getPost( id );
     }
 
+    @ApiOperation( value = "create a new parent post", consumes = "application/json", produces = "application/json")
     @PostMapping( BASE_URL )
     @ResponseStatus( HttpStatus.CREATED )
     public PostDTO createPost( @Valid @RequestBody PostDTO postDTO ) {
@@ -60,6 +66,7 @@ public class PostRestController {
         return postService.createNewPost( postDTO );
     }
 
+    @ApiOperation( value = "create a new child post", consumes = "application/json", produces = "application/json")
     @PostMapping( BASE_URL + "/{id}")
     @ResponseStatus( HttpStatus.CREATED )
     public PostDTO createChildPost( @PathVariable("id") Long parentId, @Valid @RequestBody PostDTO postDTO ) {
@@ -67,6 +74,7 @@ public class PostRestController {
         return postService.createNewChildPost( parentId, postDTO );
     }
 
+    @ApiOperation( value = "replace an existing post with a new post data", consumes = "application/json", produces = "application/json")
     @PutMapping( BASE_URL + "/{id}" )
     @ResponseStatus( HttpStatus.OK )
     public PostDTO updatePost( @PathVariable("id") Long id, @Valid @RequestBody PostDTO postDTO ) {
@@ -74,6 +82,7 @@ public class PostRestController {
         return postService.saveUpdatePost( id, postDTO );
     }
 
+    @ApiOperation( value = "update field(s) of an existing post", consumes = "application/json", produces = "application/json")
     @PatchMapping( BASE_URL + "/{id}" )
     @ResponseStatus( HttpStatus.OK )
     public PostDTO patchPost( @PathVariable( "id" ) Long id, @RequestBody PostDTO postDTO ) {
@@ -81,6 +90,7 @@ public class PostRestController {
         return postService.saveUpdatePost( id, postDTO );
     }
 
+    @ApiOperation( value = "delete a post" )
     @DeleteMapping( BASE_URL + "/{id}")
     @ResponseStatus( HttpStatus.OK )
     public void deletePost( @PathVariable("id") Long id ) {

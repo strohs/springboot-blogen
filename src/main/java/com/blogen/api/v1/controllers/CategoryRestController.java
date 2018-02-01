@@ -4,6 +4,8 @@ import com.blogen.api.v1.model.CategoryDTO;
 import com.blogen.api.v1.model.CategoryListDTO;
 import com.blogen.api.v1.validators.CategoryDtoValidator;
 import com.blogen.api.v1.services.CategoryService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +20,7 @@ import javax.validation.Valid;
  *
  * @author Cliff
  */
+@Api
 @RestController
 @Log4j
 public class CategoryRestController {
@@ -39,6 +42,7 @@ public class CategoryRestController {
         binder.addValidators( categoryDtoValidator );
     }
 
+    @ApiOperation( value = "get a list of all categories", produces = "application/json")
     @GetMapping( CategoryRestController.BASE_URL )
     @ResponseStatus( HttpStatus.OK )
     public CategoryListDTO getAllCategories() {
@@ -46,6 +50,7 @@ public class CategoryRestController {
         return categoryService.getAllCategories();
     }
 
+    @ApiOperation( value = "get a specific category by id", produces = "application/json")
     @GetMapping( CategoryRestController.BASE_URL + "/{id}")
     @ResponseStatus( HttpStatus.OK )
     public CategoryDTO getCategory( @PathVariable("id") Long id ) {
@@ -53,6 +58,7 @@ public class CategoryRestController {
         return categoryService.getCategory( id );
     }
 
+    @ApiOperation( value = "create a new category", produces = "application/json", consumes = "application/json")
     @PostMapping( CategoryRestController.BASE_URL )
     @ResponseStatus( HttpStatus.CREATED )
     public CategoryDTO createNewCategory( @Valid @RequestBody CategoryDTO categoryDTO ) {
