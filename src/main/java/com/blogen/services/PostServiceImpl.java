@@ -75,6 +75,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+    public List<PostCommand> getAllPostsByUserName( String userName ) {
+        List<Post> posts = postRepository.findAllByUser_userNameOrderByCreatedDesc( userName );
+        return posts.stream()
+                .map( (Post p) -> postCommandMapper.postToPostCommand( p ) )
+                .collect( Collectors.toList());
+    }
+
+    @Override
+    @Transactional
     public List<PostCommand> getAllPosts() {
         List<Post> posts = postRepository.findAllByParentNull();
         return posts.stream()

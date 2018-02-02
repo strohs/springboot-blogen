@@ -1,18 +1,11 @@
 package com.blogen.controllers;
 
-import com.blogen.commands.CategoryCommand;
-import com.blogen.commands.PageCommand;
-import com.blogen.commands.PostCommand;
-import com.blogen.commands.UserCommand;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
@@ -23,18 +16,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.annotation.Resources;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyLong;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -96,7 +79,7 @@ public class PostControllerIT {
 
         mockMvc.perform( get("/posts/show?cat=1&page=0").with( user(USER1_NAME).password( USER1_PW ).authorities( AUTH_USER )) )
                 .andExpect( status().isOk() )
-                .andExpect( view().name( "userPosts" ) )
+                .andExpect( view().name( "mainPosts" ) )
                 .andExpect( model().attributeExists( "postCommand" ) )
                 .andExpect( model().attributeExists( "user" ) )
                 .andExpect( model().attributeExists( "page" ) );

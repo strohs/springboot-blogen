@@ -19,7 +19,10 @@
 
             <ul class="navbar-nav">
                 <li class="nav-item px-2">
-                    <a href="userPosts.html" th:href="@{/posts}" class="nav-link">Posts</a>
+                    <a href="userPosts.html" sec:authorize="isAuthenticated()" th:href="@{/posts}" class="nav-link">Posts</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a href="userPosts.html" sec:authorize="isAuthenticated()" th:href="@{'/users/' + ${#authentication.getName()}}" class="nav-link">My Posts</a>
                 </li>
                 <!--<li class="nav-item px-2" sec:authorize="hasAuthority('ADMIN')">-->
                     <!--<a href="admin-index.html" class="nav-link active">Dashboard</a>-->
@@ -32,17 +35,16 @@
                 <!--</li>-->
             </ul>
              <!-- navbar links for all users -->
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto" sec:authorize="isAuthenticated()">
                 <li class="nav-item dropdown mr-3">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" >
                         <i class="fa fa-user"></i>
-                        <span sec:authorize="isAuthenticated()">
+                        <span>
                             Welcome <span sec:authentication="principal.username">UserName</span>
                         </span>
 
                     </a>
                     <div class="dropdown-menu">
-                        <!--todo add profile page -->
                         <a th:href="@{/profile}" class="dropdown-item">
                             <i class="fa fa-user-circle"></i>
                             Profile

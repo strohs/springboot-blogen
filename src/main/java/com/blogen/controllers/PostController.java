@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 ;
 
@@ -88,8 +89,17 @@ public class PostController {
         model.addAttribute( "page",pageCommand );
         model.addAttribute( "user",userCommand );
         model.addAttribute( "postCommand", new PostCommand() );
-        return "userPosts";
+        return "mainPosts";
 
+    }
+
+    @GetMapping("/users/{name}")
+    public String showUserPosts( @PathVariable("name") String name, Model model ) {
+        log.debug( "showing user posts for name=" + name );
+        List<PostCommand> recentPosts = postService.getAllPostsByUserName( name );
+        model.addAttribute( "posts",recentPosts );
+
+        return "userPosts";
     }
     
 }

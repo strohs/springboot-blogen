@@ -19,6 +19,9 @@ public interface PostService {
     //get all posts CREATED by a user (including child posts)
     List<PostCommand> getAllPostsByUser( Long id );
 
+    //get all posts for a userName
+    List<PostCommand> getAllPostsByUserName( String userName );
+
     //get all blogen posts
     List<PostCommand> getAllPosts();
 
