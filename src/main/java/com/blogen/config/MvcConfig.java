@@ -31,22 +31,17 @@ import java.util.Set;
  * @author Cliff
  */
 @Configuration
-public class MvcConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
+public class MvcConfig { // extends WebMvcConfigurerAdapter {
 
-    private ApplicationContext applicationContext;
 
-    @Override
-    public void setApplicationContext( ApplicationContext applicationContext ) {
-        this.applicationContext = applicationContext;
-    }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
-        registry.addResourceHandler("/img/**").addResourceLocations("classpath:/static/img/");
-        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
-    }
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+//        registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
+//        registry.addResourceHandler("/img/**").addResourceLocations("classpath:/static/img/");
+//        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
+//    }
 
 //    @Bean("simpleMappingExceptionResolver")
 //    public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {

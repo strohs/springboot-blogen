@@ -4,17 +4,19 @@
 
 Spring Boot Blogen
 ==========================================================================================
-Blogen is a fictional micro-blogging website powered by Spring Boot on the backend with Bootstrap 4 on the frontend.
-While not fully production ready, this project was a means for me to integrate various front-end and back-end technologies
-I have been working with over the past couple of years, mainly Spring and Spring MVC.
+Blogen is a fictional micro-blogging/message-board website powered by Spring Boot on the backend with Bootstrap 4 on
+the frontend. This project was a means for me to integrate various Spring Framework projects with Bootstrap,
+a technology I have been wanting to learn for some time.
 
 ## Overview
-Blogen lets users posts their thoughts on a variety of categories (such as Technology, Web Development, Health, etc..)
-Additionally users can link an image (hosted on the web) to their post, which will display on the Blogen main page.
-Once a user has made a post, other users can then reply to the post, starting a thread of conversation.
+Blogen users login to the site and post their thoughts on a variety of categories (such as Technology, Web Development,
+Health, etc..) Users can also link an image to their post, which will display on the Blogen main page.
+Once a user has made a post, other Blogen users can then reply to the post, starting a thread of conversation.
+
 
 ![Blogen Main Page](https://github.com/strohs/springboot-blogen/blob/master/BlogenMain.jpg)
 ![Blogen Posts Page](https://github.com/strohs/springboot-blogen/blob/master/BlogenPosts.jpg)
+![Blogen Profile Page](https://github.com/strohs/springboot-blogen/blob/master/BlogenProfile.jpg)
 
 
 ## Running
@@ -53,11 +55,17 @@ The following users are provided out of the gate, including an admin user
 * username: **lizreed** password: **password**
 * username: **admin** password: **adminpassword**
 
+## REST Api
+Blogen also includes a REST Api that lets you perform CRUD operations on Posts,Categories, and Users.
+You can view the REST Documentation here: 
+
 ## Software Used in the Project
 * Spring Boot (1.5.9)
 * Spring MVC
 * Spring Data JPA
+* REST Api
 * Project Lombok
+* Springfox (for documenting the REST Api in the OpenAPI format e.g. Swagger )
 * MapStruct
 * Hibernate (as the JPA provider)
 * Spring Security
