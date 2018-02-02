@@ -69,10 +69,9 @@ public class SpringSecConfig extends WebSecurityConfigurerAdapter {
                             "/console/*",
                             "/h2-console/**",
                             "/api/**",
-                            "/swagger*",
-                            "/v2/api-docs/**",
                             "/swagger-resources/**",
-                            "/springfox/**").permitAll()
+                            "/swagger-ui.html**",
+                            "/v2/api-docs").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll()

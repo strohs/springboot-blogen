@@ -42,7 +42,7 @@ public class PostRestController {
         binder.addValidators( postDtoValidator );
     }
 
-    @ApiOperation( value = "get a list of parent posts", produces = "application/json")
+    @ApiOperation( value = "get a list of parent posts and any child posts belonging to a parent", produces = "application/json")
     @GetMapping( BASE_URL + "{limit}")
     @ResponseStatus(HttpStatus.OK)
     public PostListDTO getPosts( @RequestParam(value = "limit", defaultValue = "5") int limit ) {
