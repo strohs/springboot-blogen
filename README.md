@@ -5,9 +5,8 @@
 Spring Boot Blogen
 ==========================================================================================
 Blogen is a fictional micro-blogging website powered by Spring Boot on the backend with Bootstrap 4 on the frontend.
-This application was a way for me to integrate various spring framework projects I had been using into a single
-end to end application.  Additionally it also enabled me to learn some Bootstrap, something I had been
-wanting to do for some time now.
+It incorporates many spring projects, including: security, data-jpa, mvc, rest, spring-test, plus many others.
+Additionally it also enabled me to learn some Bootstrap, something I had been wanting to do for some time now.
 
 ## Overview
 Blogen lets users post their thoughts on a variety of categories (such as Technology, Web Development, Health, etc..).
@@ -63,6 +62,8 @@ are available here:  http://http://localhost:8080/swagger-ui.html#/
 
 The Api provides CRUD operations on Posts,Categories,and Users.
 
+
+## Technical Info
 
 
 ## Software Used in the Project
