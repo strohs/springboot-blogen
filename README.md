@@ -4,16 +4,19 @@
 
 Spring Boot Blogen
 ==========================================================================================
-Blogen is a fictional micro-blogging website powered by Spring Boot on the backend with Bootstrap 4 on the frontend.
-It incorporates many spring projects, including: security, data-jpa, mvc, rest, spring-test, plus many others.
-Additionally it also enabled me to learn some Bootstrap, something I had been wanting to do for some time now.
+Blogen is a fictional micro-blogging/message-board website powered by Spring Boot on the backend with Bootstrap 4
+on the frontend. It uses a variety of spring projects to power the back-end including: spring-data-jpa, spring-mvc,
+spring-test, plus many more. Unit Tests and Integration tests have also been written using Junit and Mockito.
+In addition to the web-site, a REST Api has also been developed that will let you perform CRUD operations on
+Users,Posts, and Categories.
 
 ## Overview
 Blogen lets users post their thoughts on a variety of categories (such as Technology, Web Development, Health, etc..).
-It essentially a "mini" message board that lets users perform CRUD operations on posts. Users can also perform filter
-operations on the posts as well as search the text/title of posts.
-In addition to the text of a post, users can link an image to their post (hosted on the web) which will display on
-the Blogen main page.
+Along with the text of the post, they can optionally provide a link to an image, which will get displayed on the front
+page of Blogen. Users can create new posts, reply to posts, plus edit and delete any existing posts they
+have made. Additionally, users can also perform filtering operations on posts, as well as search posts for
+a specific textual string.
+
 
 ![Blogen Main Page](https://github.com/strohs/springboot-blogen/blob/master/BlogenMain.jpg)
 ![Blogen Posts Page](https://github.com/strohs/springboot-blogen/blob/master/BlogenPosts.jpg)
@@ -39,12 +42,9 @@ delete posts they have made. Admins can edit or delete any post. Also note that 
 post only goes one level deep, in other words, you cannot reply to a reply.
 
 
-Users can also filter posts by category or search post text and titles for a specific text string. (The search is a brute
- force SQL *LIKE* search. A production site would probably use a proper search engine like Apache Lucene.)
-
 ### Admin user
 In addition to the regular functionality provided above, admin users can create new categories. The link to create new
- categories will be on the navbar.
+ categories will appear on the navbar if you are logged in as the admin.
 
 
 ### Blogen Users
@@ -55,21 +55,25 @@ There are four sample users plus one administrator provided out of the gate:
 * username: **lizreed** password: **password**
 * username: **admin** password: **adminpassword**
 
+Each user has a public facing "home" page that lets you see all the posts they have made. These pages are not protected
+ by Spring Security and can be reached at ```http://localhost:8080/users/{username}``` where {username} is the Blogen
+ user name e.g. ```mgill```
+
 
 ## REST Api
-There is also a REST Api included with with project. It has been documented with OpenAPI (Swagger) and those docs
-are available here:  http://http://localhost:8080/swagger-ui.html#/
+There is also a REST Api included with with project. It is not currently secured but it has been documented
+with OpenAPI (Swagger). The docs are available here:  http://http://localhost:8080/swagger-ui.html#/
 
-The Api provides CRUD operations on Posts,Categories,and Users.
+The Api lets you perform CRUD operations on Posts,Categories,and Users.
 
 
-## Technical Info
 
 
 ## Software Used in the Project
 * Spring Boot (1.5.9)
 * Spring MVC
 * Spring Data JPA
+* H2 Database
 * Project Lombok
 * MapStruct
 * Hibernate (as the JPA provider)
