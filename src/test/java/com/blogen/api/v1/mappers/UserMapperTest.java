@@ -46,7 +46,6 @@ public class UserMapperTest {
         UserDTO userDTO = userMapper.userToUserDto( user );
 
         //then
-        assertThat( userDTO.getId(), equalTo( ID ) );
         assertThat( userDTO.getFirstName(), equalTo( FIRSTNAME ) );
         assertThat( userDTO.getLastName(), equalTo( LASTNAME ) );
         assertThat( userDTO.getUserName(), equalTo( USERNAME ) );
@@ -57,13 +56,12 @@ public class UserMapperTest {
     @Test
     public void userDtoToUser() {
         //given
-        UserDTO userDTO = new UserDTO( ID, FIRSTNAME,LASTNAME,USERNAME,EMAIL,PASSWORD );
+        UserDTO userDTO = new UserDTO( FIRSTNAME,LASTNAME,USERNAME,EMAIL,PASSWORD, null );
 
         //when
         User user = userMapper.userDtoToUser( userDTO );
 
         //then
-        assertThat( user.getId(), equalTo( ID ) );
         assertThat( user.getFirstName(), equalTo( FIRSTNAME ) );
         assertThat( user.getLastName(), equalTo( LASTNAME ) );
         assertThat( user.getUserName(), equalTo( USERNAME ) );
@@ -74,8 +72,8 @@ public class UserMapperTest {
     @Test
     public void userDtoToUser_withNullId_shouldSetUserIdToNull() {
         //given
-        UserDTO userDTO = new UserDTO( ID, FIRSTNAME,LASTNAME,USERNAME,EMAIL,PASSWORD );
-        userDTO.setId( null );
+        UserDTO userDTO = new UserDTO( FIRSTNAME,LASTNAME,USERNAME,EMAIL,PASSWORD,null );
+        
 
         //when
         User user = userMapper.userDtoToUser( userDTO );

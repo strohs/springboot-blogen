@@ -4,6 +4,7 @@ import com.blogen.api.v1.model.PostDTO;
 import com.blogen.domain.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -16,13 +17,20 @@ public interface PostMapper {
 
     PostMapper INSTANCE = Mappers.getMapper( PostMapper.class );
 
-    @Mapping( source = "parent.id", target = "parentId" )
-    @Mapping( source = "user.id", target = "userId")
     @Mapping( source = "user.userName", target = "userName")
-    @Mapping( target = "created", dateFormat = "EEE MMM dd, yyyy hh:mm a")
+    @Mapping( source = "category.name", target = "categoryName")
+    //@Mapping( target = "created", dateFormat = "EEE MMM dd, yyyy hh:mm a")
     PostDTO postToPostDto( Post post );
 
-    //TODO decide if this would actually be needed in the REST API
-    //Post postDtoToPost( PostDTO postDTO );
+    @Mapping( target = "user.userName", source = "userName")
+    @Mapping( target = "category.name",  source = "categoryName")
+    Post postDtoToPost( PostDTO postDTO );
+
+    @Mapping( target = "user.userName", source = "userName")
+    @Mapping( target = "category.name",  source = "categoryName")
+    //null fields in postDTO will set corresponding Post fields to null
+    Post updatePostFromDTO( PostDTO postDTO, @MappingTarget Post post );
+
+
 
 }

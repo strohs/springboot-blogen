@@ -59,9 +59,20 @@ public class SpringSecConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeRequests().antMatchers( "/admin/**" ).hasAuthority( "ADMIN" )
+                .authorizeRequests()
+                    .antMatchers( "/admin/**" )
+                    .hasAuthority( "ADMIN" )
                 .and()
-                .authorizeRequests().antMatchers("/","/users/**","/console/*","/h2-console/**").permitAll()
+                .authorizeRequests()
+                    .antMatchers(
+                            "/",
+                            "/console/*",
+                            "/h2-console/**",
+                            "/users/**",
+                            "/api/**",
+                            "/swagger-resources/**",
+                            "/swagger-ui.html**",
+                            "/v2/api-docs").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll()

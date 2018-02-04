@@ -1,9 +1,15 @@
 package com.blogen.api.v1.model;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,32 +22,32 @@ import java.util.List;
 @AllArgsConstructor
 public class PostDTO {
 
-    private Long id;
-
-    private Long parentId;
-
-    private Long userId;
-
-    private String userName;
-
+    @ApiModelProperty( value = "title of the post", required = true, example = "Some Amazing Title")
     private String title;
 
+    @ApiModelProperty( value = "text of the post", required = true, example = "text of the post")
     private String text;
 
+    @ApiModelProperty( value = "url to an image on the web", example = "http://lorempixe/200/400/abstract")
     private String imageUrl;
 
-    private CategoryDTO category;
+    @ApiModelProperty( value = "category that this post belongs to", required = true, example = "Web Development")
+    private String categoryName;
 
-    private String created;
+    @ApiModelProperty(value = "the userName of the user creating this post", required = true, example = "coolUserName")
+    private String userName;
 
+    @ApiModelProperty(value = "ISO8601 date of when this post was created" ,readOnly = true )
+    private LocalDateTime created;
+
+    @ApiModelProperty(value = "URL that identifies this post", readOnly = true, example = "/api/v1/posts/43")
+    private String postUrl;
+
+    @ApiModelProperty(value = "URL that identifies the parent of this post, will be null if the post is a parent", readOnly = true, example = "/api/v1/posts/40")
+    private String parentPostUrl;
+
+    @ApiModelProperty(value = "if this is a parent post, contains its child posts", readOnly = true)
     private List<PostDTO> children;
-
-    /**
-     * A parent post will have a parentId == null.
-     * @return true if this is a 'parent' post, false otherwise (indicating that this post is a 'child' post)
-     */
-    public boolean isParentPost() {
-        return parentId == null;
-    }
+    
 
 }

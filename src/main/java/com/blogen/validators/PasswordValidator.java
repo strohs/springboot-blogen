@@ -3,7 +3,6 @@ package com.blogen.validators;
 import com.blogen.commands.UserProfileCommand;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 /**
@@ -15,6 +14,7 @@ import org.springframework.validation.Validator;
  */
 @Component
 public class PasswordValidator implements Validator {
+
     @Override
     public boolean supports( Class<?> clazz ) {
         return UserProfileCommand.class.equals( clazz );
@@ -31,13 +31,13 @@ public class PasswordValidator implements Validator {
 
         //if something was entered in the password field
         if( command.getPassword() != null && command.getPassword().length() > 0 ) {
-            if ( !passwordLengthOk( command.getPassword() ) ) {
+            if ( invalidPasswordLength( command.getPassword() ) ) {
                 errors.rejectValue( "password","size.password", "size must be between 8 and 30 characters" );
             }
         }
         //if something was entered in the password confirmation field
         if( command.getConfirmPassword() != null && command.getConfirmPassword().length() > 0 ) {
-            if ( !passwordLengthOk( command.getConfirmPassword() ) ) {
+            if ( invalidPasswordLength( command.getConfirmPassword() ) ) {
                 errors.rejectValue( "confirmPassword","size.password", "size must be between 8 and 30 characters" );
             }
         }
@@ -52,7 +52,7 @@ public class PasswordValidator implements Validator {
     }
 
     //password must be between 8 and 30 characters
-    private boolean passwordLengthOk( String password ) {
-        return password.length() >= 8 && password.length() <= 30;
+    private boolean invalidPasswordLength( String password ) {
+        return password.length() < 8 || password.length() > 30;
     }
 }

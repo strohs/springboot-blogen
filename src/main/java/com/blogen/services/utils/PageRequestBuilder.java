@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 /**
- * Helper class for building page requests.
+ * Helper class for building Spring-Data page requests.
  *
  * @see  {@link PageRequest}
  *

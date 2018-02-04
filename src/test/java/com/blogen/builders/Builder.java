@@ -1,11 +1,14 @@
 package com.blogen.builders;
 
+import com.blogen.api.v1.model.CategoryDTO;
+import com.blogen.api.v1.model.PostDTO;
 import com.blogen.commands.*;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
 import com.blogen.domain.UserPrefs;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -119,6 +122,18 @@ public class Builder {
         return cc;
     }
 
-
+    //Builders for REST API
+    public static PostDTO buildPostDTO( String userName, String title, String text,
+                                        String imageUrl, String categoryName, LocalDateTime created, List<PostDTO> children) {
+        PostDTO postDTO = new PostDTO();
+        postDTO.setUserName( userName );
+        postDTO.setCategoryName( categoryName );
+        postDTO.setText( text );
+        postDTO.setTitle( title );
+        postDTO.setImageUrl( imageUrl );
+        postDTO.setCreated( created );
+        postDTO.setChildren( children );
+        return postDTO;
+    }
 
 }

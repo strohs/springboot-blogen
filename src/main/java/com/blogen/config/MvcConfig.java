@@ -31,8 +31,7 @@ import java.util.Set;
  * @author Cliff
  */
 @Configuration
-public class MvcConfig { // extends WebMvcConfigurerAdapter {
-
+public class MvcConfig { //extends WebMvcConfigurerAdapter {
 
 
 //    @Override

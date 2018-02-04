@@ -22,7 +22,7 @@ import static org.junit.Assert.assertThat;
 public class AvatarServiceImplTest {
 
     //total number of avatar images in /img directory
-    private static final int TOTAL_AVATAR_FILES = 7;
+    private static final int TOTAL_AVATAR_FILES = 8;
 
     @Autowired
     private AvatarService avatarService;
