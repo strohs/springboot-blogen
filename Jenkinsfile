@@ -8,8 +8,17 @@ pipeline {
   }
   stages {
     stage('Compile') {
-      steps {
-        sh 'mvn -B clean verify'
+      parallel {
+        stage('Compile') {
+          steps {
+            sh 'mvn -B clean verify'
+          }
+        }
+        stage('exStage') {
+          steps {
+            echo 'this is a message'
+          }
+        }
       }
     }
   }
