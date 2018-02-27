@@ -8,17 +8,18 @@ pipeline {
   }
   stages {
     stage('Compile') {
-      parallel {
-        stage('Compile') {
-          steps {
-            sh 'mvn -B clean verify'
-          }
-        }
-        stage('exStage') {
-          steps {
-            echo 'this is a message'
-          }
-        }
+      steps {
+        sh 'mvn -B clean compile'
+      }
+    }
+    stage('Test') {
+      steps {
+        sh 'mvn -B verify'
+      }
+    }
+    stage('Report') {
+      steps {
+        sh 'junit \'target/*-reports/*.xml\''
       }
     }
   }
