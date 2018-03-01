@@ -8,22 +8,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -B clean compile'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn verify'
+                sh 'mvn -B clean install'
             }
             post {
                 always {
                     junit 'target/surefire-reports/*.xml'
                 }
-            }
-        }
-        stage('Install') {
-            steps {
-                sh 'mvn install'
             }
         }
     }
