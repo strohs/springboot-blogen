@@ -23,7 +23,7 @@ public class AvatarServiceImpl implements AvatarService {
 
 
     //image directory containing Avatar Images
-    private static final String AVATAR_IMG_DIR = "classpath:/static/img/avatar*";
+    private static final String AVATAR_IMG_DIR = "classpath:static/img/avatar*";
 
 
     /**

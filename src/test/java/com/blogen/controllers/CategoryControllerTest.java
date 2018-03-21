@@ -57,7 +57,7 @@ public class CategoryControllerTest {
 
         mockMvc.perform( get("/admin/categories/show?page=0") )
                 .andExpect( status().isOk() )
-                .andExpect( view().name( "/admin/categories" ) )
+                .andExpect( view().name( "admin/categories" ) )
                 .andExpect( model().attributeExists( "page" ) )
                 .andExpect( model().attributeExists( "categoryCommand" ) );
 

@@ -36,7 +36,7 @@ public class CategoryController {
 
         model.addAttribute( "page",command );
         model.addAttribute( "categoryCommand",new CategoryCommand() );
-        return "/admin/categories";
+        return "admin/categories";
     }
 
     @PostMapping("/admin/categories")
