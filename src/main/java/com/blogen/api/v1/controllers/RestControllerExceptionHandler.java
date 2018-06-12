@@ -25,7 +25,8 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Controller Advice for REST Controllers
+ * Exception Handlers for REST Controllers
+ *
  * @author Cliff
  */
 @Log4j

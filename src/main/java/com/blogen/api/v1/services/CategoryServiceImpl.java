@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * CategoryService for REST API
+ * Category Service for REST API
  * For Categories:
  *   we can get a list of all categories
  *   get a specific category
  *   create a new category
  *
- * Deleting or Updating a category is not supported in this API
+ * NOTE: Deleting or Updating a category is not supported in this API
  * @author Cliff
  */
 @Service("categoryRestService")

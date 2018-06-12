@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Service for performing RESTful CRUD operations on Blogen {@link com.blogen.domain.Post}
+ *
  * @author Cliff
  */
 @Log4j
@@ -139,6 +141,7 @@ public class PostServiceImpl implements PostService {
         return post;
     }
 
+    //helper method that builds a URL String to a particular post
     private String buildPostUrl( Post post ) {
         return PostRestController.BASE_URL + "/" + post.getId();
     }
@@ -152,8 +155,8 @@ public class PostServiceImpl implements PostService {
 
     /**
      * build a PostDTO object and construct the URLs that get returned in the PostDTO
-     * @param post
-     * @return
+     * @param post - the Post domain object to convert into a PostDTO
+     * @return a PostDTO
      */
     private PostDTO buildReturnDto( Post post ) {
         PostDTO postDTO = postMapper.postToPostDto( post );
