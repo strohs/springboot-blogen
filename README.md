@@ -4,17 +4,21 @@
 
 Spring Boot Blogen
 ==========================================================================================
-Blogen is a fictional micro-blogging/message-board website powered by Spring Boot on the backend with Bootstrap 4
-on the frontend. It uses a variety of spring projects to power the back-end including: spring-data-jpa, spring-mvc,
+Blogen is a fictional micro-blogging/message-board website I created that brings together various front/back end 
+technologies I have been working with. It is powered by Spring Boot (on the backend) with Bootstrap 4
+on the frontend. 
+
+
+A variety of Spring projects have been used, mainly: spring-data-jpa, spring-mvc,
 spring-test, plus many more. Unit Tests and Integration tests have also been written using Junit and Mockito.
 In addition to the web-site, a REST Api has also been developed that will let you perform CRUD operations on
 Users,Posts, and Categories.
 
 ## Overview
 Blogen lets users post their thoughts on a variety of categories (such as Technology, Web Development, Health, etc..).
-Along with the text of the post, they can optionally provide a link to an image, which will get displayed on the front
+Along with the text of the post, users can optionally provide a link to an image, which will get displayed on the front
 page of Blogen. Users can create new posts, reply to posts, plus edit and delete any existing posts they
-have made. Additionally, users can also perform filtering operations on posts, as well as search posts for
+have created. Additionally, users can also perform filtering operations on posts, as well as search posts for
 a specific textual string.
 
 
@@ -25,11 +29,13 @@ a specific textual string.
 
 ## Running
 * You will need to have Java 1.8 installed on your system (JDK or JRE) and have the **JAVA_HOME** environment variable set
-* Clone the repository
+* Clone the *springboot-blogen* repository
 * cd into the main project directory and use maven wrapper to run:
   1. ```./mvnw clean install```   (on windows systems run ```mvnw.cmd clean install```)
   2. ```./mvnw spring-boot:run```  (on windows systems run ```mvnw.cmd spring-boot:run```)
   3. open your web browser to ```http://localhost:8080```
+  4. The main blogen home page should display (it will attempt to load images from the lorempixel website, which is slow)
+
 
 
 ## Using Blogen
