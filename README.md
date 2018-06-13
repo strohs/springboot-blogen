@@ -14,6 +14,7 @@ spring-test, plus many more. Unit Tests and Integration tests have also been wri
 In addition to the web-site, a REST Api has also been developed that will let you perform CRUD operations on
 Users,Posts, and Categories.
 
+
 ## Overview
 Blogen lets users post their thoughts on a variety of categories (such as Technology, Web Development, Health, etc..).
 Along with the text of the post, users can optionally provide a link to an image, which will get displayed on the front
