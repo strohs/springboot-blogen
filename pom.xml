@@ -26,6 +26,7 @@
 		<thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
 		<thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
         <springfox-swagger.version>2.8.0</springfox-swagger.version>
+        <docker.image.prefix>strohs</docker.image.prefix>
 	</properties>
 
 	<dependencies>
@@ -140,6 +141,7 @@
 		</dependency>
 	</dependencies>
 
+
     <build>
         <plugins>
             <plugin>
@@ -212,6 +214,18 @@
                             -Amapstruct.defaultComponentModel=spring
                         </compilerArg>
                     </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- for building a docker image of our application -->
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.3.6</version>
+                <configuration>
+                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
                 </configuration>
             </plugin>
         </plugins>

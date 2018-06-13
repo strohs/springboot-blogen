@@ -9,6 +9,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn -B clean install'
+                sh 'mvn dockerfile:build'
             }
             post {
                 always {
@@ -16,10 +17,10 @@ pipeline {
                 }
             }
         }
-//        stage('Deliver') {
-//            steps {
-//                sh 'cp ./target/spring-boot-blogen-0.0.1-SNAPSHOT.jar ~'
-//            }
-//        }
+        stage('Deliver') {
+            steps {
+                sh 'mvn dockerfile:push'
+            }
+        }
     }
 }
