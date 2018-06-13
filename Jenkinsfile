@@ -16,10 +16,10 @@ pipeline {
                 }
             }
         }
-        stage('Deliver') {
-            steps {
-                sh 'mvn dockerfile:push'
-            }
-        }
+//        stage('Deliver') {
+//            steps {
+//                sh 'mvn dockerfile:push'
+//            }
+//        }
     }
 }
