@@ -1,10 +1,11 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
+    agent any
+//            {
+//        docker {
+//            image 'maven:3-alpine'
+//            args '-v /root/.m2:/root/.m2'
+//        }
+//    }
     stages {
         stage('Build') {
             steps {
@@ -16,10 +17,10 @@ pipeline {
                 }
             }
         }
-        stage('Deliver') {
-            steps {
-                sh 'cp ./target/spring-boot-blogen-0.0.1-SNAPSHOT.jar ~'
-            }
-        }
+//        stage('Deliver') {
+//            steps {
+//                sh 'cp ./target/spring-boot-blogen-0.0.1-SNAPSHOT.jar ~'
+//            }
+//        }
     }
 }
