@@ -8,7 +8,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -B clean install dockerfile:build'
+                sh 'mvn -B clean install'
+                sh 'mvn dockerfile:build'
             }
             post {
                 always {
