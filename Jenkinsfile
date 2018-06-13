@@ -16,5 +16,10 @@ pipeline {
                 }
             }
         }
+        stage('Deliver') {
+            steps {
+                sh 'cp ./target/spring-boot-blogen-0.0.1-SNAPSHOT.jar ~'
+            }
+        }
     }
 }
