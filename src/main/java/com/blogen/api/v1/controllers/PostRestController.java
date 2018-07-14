@@ -6,7 +6,7 @@ import com.blogen.api.v1.services.PostService;
 import com.blogen.api.v1.validators.PostDtoValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 /**
  * REST Controller for working with {@link com.blogen.domain.Post}
@@ -22,7 +21,7 @@ import javax.websocket.server.PathParam;
  * @author Cliff
  */
 @Api
-@Log4j
+@Slf4j
 @RestController
 public class PostRestController {
 

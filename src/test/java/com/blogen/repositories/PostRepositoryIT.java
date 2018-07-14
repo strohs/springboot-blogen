@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -81,7 +82,7 @@ public class PostRepositoryIT {
 
         int CHILD_COUNT = 4;
 
-        Post parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
+        Post parent = postRepository.findById( PARENT_POST_ID_WITH_CHILDREN ).get();
         assertNotNull( parent );
         assertThat( parent.getChildren().size(), is( CHILD_COUNT) );
         assertThat( parent.getChildren().get( 0 ).getParent().getId(), is( PARENT_POST_ID_WITH_CHILDREN ));
@@ -95,7 +96,7 @@ public class PostRepositoryIT {
     public void should_findParentPostWithNoChildPosts() {
         int CHILD_COUNT = 0;
 
-        Post parent = postRepository.findOne( PARENT_POST_ID_NO_CHILDREN );
+        Post parent = postRepository.findById( PARENT_POST_ID_NO_CHILDREN ).get();
         assertNotNull( parent );
         assertThat( parent.getChildren().size(), is( CHILD_COUNT) );
 
@@ -104,13 +105,13 @@ public class PostRepositoryIT {
     @Test
     public void should_returnTrue_when_ifPostIsAParentPost() {
 
-        Post parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
+        Post parent = postRepository.findById( PARENT_POST_ID_WITH_CHILDREN ).get();
         assertThat( parent.isParentPost(), is( true ));
     }
 
     @Test
     public void should_returnFalse_ifPostIsAChildPost() {
-        Post child = postRepository.findOne( CHILD1_POST_ID );
+        Post child = postRepository.findById( CHILD1_POST_ID ).get();
 
         assertThat( child.isParentPost(), is(false) );
         assertThat( child.getParent(), is( notNullValue()));
@@ -119,27 +120,27 @@ public class PostRepositoryIT {
     @Test
     @Transactional
     public void should_deleteParentPostAndAllItsChildPosts() {
-        Post parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
+        Post parent = postRepository.findById( PARENT_POST_ID_WITH_CHILDREN ).get();
 
         postRepository.delete( parent );
         //re-select parent to make sure it is null
-        parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
-        Post child1 = postRepository.findOne( CHILD1_POST_ID );
-        Post child2 = postRepository.findOne( CHILD2_POST_ID );
-        Post child3 = postRepository.findOne( CHILD3_POST_ID );
-        Post child4 = postRepository.findOne( CHILD4_POST_ID );
-        assertNull( parent );
-        assertNull( child1 );
-        assertNull( child2 );
-        assertNull( child3 );
-        assertNull( child4 );
+        Optional<Post> deletedParent = postRepository.findById( PARENT_POST_ID_WITH_CHILDREN );
+        Optional<Post> child1 = postRepository.findById( CHILD1_POST_ID );
+        Optional<Post> child2 = postRepository.findById( CHILD2_POST_ID );
+        Optional<Post> child3 = postRepository.findById( CHILD3_POST_ID );
+        Optional<Post> child4 = postRepository.findById( CHILD4_POST_ID );
+        assertFalse( deletedParent.isPresent() );
+        assertFalse( child1.isPresent() );
+        assertFalse( child2.isPresent() );
+        assertFalse( child3.isPresent() );
+        assertFalse( child4.isPresent() );
     }
 
     @Test
     @Transactional
     public void should_notDeleteParentPost_when_deletingAChildPost() {
-        Post parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
-        Post child = postRepository.findOne( CHILD1_POST_ID );
+        Post parent = postRepository.findById( PARENT_POST_ID_WITH_CHILDREN ).get();
+        Post child = postRepository.findById( CHILD1_POST_ID ).get();
 
         parent.removeChild( child );
         postRepository.delete( child );
@@ -151,9 +152,9 @@ public class PostRepositoryIT {
     @Test
     @Transactional
     public void should_notDeleteParentPost_when_deletingAllChildPosts() {
-        Post parent = postRepository.findOne( PARENT_POST_ID_TWO_CHILDREN );
-        Post child1 = postRepository.findOne( CHILD5_POST_ID );
-        Post child2 = postRepository.findOne( CHILD6_POST_ID );
+        Post parent = postRepository.findById( PARENT_POST_ID_TWO_CHILDREN ).get();
+        Post child1 = postRepository.findById( CHILD5_POST_ID ).get();
+        Post child2 = postRepository.findById( CHILD6_POST_ID ).get();
 
         parent.removeChild( child1 );
         parent.removeChild( child2 );
@@ -161,7 +162,7 @@ public class PostRepositoryIT {
         postRepository.delete( child2 );
         postRepository.saveAndFlush( parent );
 
-        parent = postRepository.findOne( PARENT_POST_ID_TWO_CHILDREN );
+        parent = postRepository.findById( PARENT_POST_ID_TWO_CHILDREN ).get();
         assertNotNull( parent );
         assertThat( parent.getChildren().size(), is(0) );
     }
@@ -169,30 +170,30 @@ public class PostRepositoryIT {
     @Test
     @Transactional
     public void should_succeed_when_addingOneChildPostToAParentPostWithChildren() {
-        Category cat = categoryRepository.findOne( 3L );
-        User user = userRepository.findOne( 1L );
+        Category cat = categoryRepository.findById( 3L ).get();
+        User user = userRepository.findById( 1L ).get();
         Post child = buildPost( user, cat, "child text","http://foo.com" );
 
-        Post parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
+        Post parent = postRepository.findById( PARENT_POST_ID_WITH_CHILDREN ).get();
         parent.addChild( child );
         postRepository.saveAndFlush( parent );
 
-        parent = postRepository.findOne( PARENT_POST_ID_WITH_CHILDREN );
+        parent = postRepository.findById( PARENT_POST_ID_WITH_CHILDREN ).get();
         assertThat( parent.getChildren().size(), is(5) );
     }
 
     @Test
     @Transactional
     public void should_succeed_when_addingChildPostToParentPostWithoutChildren() {
-        Category cat = categoryRepository.findOne( 3L );
-        User user = userRepository.findOne( 1L );
+        Category cat = categoryRepository.findById( 3L ).get();
+        User user = userRepository.findById( 1L ).get();
         Post child = buildPost( user, cat, "child text","http://foo.com" );
 
-        Post parent = postRepository.findOne( PARENT_POST_ID_NO_CHILDREN);
+        Post parent = postRepository.findById( PARENT_POST_ID_NO_CHILDREN).get();
         parent.addChild( child );
         postRepository.saveAndFlush( parent );
 
-        parent = postRepository.findOne( PARENT_POST_ID_NO_CHILDREN );
+        parent = postRepository.findById( PARENT_POST_ID_NO_CHILDREN ).get();
         assertThat( parent.getChildren().size(), is(1) );
     }
 
@@ -221,7 +222,7 @@ public class PostRepositoryIT {
 
         Post detachedPost = postCommandMapper.postCommandToPost( postCommand );
         Category cat = categoryRepository.findByName( detachedPost.getCategory().getName() );
-        User user = userRepository.findOne( detachedPost.getUser().getId() );
+        User user = userRepository.findById( detachedPost.getUser().getId() ).get();
         detachedPost.setCategory( cat );
         detachedPost.setUser( user );
         Post savedPost = postRepository.save( detachedPost );
@@ -259,15 +260,15 @@ public class PostRepositoryIT {
         Post detachedPost = postCommandMapper.postCommandToPost( postCommand );
         assertThat( detachedPost.getId(), is( nullValue()));
         Category cat = categoryRepository.findByName( detachedPost.getCategory().getName() );
-        User user = userRepository.findOne( detachedPost.getUser().getId() );
+        User user = userRepository.findById( detachedPost.getUser().getId() ).get();
         detachedPost.setCategory( cat );
         detachedPost.setUser( user );
         //get Parent Post
-        Post parent = postRepository.findOne( postCommand.getParentId() );
+        Post parent = postRepository.findById( postCommand.getParentId() ).get();
         parent.addChild( detachedPost );
         postRepository.saveAndFlush( parent );
 
-        Post savedPost = postRepository.findOne( 17L );
+        Post savedPost = postRepository.findById( 17L ).get();
 
         assertThat( savedPost.getChildren().size(), is(1));
         assertThat( savedPost.getChildren().get( 0 ).getId(), is( notNullValue()) );

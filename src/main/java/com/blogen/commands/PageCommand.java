@@ -1,6 +1,5 @@
 package com.blogen.commands;
 
-import com.blogen.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

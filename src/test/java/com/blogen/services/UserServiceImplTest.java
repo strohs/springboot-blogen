@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -71,11 +72,11 @@ public class UserServiceImplTest {
     public void should_returnOneUser_when_getUserById() {
         User user = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
 
-        given( userRepository.findOne( anyLong() ) ).willReturn( user );
+        given( userRepository.findById(anyLong()) ).willReturn( Optional.of(user) );
 
         UserCommand command = userService.getUserById( USER1_ID );
 
-        then( userRepository ).should().findOne( anyLong() );
+        then( userRepository ).should().findById(anyLong());
         assertThat( command.getId(), is( USER1_ID) );
     }
 
@@ -122,7 +123,7 @@ public class UserServiceImplTest {
         User fetchedUser = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
 
         given( userRepository.save( any( User.class ) )).willReturn( savedUser );
-        given( userRepository.findOne( anyLong() )).willReturn( fetchedUser );
+        given( userRepository.findById( anyLong() )).willReturn( Optional.of(fetchedUser) );
         given( encryptionService.encrypt( anyString() )).willReturn( ENCRYPTED_PASSWORD );
 
         UserCommand savedCommand = userService.saveUserCommand( commandToSave );
@@ -145,7 +146,7 @@ public class UserServiceImplTest {
         fetchedUser.setUserPrefs( userPrefs );
 
         given( userRepository.save( any( User.class) )).willReturn( savedUser );
-        given( userRepository.findOne( anyLong() )).willReturn( fetchedUser );
+        given( userRepository.findById(anyLong())).willReturn( Optional.of(fetchedUser) );
 
         UserProfileCommand savedCommand = userService.saveUserProfileCommand( upc );
 
@@ -160,6 +161,7 @@ public class UserServiceImplTest {
     @Test
     public void should_encryptAndSavePassword_when_savePassword() {
         UserProfileCommand upc = Builder.buildUserProfileCommand( USER_PREFS_ID, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, USER_PREFS_AVATAR, PASSWORD, PASSWORD);
+        upc.setUserName( USER1_USERNAME );
         User savedUser = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, null, ENCRYPTED_PASSWORD );
         User fetchedUser = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, null, ENCRYPTED_PASSWORD );
 

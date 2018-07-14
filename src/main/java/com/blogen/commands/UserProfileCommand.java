@@ -2,8 +2,6 @@ package com.blogen.commands;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.List;
 
@@ -23,13 +21,13 @@ public class UserProfileCommand {
 
     String userName;
 
-    @NotBlank
+    //@javax.validation.constraints.NotBlank
     String firstName;
 
-    @NotBlank
+    //@javax.validation.constraints.NotBlank
     String lastName;
 
-    @Email
+    //@javax.validation.constraints.Email
     String email;
 
     //validation for password/confirmPassword done by PasswordValidator class
@@ -40,6 +38,6 @@ public class UserProfileCommand {
     //list of avatar image names to display on user profile page
     List<String> avatarImages;
 
-    @NotBlank
+    //@javax.validation.constraints.NotBlank
     String avatarImage;
 }

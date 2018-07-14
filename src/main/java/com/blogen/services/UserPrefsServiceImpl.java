@@ -1,11 +1,10 @@
 package com.blogen.services;
 
-import com.blogen.commands.UserCommand;
 import com.blogen.commands.UserPrefsCommand;
 import com.blogen.commands.mappers.UserPrefsCommandMapper;
 import com.blogen.domain.UserPrefs;
 import com.blogen.repositories.UserPrefsRepository;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
  *
  * @author Cliff
  */
-@Log4j
+@Slf4j
 @Service
 public class UserPrefsServiceImpl implements UserPrefsService {
 

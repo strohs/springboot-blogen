@@ -61,6 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryPageCommand command = new CategoryPageCommand();
         List<CategoryCommand> categoryCommands = new ArrayList<>();
         //build a PageRequest for Category data
+
         PageRequest pageRequest = pageRequestBuilder.buildCategoryPageRequest( pageNum, Sort.Direction.ASC, "name" );
         //retrieve a page worth of categories
         Page<Category> page = categoryRepository.findAll( pageRequest );

@@ -5,7 +5,7 @@ import com.blogen.api.v1.model.ApiFieldError;
 import com.blogen.api.v1.model.ApiGlobalError;
 import com.blogen.exceptions.BadRequestException;
 import com.blogen.exceptions.NotFoundException;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ import static java.util.stream.Collectors.toList;
  *
  * @author Cliff
  */
-@Log4j
+@Slf4j
 @ControllerAdvice("com.blogen.api.v1.controllers")
 public class RestControllerExceptionHandler extends ResponseEntityExceptionHandler {
 

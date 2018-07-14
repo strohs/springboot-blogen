@@ -4,7 +4,7 @@ import com.blogen.commands.UserProfileCommand;
 import com.blogen.services.AvatarService;
 import com.blogen.services.UserService;
 import com.blogen.validators.PasswordValidator;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +23,7 @@ import java.security.Principal;
  * Controller for the user profile page
  * @author Cliff
  */
-@Log4j
+@Slf4j
 @Controller
 public class UserProfileController {
 
@@ -64,7 +64,7 @@ public class UserProfileController {
         }
         userService.saveUserProfileCommand( userProfileCommand );
         redirectAttributes.addFlashAttribute( "successMessage","Settings were saved" );
-        return "redirect:profile";
+        return "redirect/profile";
     }
 
     @PostMapping("/profile/password")
@@ -80,6 +80,6 @@ public class UserProfileController {
         }
         userService.savePassword( command );
         redirectAttributes.addFlashAttribute( "successMessage","Password was saved" );
-        return "redirect:profile";
+        return "redirect:/profile";
     }
 }

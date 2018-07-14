@@ -13,7 +13,7 @@ import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
 import com.blogen.services.utils.PageRequestBuilder;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author Cliff
  */
-@Log4j
+@Slf4j
 @Service("postRestService")
 public class PostServiceImpl implements PostService {
 
@@ -66,8 +66,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDTO getPost( Long id ) {
-        Post post = postRepository.findOne( id );
-        if ( post == null ) throw new NotFoundException( "post not found with id:" + id );
+        Post post = postRepository.findById( id ).orElseThrow( () -> new NotFoundException( "post not found with id:" + id ) );
         return buildReturnDto( post );
     }
 
@@ -83,9 +82,10 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostDTO createNewChildPost( Long parentId, PostDTO postDTO ) {
-        Post parentPost = postRepository.findOne( parentId );
-        if ( parentPost == null ) throw new BadRequestException( "Post with id " + parentId + " was not found" );
-        if ( !parentPost.isParentPost() ) throw new BadRequestException( "Post with id: " + parentId + " is a child post. Cannot create a new child post onto an existing child post" );
+        Post parentPost = postRepository.findById( parentId ).orElseThrow( () ->
+                new BadRequestException( "Post with id " + parentId + " was not found" ) );
+        if ( !parentPost.isParentPost() )
+            throw new BadRequestException( "Post with id: " + parentId + " is a child post. Cannot create a new child post onto an existing child post" );
         Post childPost = buildNewPost( postDTO );
         parentPost.addChild( childPost );
         Post savedPost = postRepository.saveAndFlush( parentPost );
@@ -94,8 +94,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDTO saveUpdatePost( Long id, PostDTO postDTO ) {
-        Post postToUpdate = postRepository.findOne( id );
-        if ( postToUpdate == null ) throw new BadRequestException( "Post with id " + id + " was not found" );
+        Post postToUpdate = postRepository.findById( id ).orElseThrow( () ->
+                new BadRequestException( "Post with id " + id + " was not found" ) );
         postToUpdate = mergePostDtoToPost( postToUpdate, postDTO );
         postToUpdate.setCreated( LocalDateTime.now() );
         Post savedPost = postRepository.save( postToUpdate );
@@ -114,8 +114,8 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void deletePost( Long id ) {
-        Post post = postRepository.findOne( id );
-        if ( post == null ) throw new BadRequestException( "Post with id " + id + " was not found" );
+        Post post = postRepository.findById( id ).orElseThrow( () ->
+                new BadRequestException( "Post with id " + id + " was not found" ) );
         if ( !post.isParentPost() ) {
             //post to delete is a child post, need to get the parent post object and remove the child from it.
             Post parent = post.getParent();

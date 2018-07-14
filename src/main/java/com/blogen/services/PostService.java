@@ -1,12 +1,8 @@
 package com.blogen.services;
 
-import com.blogen.api.v1.model.PostDTO;
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
 import com.blogen.commands.SearchResultPageCommand;
-import com.blogen.domain.Post;
-import com.blogen.domain.User;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 

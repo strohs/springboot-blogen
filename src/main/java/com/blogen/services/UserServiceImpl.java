@@ -5,6 +5,7 @@ import com.blogen.commands.UserProfileCommand;
 import com.blogen.commands.mappers.UserCommandMapper;
 import com.blogen.commands.mappers.UserProfileCommandMapper;
 import com.blogen.domain.User;
+import com.blogen.exceptions.NotFoundException;
 import com.blogen.repositories.UserRepository;
 import com.blogen.services.security.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserCommand getUserById( Long id ) {
-        return userCommandMapper.userToUserCommand( userRepository.findOne( id ) );
+        return userCommandMapper.userToUserCommand( userRepository.findById( id ).get() );
     }
 
     /**
@@ -119,7 +120,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserCommand saveUserCommand( UserCommand command ) {
         User userToSave = userCommandMapper.userCommandToUser( command );
-        User fetchedUser = userRepository.findOne( command.getId() );
+        User fetchedUser = userRepository.findById( command.getId() ).get();
         mergeUsers( userToSave, fetchedUser );
         if( userToSave.getPassword() != null )
             fetchedUser.setEncryptedPassword( encryptionService.encrypt( userToSave.getPassword() ) );
@@ -151,7 +152,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserProfileCommand saveUserProfileCommand( UserProfileCommand command ) {
-        User userToSave = userRepository.findOne( command.getId() );
+        User userToSave = userRepository.findById( command.getId() ).get();
         //merge fields from UserProfileCommand to User
         userToSave.setFirstName( command.getFirstName() );
         userToSave.setLastName( command.getLastName() );
@@ -175,7 +176,8 @@ public class UserServiceImpl implements UserService {
         String encryptedPassword = encryptionService.encrypt( command.getPassword() );
         userToSave.setEncryptedPassword( encryptedPassword );
         User savedUser = userRepository.save( userToSave );
-        return userProfileCommandMapper.userToUserProfileCommand( savedUser );
+        UserProfileCommand savedCommand = userProfileCommandMapper.userToUserProfileCommand( savedUser );
+        return savedCommand;
     }
 
     /**

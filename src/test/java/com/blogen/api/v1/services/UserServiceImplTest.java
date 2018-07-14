@@ -17,6 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -82,22 +83,22 @@ public class UserServiceImplTest {
 
     @Test
     public void should_getUser1_when_getUserWithValidId() {
-        given( userRepository.findOne( anyLong() )).willReturn( user1 );
+        given( userRepository.findById(anyLong())).willReturn( Optional.of( user1 ) );
 
         UserDTO userDTO = userService.getUser( 1L );
 
-        then( userRepository ).should().findOne( anyLong() );
+        then( userRepository ).should().findById(anyLong());
         assertThat( userDTO, is( notNullValue()) );
         assertThat( userDTO.getUserUrl(), is(user1Url) );
     }
 
     @Test( expected = BadRequestException.class )
     public void should_throwBadRequestException_whenGetUserWithInvalidId() {
-        given( userRepository.findOne( anyLong() )).willReturn( null );
+        given( userRepository.findById(anyLong())).willReturn( Optional.empty() );
 
         UserDTO userDTO = userService.getUser( 234L );
 
-        then( userRepository ).should().findOne( anyLong() );
+        then( userRepository ).should().findById(anyLong());
     }
 
     @Test
@@ -134,7 +135,7 @@ public class UserServiceImplTest {
         newUserDTO.setFirstName( "NewFirstName" );
         updatedUser1.setFirstName( "NewFirstName" );
         
-        given( userRepository.findOne( anyLong() ) ).willReturn( user1 );
+        given( userRepository.findById(anyLong()) ).willReturn( Optional.of( user1 ) );
         given( userRepository.save( any(User.class) )).willReturn( updatedUser1 );
 
         UserDTO savedDTO = userService.updateUser( 1L, newUserDTO );

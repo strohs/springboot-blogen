@@ -2,7 +2,6 @@ package com.blogen.services.security;
 
 import com.blogen.commands.mappers.UserDetailsMapper;
 import com.blogen.domain.User;
-import com.blogen.repositories.UserRepository;
 import com.blogen.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -10,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation of Spring UserDetailsService for our Blogen users

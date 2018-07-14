@@ -6,7 +6,7 @@ import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserPrefsRepository;
 import com.blogen.services.RoleService;
 import com.blogen.services.UserService;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -21,7 +21,7 @@ import java.util.Random;
  *
  *  @author Cliff
  */
-@Log4j
+@Slf4j
 @Component
 public class Bootstrapper implements ApplicationListener<ContextRefreshedEvent> {
 

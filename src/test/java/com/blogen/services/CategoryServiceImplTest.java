@@ -130,8 +130,10 @@ public class CategoryServiceImplTest {
         Category cat2 = buildCategory( CAT2_ID,CAT2_NAME );
         List<Category> categories = Arrays.asList( cat1,cat2 );
         Page<Category> page = new PageImpl<>( categories );
+        PageRequest pageRequest = PageRequest.of( 0,4,Sort.Direction.ASC,"name" );
 
-        given( categoryRepository.findAll( any( Pageable.class) )).willReturn( page );
+        given( pageRequestBuilder.buildCategoryPageRequest( anyInt(),any(),anyString() )).willReturn( pageRequest );
+        given( categoryRepository.findAll( any( PageRequest.class ) )).willReturn( page );
 
         CategoryPageCommand categoryPageCommand = categoryService.getAllCategories( 0 );
 

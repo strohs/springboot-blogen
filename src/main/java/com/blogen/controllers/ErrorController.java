@@ -1,6 +1,6 @@
 package com.blogen.controllers;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +13,7 @@ import java.security.Principal;
  *
  * @author Cliff
  */
-@Log4j
+@Slf4j
 @Controller
 @RequestMapping("/error")
 public class ErrorController {

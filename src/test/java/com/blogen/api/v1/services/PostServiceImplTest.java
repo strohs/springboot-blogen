@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -181,11 +182,11 @@ public class PostServiceImplTest {
         Post post1 = buildPost1();
         List<Post> posts = Arrays.asList( post1 );
 
-        given( postRepository.findOne( anyLong() ) ).willReturn( post1 );
+        given( postRepository.findById(anyLong()) ).willReturn( Optional.of( post1 ) );
 
         PostDTO postDTO = postService.getPost( POST1_ID );
 
-        then( postRepository ).should().findOne( POST1_ID );
+        then( postRepository ).should().findById( POST1_ID );
         assertThat( postDTO, is( notNullValue()) );
         assertThat( postDTO.getText(), is(POST1_TEXT) );
     }
@@ -195,7 +196,7 @@ public class PostServiceImplTest {
         Post post1 = buildPost1();
         List<Post> posts = Arrays.asList( post1 );
 
-        given( postRepository.findOne( anyLong() ) ).willReturn( null );
+        given( postRepository.findById(anyLong()) ).willReturn( Optional.empty() );
 
         PostDTO postDTO = postService.getPost( 5583L );
     }
@@ -251,14 +252,14 @@ public class PostServiceImplTest {
         savedPost.addChild( child1 );
         PostDTO childDTO = buildChild1DTO();
 
-        given( postRepository.findOne( anyLong() ) ).willReturn( post1 );
+        given( postRepository.findById(anyLong()) ).willReturn( Optional.of( post1 ) );
         given( categoryRepository.findByName( anyString() )).willReturn( child1.getCategory() );
         given( userRepository.findByUserName( anyString() )).willReturn( child1.getUser() );
         given( postRepository.saveAndFlush( any(Post.class) )).willReturn( savedPost );
 
         PostDTO savedDTO = postService.createNewChildPost( POST1_ID, childDTO );
 
-        then( postRepository ).should().findOne( anyLong() );
+        then( postRepository ).should().findById(anyLong());
         then( categoryRepository ).should().findByName( anyString() );
         then( userRepository ).should().findByUserName( anyString() );
         then( postRepository ).should().saveAndFlush( any( Post.class ) );
@@ -277,7 +278,7 @@ public class PostServiceImplTest {
         savedPost.addChild( child1 );
         PostDTO childDTO = buildChild1DTO();
 
-        given( postRepository.findOne( anyLong() ) ).willReturn( null );
+        given( postRepository.findById(anyLong()) ).willReturn( Optional.empty() );
 
         PostDTO savedDTO = postService.createNewChildPost( 45342L, childDTO );
     }
@@ -290,14 +291,14 @@ public class PostServiceImplTest {
         PostDTO postDTO = buildPost1DTO();
         postDTO.setTitle( POST2_TITLE );
 
-        given( postRepository.findOne( anyLong() )).willReturn( post );
+        given( postRepository.findById(anyLong()) ).willReturn( Optional.of( post ) );
         given( postRepository.save( any(Post.class) )).willReturn( savedPost );
         given( categoryRepository.findByName( anyString() )).willReturn( post.getCategory() );
         given( userRepository.findByUserName( anyString() )).willReturn( post.getUser() );
 
         PostDTO savedDTO = postService.saveUpdatePost( POST1_ID, postDTO );
 
-        then( postRepository ).should().findOne( anyLong() );
+        then( postRepository ).should().findById(anyLong());
         then( postRepository).should().save( any( Post.class ) );
         assertThat( savedDTO.getPostUrl(), is( POST1_URL) );
     }
@@ -311,12 +312,12 @@ public class PostServiceImplTest {
 //        PostDTO postDTO = buildPost1DTO();
 //        postDTO.setTitle( POST2_TITLE );
 //
-//        given( postRepository.findOne( anyLong() )).willReturn( post );
+//        given( postRepository.findById(anyLong()).get()).willReturn( post );
 //        given( postRepository.save( any(Post.class) )).willReturn( savedPost );
 //
 //        PostDTO savedDTO = postService.saveUpdatePost( POST1_ID, postDTO );
 //
-//        then( postRepository ).should().findOne( anyLong() );
+//        then( postRepository ).should().findById(anyLong()).get();
 //        then( postRepository).should().save( any( Post.class ) );
 //        assertThat( savedDTO.getPostUrl(), is( POST1_URL) );
 //    }
@@ -325,7 +326,7 @@ public class PostServiceImplTest {
     public void deletePost() {
         Post post1 = buildPost1();
 
-        given( postRepository.findOne( POST1_ID ) ).willReturn( post1 );
+        given( postRepository.findById( POST1_ID ) ).willReturn( Optional.of(post1) );
 
         postService.deletePost( POST1_ID );
 

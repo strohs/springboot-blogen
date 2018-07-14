@@ -1,6 +1,7 @@
 package com.blogen.services;
 
 import com.blogen.domain.Role;
+import com.blogen.exceptions.NotFoundException;
 import com.blogen.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getById( Long id ) {
-        return roleRepository.findOne( id );
+        return roleRepository.findById( id ).get();
     }
 
     @Override
@@ -48,6 +49,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void delete( Long id ) {
-        roleRepository.delete( id );
+        roleRepository.deleteById( id );
     }
 }

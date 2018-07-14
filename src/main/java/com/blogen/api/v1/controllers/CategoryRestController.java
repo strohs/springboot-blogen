@@ -2,11 +2,11 @@ package com.blogen.api.v1.controllers;
 
 import com.blogen.api.v1.model.CategoryDTO;
 import com.blogen.api.v1.model.CategoryListDTO;
-import com.blogen.api.v1.validators.CategoryDtoValidator;
 import com.blogen.api.v1.services.CategoryService;
+import com.blogen.api.v1.validators.CategoryDtoValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -21,8 +21,8 @@ import javax.validation.Valid;
  * @author Cliff
  */
 @Api
+@Slf4j
 @RestController
-@Log4j
 public class CategoryRestController {
 
     public static final String BASE_URL = "/api/v1/categories";

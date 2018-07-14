@@ -7,10 +7,9 @@ import com.blogen.api.v1.model.UserListDTO;
 import com.blogen.domain.User;
 import com.blogen.domain.UserPrefs;
 import com.blogen.exceptions.BadRequestException;
-import com.blogen.repositories.UserPrefsRepository;
 import com.blogen.repositories.UserRepository;
 import com.blogen.services.security.EncryptionService;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
  *
  * @author Cliff
  */
-@Log4j
+@Slf4j
 @Service("userRestService")
 public class UserServiceImpl implements UserService {
 
@@ -113,8 +112,8 @@ public class UserServiceImpl implements UserService {
      * @throws BadRequestException if the user was not found in the repository
      */
     private User validateUserId( Long id ) throws BadRequestException {
-        User user = userRepository.findOne( id );
-        if ( user == null ) throw new BadRequestException( "user with id=" + id + " does not exist" );
+        User user = userRepository.findById( id )
+                .orElseThrow( () -> new BadRequestException( "user with id=" + id + " does not exist" ) );
         return user;
     }
 

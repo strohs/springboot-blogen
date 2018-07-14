@@ -5,7 +5,7 @@ import com.blogen.api.v1.model.UserListDTO;
 import com.blogen.api.v1.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Cliff
  */
 @Api
-@Log4j
+@Slf4j
 @RestController
 public class UserRestController {
 

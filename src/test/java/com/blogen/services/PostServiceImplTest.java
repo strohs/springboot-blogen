@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -115,7 +116,7 @@ public class PostServiceImplTest {
         Page<Post> page = new PageImpl<Post>( posts );
 
         given( postRepository.findAllByCategory_IdAndParentNullOrderByCreatedDesc( anyLong(), Matchers.any( Pageable.class ) )).willReturn( page );
-        given( categoryRepository.findOne( anyLong() )).willReturn( cat1 );
+        given( categoryRepository.findById( anyLong() )).willReturn( Optional.of(cat1) );
         given( categoryRepository.findAll() ).willReturn( categories );
         given( pageRequestBuilder.buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
 
@@ -150,11 +151,11 @@ public class PostServiceImplTest {
     public void should_GetOnePost_when_getPost() {
         Post p1 = getParentPost1();
 
-        given( postRepository.findOne( anyLong() )).willReturn( p1 );
+        given( postRepository.findById( anyLong() )).willReturn( Optional.of(p1) );
 
         PostCommand pc = postService.getPost( POST1_ID );
 
-        then( postRepository ).should().findOne( anyLong() );
+        then( postRepository ).should().findById( anyLong() );
         assertThat( pc, is(notNullValue()));
         assertThat( pc.getId(), is( POST1_ID ));
     }
@@ -168,7 +169,7 @@ public class PostServiceImplTest {
 
         postService.deletePost( pc );
 
-        then( postRepository ).should().delete( anyLong() );
+        then( postRepository ).should().deleteById( anyLong() );
     }
 
 
@@ -180,13 +181,13 @@ public class PostServiceImplTest {
 
         PostCommand pc = postCommandMapper.postToPostCommand( c1 );
 
-        given( postRepository.findOne( p1.getId() )).willReturn( p1 );
-        given( postRepository.findOne( c1.getId() )).willReturn( c1 );
+        given( postRepository.findById( p1.getId() ) ).willReturn( Optional.of( p1 ) );
+        given( postRepository.findById( c1.getId() ) ).willReturn( Optional.of( c1 ) );
         postService.deletePost( pc );
 
-        then( postRepository ).should().delete( c1.getId() );
-        then( postRepository ).should().findOne( p1.getId() );
-        then( postRepository ).should().findOne( c1.getId() );
+        then( postRepository ).should().deleteById( c1.getId() );
+        then( postRepository ).should().findById( p1.getId() );
+        then( postRepository ).should().findById( c1.getId() );
     }
 
     @Test
@@ -220,7 +221,7 @@ public class PostServiceImplTest {
 
         given( categoryRepository.findByName( anyString() )).willReturn( cat );
         given( userRepository.findByUserName( anyString() )).willReturn( user1 );
-        given( postRepository.findOne( anyLong() )).willReturn( post );
+        given( postRepository.findById(anyLong()) ).willReturn( Optional.of(post) );
         given( postRepository.saveAndFlush( Matchers.any( Post.class ) )).willReturn( post );
         given( principalService.getPrincipalUserName() ).willReturn( USER_NAME );
 
@@ -229,7 +230,7 @@ public class PostServiceImplTest {
         then( postRepository ).should().saveAndFlush( Matchers.any( Post.class) );
         then( categoryRepository).should().findByName( anyString() );
         then( userRepository ).should().findByUserName( anyString() );
-        then( postRepository ).should().findOne( anyLong() );
+        then( postRepository ).should().findById(anyLong());
         assertThat( savedCommand.getId(), is(POST1_ID) );
         assertThat( savedCommand.getChildren().size(), is(1));
         assertThat( savedCommand.getChildren().get( 0 ).getId(), is(CHILD1_ID));
@@ -245,7 +246,7 @@ public class PostServiceImplTest {
         updatedPost.setText( newText );
         PostCommand command = postCommandMapper.postToPostCommand( updatedPost );
 
-        given( postRepository.findOne( anyLong() )).willReturn( existingPost );
+        given( postRepository.findById(anyLong()) ).willReturn( Optional.of(existingPost) );
         given( categoryRepository.findByName( anyString() )).willReturn( cat );
         given( postRepository.saveAndFlush( Matchers.any(Post.class) )).willReturn( updatedPost );
 
@@ -253,7 +254,7 @@ public class PostServiceImplTest {
 
         then( postRepository ).should().saveAndFlush( Matchers.any(Post.class) );
         then( categoryRepository ).should().findByName( anyString() );
-        then( postRepository ).should().findOne( anyLong() );
+        then( postRepository ).should().findById(anyLong());
         assertThat( savedCommand.getId(), is(POST1_ID) );
         assertThat( savedCommand.getText(), is(newText) );
     }
@@ -270,7 +271,7 @@ public class PostServiceImplTest {
         updatedPost.setId( 99999L );
         PostCommand command = postCommandMapper.postToPostCommand( updatedPost );
 
-        given( postRepository.findOne( anyLong() )).willReturn( null );
+        given( postRepository.findById( anyLong()) ).willReturn( Optional.empty() );
         given( categoryRepository.findByName( anyString() )).willReturn( cat );
         given( postRepository.saveAndFlush( Matchers.any(Post.class) )).willReturn( updatedPost );
 

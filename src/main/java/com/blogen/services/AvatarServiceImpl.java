@@ -1,11 +1,9 @@
 package com.blogen.services;
 
-import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @author Cliff
  */
-@Log4j
+@Slf4j
 @Service
 public class AvatarServiceImpl implements AvatarService {
 

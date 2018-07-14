@@ -1,9 +1,6 @@
 package com.blogen.api.v1.validators;
 
 import com.blogen.api.v1.model.PostDTO;
-import com.blogen.repositories.CategoryRepository;
-import com.blogen.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

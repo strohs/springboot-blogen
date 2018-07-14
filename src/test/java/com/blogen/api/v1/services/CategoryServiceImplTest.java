@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -68,11 +69,11 @@ public class CategoryServiceImplTest {
     @Test
     public void should_getOneCategory_withCorrectCategoryUrl_when_getCategory() {
         Long catId = 1L;
-        given( categoryRepository.findOne( anyLong() )).willReturn( cat_1 );
+        given( categoryRepository.findById( anyLong() ) ).willReturn( Optional.of( cat_1 ) );
 
         CategoryDTO dto = categoryService.getCategory( catId );
 
-        then( categoryRepository ).should().findOne( anyLong() );
+        then( categoryRepository ).should().findById(anyLong());
         assertThat( dto, is( notNullValue() ));
         assertThat( dto.getCategoryUrl(), is( CategoryRestController.BASE_URL + "/1") );
     }
@@ -81,7 +82,7 @@ public class CategoryServiceImplTest {
     public void should_throwBadRequestException_when_invalidID_getCategory() {
         //id does not exist
         Long catId = 9445L;
-        given( categoryRepository.findOne( anyLong() )).willReturn( null );
+        given( categoryRepository.findById(anyLong())).willReturn( Optional.empty() );
 
         CategoryDTO dto = categoryService.getCategory( catId );
     }

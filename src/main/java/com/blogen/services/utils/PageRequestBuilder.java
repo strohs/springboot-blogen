@@ -23,14 +23,14 @@ public class PageRequestBuilder {
     private int CATEGORIES_PER_PAGE;
 
     public PageRequest buildPostPageRequest( int pageNum, Sort.Direction sortDir, String property ) {
-        return new PageRequest( pageNum, POSTS_PER_PAGE, sortDir, property );
+        return PageRequest.of( pageNum, POSTS_PER_PAGE, sortDir, property );
     }
 
     public PageRequest buildCategoryPageRequest( int pageNum, Sort.Direction sortDir, String property ) {
-        return new PageRequest( pageNum, CATEGORIES_PER_PAGE, sortDir, property );
+        return PageRequest.of( pageNum, CATEGORIES_PER_PAGE, sortDir, property );
     }
 
     public PageRequest buildPageRequest( int pageNum, int elementsPerPage, Sort.Direction sortDir, String property ) {
-        return new PageRequest( pageNum, elementsPerPage, sortDir, property );
+        return PageRequest.of( pageNum, elementsPerPage, sortDir, property );
     }
 }

@@ -7,7 +7,7 @@ import com.blogen.api.v1.model.CategoryListDTO;
 import com.blogen.domain.Category;
 import com.blogen.exceptions.BadRequestException;
 import com.blogen.repositories.CategoryRepository;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @author Cliff
  */
 @Service("categoryRestService")
-@Log4j
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
     private CategoryRepository categoryRepository;
@@ -52,8 +52,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO getCategory( Long id ) {
-        Category category = categoryRepository.findOne( id );
-        if ( category == null ) throw new BadRequestException( "category with id: " + id + " does not exist" );
+        Category category = categoryRepository.findById( id ).orElseThrow( () ->
+                new BadRequestException( "category with id: " + id + " does not exist" ) );
         CategoryDTO categoryDTO = categoryMapper.categoryToCategoryDto( category );
         categoryDTO.setCategoryUrl( buildCategoryUrl( category ) );
         return categoryDTO;
