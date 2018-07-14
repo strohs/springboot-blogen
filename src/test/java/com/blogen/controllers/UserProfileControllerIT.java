@@ -88,7 +88,7 @@ public class UserProfileControllerIT {
                 .param( "avatarImage",AVATAR1 )
         )
                 .andExpect( status().is3xxRedirection() )
-                .andExpect( view().name( "redirect:profile" ) )
+                .andExpect( view().name( "redirect:/profile" ) )
                 .andExpect( flash().attributeExists( "successMessage" ) );
     }
 
@@ -126,7 +126,7 @@ public class UserProfileControllerIT {
                         .param( "confirmPassword", USER1_PW_CONFIRM )
         )
                 .andExpect( status().is3xxRedirection() )
-                .andExpect( view().name( "redirect:profile" ) )
+                .andExpect( view().name( "redirect:/profile" ) )
                 .andExpect( flash().attributeExists( "successMessage" ) );
     }
 

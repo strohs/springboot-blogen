@@ -21,13 +21,13 @@ public class UserProfileCommand {
 
     String userName;
 
-    //@javax.validation.constraints.NotBlank
+    @javax.validation.constraints.NotBlank
     String firstName;
 
-    //@javax.validation.constraints.NotBlank
+    @javax.validation.constraints.NotBlank
     String lastName;
 
-    //@javax.validation.constraints.Email
+    @javax.validation.constraints.Email
     String email;
 
     //validation for password/confirmPassword done by PasswordValidator class
@@ -38,6 +38,6 @@ public class UserProfileCommand {
     //list of avatar image names to display on user profile page
     List<String> avatarImages;
 
-    //@javax.validation.constraints.NotBlank
+    @javax.validation.constraints.NotBlank
     String avatarImage;
 }

@@ -64,7 +64,7 @@ public class UserProfileController {
         }
         userService.saveUserProfileCommand( userProfileCommand );
         redirectAttributes.addFlashAttribute( "successMessage","Settings were saved" );
-        return "redirect/profile";
+        return "redirect:/profile";
     }
 
     @PostMapping("/profile/password")
