@@ -9,6 +9,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,6 +58,13 @@ public class SpringSecConfig extends WebSecurityConfigurerAdapter {
         authenticationManagerBuilder.authenticationProvider(authenticationProvider);
     }
 
+    @Override
+    public void configure( WebSecurity web) throws Exception {
+        //this will allow swagger UI and h2-console through spring-security
+        web.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources",
+                "/swagger-resources/configuration/security", "/swagger-ui.html", "/webjars/**", "/console/*",
+                "/h2-console/**", "/actuator/**");
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -68,13 +76,8 @@ public class SpringSecConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(
                             "/",
-                            "/console/*",
-                            "/h2-console/**",
                             "/users/**",
-                            "/api/**",
-                            "/swagger-resources/**",
-                            "/swagger-ui.html**",
-                            "/v2/api-docs").permitAll()
+                            "/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll()

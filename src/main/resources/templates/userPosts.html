@@ -5,12 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>User Blogens</title>
 
-    <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.css}"/>
-
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
-          th:href="@{/webjars/bootstrap/4.0.0-beta.3/css/bootstrap.min.css}"
-    />
+    <link th:replace="~{fragments/general :: fontAwesomeCss}"/>
+    <link th:replace="~{fragments/general :: bootstrapCss}"/>
 
 </head>
 
@@ -121,18 +117,9 @@
 
 
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        th:src="@{/webjars/jquery/3.2.1/dist/jquery.slim.min.js}"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        th:src="@{/webjars/popper.js/1.12.9/dist/umd/popper.min.js}"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
-        th:src="@{/webjars/bootstrap/4.0.0-beta.3/js/bootstrap.min.js}"
-        integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
-        crossorigin="anonymous"></script>
+<script th:replace="~{fragments/general :: jquery}"></script>
+<script th:replace="~{fragments/general :: popper}"></script>
+<script th:replace="~{fragments/general :: bootstrap}"></script>
 
 <!-- Using ckeditor for WYSIWYG editing in our textarea(s) -->
 <!--<script src="https://cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>-->
