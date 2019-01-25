@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Configure some of the MVC defaults used by this project.
+ * NOTE: this is all handled by Spring Boot's default MVC configuration.
  *
  * @author Cliff
  */

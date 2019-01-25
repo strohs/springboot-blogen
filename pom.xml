@@ -27,6 +27,7 @@
 		<thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
         <springfox-swagger.version>2.8.0</springfox-swagger.version>
         <docker.image.prefix>strohs</docker.image.prefix>
+        <dockerfile.maven.version>1.4.10</dockerfile.maven.version>
 	</properties>
 
 	<dependencies>
@@ -226,10 +227,11 @@
             </plugin>
             <plugin>
                 <!-- for building a docker image of our application -->
-                <!-- https://github.com/spotify/dockerfile-maven -->
+                <!-- build the docker image using: mvn dockerfile:build -->
+                <!-- SEE: https://github.com/spotify/dockerfile-maven -->
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.3.6</version>
+                <version>${dockerfile.maven.version}</version>
                 <configuration>
                     <repository>${docker.image.prefix}/${project.artifactId}</repository>
                     <tag>${project.version}</tag>

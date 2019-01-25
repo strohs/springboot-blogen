@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SpringBootBlogenApplication {
 
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringBootBlogenApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootBlogenApplication.class, args);
+    }
 }
