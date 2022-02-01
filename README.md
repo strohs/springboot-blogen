@@ -25,7 +25,7 @@ spring-test, plus many more. Unit Tests and Integration tests have also been wri
 A REST Api has also been developed that will let you perform CRUD operations on Users, Posts, and Categories.
 
 ## Running
-* You will need to have Java 1.8 installed on your system (JDK or JRE) and have the **JAVA_HOME** environment variable set
+* You will need to have Java 11 installed on your system (JDK or JRE) and have the **JAVA_HOME** environment variable set
 * Clone the *springboot-blogen* repository
 * cd into the main project directory and use maven wrapper to run:
   1. ```./mvnw clean install```   (on Windows systems run ```mvnw.cmd clean install```)
