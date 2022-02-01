@@ -38,7 +38,7 @@ public class Post {
     //a quick and hacky way to generate a unique id for a post
     private String uuid = UUID.randomUUID().toString();
 
-    //the user who created this post
+    //the user who created this post, many post(s) to one user
     @ManyToOne
     private User user;
 
@@ -47,19 +47,22 @@ public class Post {
 
     private LocalDateTime created = LocalDateTime.now();
 
-    //this is the "one" side of the relationship
+    //this is the "one" side of the relationship, many post(s) to one parent post
     @ManyToOne( cascade = CascadeType.ALL )
     private Post parent;
 
-    //many side is the, "child side" and owner of the relationship, Usually this is the side with the foreign key.
+    // many side is the "child side" and owner of the relationship, Usually this is the side with the foreign key.
+    // one post to many child posts
     @OneToMany( mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true )
     private List<Post> children = new ArrayList<>();
 
-
-    public Post addChild( Post child ) {
+    /**
+     * add a (child) post to this parent post
+     * @param child is the post to add
+     */
+    public void addChild( Post child ) {
         child.setParent( this );
         children.add( child );
-        return child;
     }
 
     public void removeChild( Post child ) {

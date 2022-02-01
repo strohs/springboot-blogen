@@ -8,14 +8,14 @@ import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
+import com.blogen.exceptions.BadRequestException;
 import com.blogen.exceptions.NotFoundException;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
 import com.blogen.services.utils.PageRequestBuilder;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.*;
@@ -28,10 +28,11 @@ import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 
 /**
  * Unit Tests for {@link PostServiceImpl}
@@ -77,7 +78,7 @@ public class PostServiceImplTest {
     private PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
     private CategoryCommandMapper categoryCommandMapper = CategoryCommandMapper.INSTANCE;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
         postService = new PostServiceImpl( postRepository, userRepository, categoryRepository, principalService, postCommandMapper,categoryCommandMapper,pageRequestBuilder );
@@ -112,17 +113,17 @@ public class PostServiceImplTest {
         p3.setCategory( getCategory2() );
         List<Post> posts = Arrays.asList( p1,p2 );
         List<Category> categories = Arrays.asList( cat1,cat2 );
-        PageRequest pageRequest = new PageRequest( 0,4, Sort.Direction.DESC, "created" );
+        PageRequest pageRequest = PageRequest.of( 0,4, Sort.Direction.DESC, "created" );
         Page<Post> page = new PageImpl<Post>( posts );
 
-        given( postRepository.findAllByCategory_IdAndParentNullOrderByCreatedDesc( anyLong(), Matchers.any( Pageable.class ) )).willReturn( page );
+        given( postRepository.findAllByCategory_IdAndParentNullOrderByCreatedDesc( anyLong(), any( Pageable.class ) )).willReturn( page );
         given( categoryRepository.findById( anyLong() )).willReturn( Optional.of(cat1) );
         given( categoryRepository.findAll() ).willReturn( categories );
-        given( pageRequestBuilder.buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
+        given( pageRequestBuilder.buildPostPageRequest( anyInt(), any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
 
         PageCommand pageCommand = postService.getAllPostsByCategoryForPage( CAT1_ID,0 );
 
-        then( postRepository ).should(  ).findAllByCategory_IdAndParentNullOrderByCreatedDesc( anyLong(), Matchers.any( Pageable.class ) );
+        then( postRepository ).should(  ).findAllByCategory_IdAndParentNullOrderByCreatedDesc( anyLong(), any( Pageable.class ) );
         assertThat( pageCommand, is(notNullValue()));
         assertThat( pageCommand.getTotalElements(), is( 2L));
         assertThat( pageCommand.getSelectedCategoryId(), is(CAT1_ID));
@@ -200,12 +201,12 @@ public class PostServiceImplTest {
 
         given( categoryRepository.findByName( anyString() )).willReturn( cat );
         given( userRepository.findByUserName( anyString() )).willReturn( user1 );
-        given( postRepository.saveAndFlush( Matchers.any( Post.class ) )).willReturn( post );
+        given( postRepository.saveAndFlush( any( Post.class ) )).willReturn( post );
         given( principalService.getPrincipalUserName() ).willReturn( USER_NAME );
 
         postService.savePostCommand( pc );
 
-        then( postRepository ).should().saveAndFlush( Matchers.any( Post.class) );
+        then( postRepository ).should().saveAndFlush( any( Post.class) );
         then( categoryRepository).should().findByName( anyString() );
         then( userRepository ).should().findByUserName( anyString() );
     }
@@ -222,12 +223,12 @@ public class PostServiceImplTest {
         given( categoryRepository.findByName( anyString() )).willReturn( cat );
         given( userRepository.findByUserName( anyString() )).willReturn( user1 );
         given( postRepository.findById(anyLong()) ).willReturn( Optional.of(post) );
-        given( postRepository.saveAndFlush( Matchers.any( Post.class ) )).willReturn( post );
+        given( postRepository.saveAndFlush( any( Post.class ) )).willReturn( post );
         given( principalService.getPrincipalUserName() ).willReturn( USER_NAME );
 
         PostCommand savedCommand = postService.savePostCommand( pc );
 
-        then( postRepository ).should().saveAndFlush( Matchers.any( Post.class) );
+        then( postRepository ).should().saveAndFlush( any( Post.class) );
         then( categoryRepository).should().findByName( anyString() );
         then( userRepository ).should().findByUserName( anyString() );
         then( postRepository ).should().findById(anyLong());
@@ -248,18 +249,18 @@ public class PostServiceImplTest {
 
         given( postRepository.findById(anyLong()) ).willReturn( Optional.of(existingPost) );
         given( categoryRepository.findByName( anyString() )).willReturn( cat );
-        given( postRepository.saveAndFlush( Matchers.any(Post.class) )).willReturn( updatedPost );
+        given( postRepository.saveAndFlush( any(Post.class) )).willReturn( updatedPost );
 
         PostCommand savedCommand = postService.updatePostCommand( command );
 
-        then( postRepository ).should().saveAndFlush( Matchers.any(Post.class) );
+        then( postRepository ).should().saveAndFlush( any(Post.class) );
         then( categoryRepository ).should().findByName( anyString() );
         then( postRepository ).should().findById(anyLong());
         assertThat( savedCommand.getId(), is(POST1_ID) );
         assertThat( savedCommand.getText(), is(newText) );
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void should_throwNotFoundException_when_updatingNonExistingPost() throws Exception {
         Post existingPost = getParentPost1();
         Category cat = getCategory1();
@@ -273,9 +274,9 @@ public class PostServiceImplTest {
 
         given( postRepository.findById( anyLong()) ).willReturn( Optional.empty() );
         given( categoryRepository.findByName( anyString() )).willReturn( cat );
-        given( postRepository.saveAndFlush( Matchers.any(Post.class) )).willReturn( updatedPost );
+        given( postRepository.saveAndFlush( any(Post.class) )).willReturn( updatedPost );
 
-        PostCommand savedCommand = postService.updatePostCommand( command );
+        assertThrows(NotFoundException.class, () -> postService.updatePostCommand( command ));
 
     }
 
@@ -311,16 +312,16 @@ public class PostServiceImplTest {
         Post p3 = getParentPost3();
         p3.setText("this is regular post three");
         List<Post> posts = Arrays.asList( p1,p2 );
-        PageRequest pageRequest = new PageRequest( 0,4, Sort.Direction.DESC, "created" );
+        PageRequest pageRequest = PageRequest.of( 0,4, Sort.Direction.DESC, "created" );
         Page<Post> page = new PageImpl<Post>( posts );
 
-        given( postRepository.findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) )).willReturn( page );
-        given( pageRequestBuilder.buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
+        given( postRepository.findByTextOrTitleIgnoreCaseContaining( anyString(), any( Pageable.class ) )).willReturn( page );
+        given( pageRequestBuilder.buildPostPageRequest( anyInt(), any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
 
         SearchResultPageCommand command = postService.searchPosts( searchStr, 0 );
 
-        then( postRepository ).should().findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) );
-        then( pageRequestBuilder ).should().buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString() );
+        then( postRepository ).should().findByTextOrTitleIgnoreCaseContaining( anyString(), any( Pageable.class ) );
+        then( pageRequestBuilder ).should().buildPostPageRequest( anyInt(), any( Sort.Direction.class ), anyString() );
         assertThat( command, is(notNullValue()));
         assertThat( command.getTotalElements(), is( 2L));
         assertThat( command.getPosts().get( 0 ).getText().contains( searchStr ), is(true) );
@@ -336,16 +337,16 @@ public class PostServiceImplTest {
         Post p3 = getParentPost3();
         p3.setText("this is regular post three");
         List<Post> posts = new ArrayList<>();
-        PageRequest pageRequest = new PageRequest( 0,4, Sort.Direction.DESC, "created" );
+        PageRequest pageRequest = PageRequest.of( 0,4, Sort.Direction.DESC, "created" );
         Page<Post> page = new PageImpl<Post>( posts );
 
-        given( postRepository.findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) )).willReturn( page );
-        given( pageRequestBuilder.buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
+        given( postRepository.findByTextOrTitleIgnoreCaseContaining( anyString(), any( Pageable.class ) )).willReturn( page );
+        given( pageRequestBuilder.buildPostPageRequest( anyInt(), any( Sort.Direction.class ), anyString()) ).willReturn( pageRequest );
 
         SearchResultPageCommand command = postService.searchPosts( searchStr, 0 );
 
-        then( postRepository ).should().findByTextOrTitleIgnoreCaseContaining( anyString(), Matchers.any( Pageable.class ) );
-        then( pageRequestBuilder ).should().buildPostPageRequest( anyInt(), Matchers.any( Sort.Direction.class ), anyString() );
+        then( postRepository ).should().findByTextOrTitleIgnoreCaseContaining( anyString(), any( Pageable.class ) );
+        then( pageRequestBuilder ).should().buildPostPageRequest( anyInt(), any( Sort.Direction.class ), anyString() );
         assertThat( command, is(notNullValue()));
         assertThat( command.getTotalElements(), is( 0L));
     }
@@ -357,7 +358,7 @@ public class PostServiceImplTest {
         post.setParent( null );
         post.setText( POST1_TEXT );
         post.setId( POST1_ID );
-        post.setCreated( LocalDateTime.of( 2017,01,01,10,10,10 ) );
+        post.setCreated( LocalDateTime.of( 2017, 1,1,10,10,10 ) );
         post.setCategory( getCategory1() );
         post.setUser( getUser1() );
         return post;
@@ -368,7 +369,7 @@ public class PostServiceImplTest {
         post.setParent( null );
         post.setText( POST2_TEXT );
         post.setId( POST2_ID );
-        post.setCreated( LocalDateTime.of( 2017,01,02,10,10,10 ) );
+        post.setCreated( LocalDateTime.of( 2017,1,2,10,10,10 ) );
         post.setCategory( getCategory1() );
         post.setUser( getUser2() );
         return post;
@@ -379,7 +380,7 @@ public class PostServiceImplTest {
         post.setParent( null );
         post.setText( POST3_TEXT );
         post.setId( POST3_ID );
-        post.setCreated( LocalDateTime.of( 2017,01,03,10,10,10 ) );
+        post.setCreated( LocalDateTime.of( 2017,1,3,10,10,10 ) );
         post.setCategory( getCategory1() );
         post.setUser( getUser1() );
         return post;
@@ -391,7 +392,7 @@ public class PostServiceImplTest {
         post.setId( CHILD1_ID );
         post.setCategory( getCategory1() );
         post.setUser( getUser1() );
-        post.setCreated( LocalDateTime.of( 2017,01,04,10,10,10 ) );
+        post.setCreated( LocalDateTime.of( 2017,1,4,10,10,10 ) );
         return post;
     }
 

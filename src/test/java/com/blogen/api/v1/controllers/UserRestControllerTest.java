@@ -3,17 +3,14 @@ package com.blogen.api.v1.controllers;
 import com.blogen.api.v1.model.UserDTO;
 import com.blogen.api.v1.model.UserListDTO;
 import com.blogen.api.v1.services.UserService;
-import com.blogen.domain.User;
 import com.blogen.exceptions.BadRequestException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -21,13 +18,10 @@ import java.util.Arrays;
 import static com.blogen.api.v1.controllers.AbstractRestControllerTest.asJsonString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,8 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Unit Tests for UserRestController
  * @author Cliff
  */
-@RunWith(SpringRunner.class)
-@WebMvcTest( controllers = {UserRestController.class}, secure = false)
+@WebMvcTest( controllers = {UserRestController.class})
 public class UserRestControllerTest {
 
     @MockBean
@@ -51,7 +44,7 @@ public class UserRestControllerTest {
     private UserDTO newUserDTO;
     private UserDTO updateUserDTO1;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         userDTO1 = new UserDTO( "jane", "smith","janey","js@zombo.com","secret",UserRestController.BASE_URL + "/1" );
         userDTO2 = new UserDTO( "fozzy", "zoeller","shelly","foz@gmail.com","secret",UserRestController.BASE_URL + "/2" );

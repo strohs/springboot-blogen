@@ -14,7 +14,7 @@ import org.mapstruct.factory.Mappers;
  *
  * @author Cliff
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PostCommandMapper {
 
     PostCommandMapper INSTANCE = Mappers.getMapper( PostCommandMapper.class );

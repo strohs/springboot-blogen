@@ -4,8 +4,8 @@ import com.blogen.api.v1.model.CategoryDTO;
 import com.blogen.api.v1.model.CategoryListDTO;
 import com.blogen.api.v1.services.CategoryService;
 import com.blogen.api.v1.validators.CategoryDtoValidator;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +20,7 @@ import javax.validation.Valid;
  *
  * @author Cliff
  */
-@Api
+@Tag(name="Categories", description = "operations on category names")
 @Slf4j
 @RestController
 public class CategoryRestController {
@@ -42,24 +42,24 @@ public class CategoryRestController {
         binder.addValidators( categoryDtoValidator );
     }
 
-    @ApiOperation( value = "get a list of all categories", produces = "application/json")
-    @GetMapping( CategoryRestController.BASE_URL )
+    @Operation( summary = "get a list of all categories" )
+    @GetMapping( value = CategoryRestController.BASE_URL, produces = { "application/json" } )
     @ResponseStatus( HttpStatus.OK )
     public CategoryListDTO getAllCategories() {
         log.debug( "getAllCategories" );
         return categoryService.getAllCategories();
     }
 
-    @ApiOperation( value = "get a specific category by id", produces = "application/json")
-    @GetMapping( CategoryRestController.BASE_URL + "/{id}")
+    @Operation( summary = "get a specific category by id")
+    @GetMapping( value=CategoryRestController.BASE_URL + "/{id}", produces = { "application/json" } )
     @ResponseStatus( HttpStatus.OK )
     public CategoryDTO getCategory( @PathVariable("id") Long id ) {
         log.debug( "getCategory id=" + id );
         return categoryService.getCategory( id );
     }
 
-    @ApiOperation( value = "create a new category", produces = "application/json", consumes = "application/json")
-    @PostMapping( CategoryRestController.BASE_URL )
+    @Operation( summary = "create a new category")
+    @PostMapping( value=CategoryRestController.BASE_URL, produces = { "application/json" }, consumes = {"application/json"})
     @ResponseStatus( HttpStatus.CREATED )
     public CategoryDTO createNewCategory( @Valid @RequestBody CategoryDTO categoryDTO ) {
         log.debug( "createNewCategory categoryDTO=" + categoryDTO );

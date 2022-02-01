@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Service for RESTful operations on Blogen {@link com.blogen.domain.User}
+ * Service for RESTful operations on Blogen {@link com.blogen.domain.User}(s)
  *
  * @author Cliff
  */

@@ -6,21 +6,15 @@ import com.blogen.api.v1.services.PostService;
 import com.blogen.api.v1.validators.PostDtoValidator;
 import com.blogen.builders.Builder;
 import com.blogen.exceptions.NotFoundException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
@@ -30,12 +24,8 @@ import java.util.Arrays;
 import static com.blogen.api.v1.controllers.AbstractRestControllerTest.asJsonString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyLong;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,8 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * RestControllerTest using @WebMvcTest
  * @author Cliff
  */
-@RunWith( SpringRunner.class )
-@WebMvcTest(controllers = {PostRestController.class}, secure = false)
+@WebMvcTest(controllers = {PostRestController.class})
 @Import( {PostDtoValidator.class} )
 public class PostRestControllerTest {
 
@@ -63,7 +52,7 @@ public class PostRestControllerTest {
     PostDTO postDTO_2;
     PostDTO childDTO_1;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         
         //build two parent posts and one child post. The child post will belong to postDTO_1

@@ -2,10 +2,10 @@ package com.blogen.commands.mappers;
 
 import com.blogen.commands.UserPrefsCommand;
 import com.blogen.domain.UserPrefs;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Unit Test mappings to/from UserPrefs and UserPrefsCommand

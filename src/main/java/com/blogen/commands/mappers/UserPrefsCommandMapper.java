@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
  * 
  * @author Cliff
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserPrefsCommandMapper {
 
     UserPrefsCommandMapper INSTANCE = Mappers.getMapper( UserPrefsCommandMapper.class );

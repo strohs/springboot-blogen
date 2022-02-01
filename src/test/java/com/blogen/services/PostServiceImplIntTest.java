@@ -2,42 +2,25 @@ package com.blogen.services;
 
 import com.blogen.commands.PageCommand;
 import com.blogen.commands.PostCommand;
-import com.blogen.commands.mappers.PostCommandMapper;
-import com.blogen.domain.Post;
-import com.blogen.domain.User;
-import com.blogen.repositories.CategoryRepository;
-import com.blogen.repositories.PostRepository;
-import com.blogen.repositories.UserRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.anyLong;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Integration Tests for {@link PostServiceImpl}
  *
  * @author Cliff
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(properties = {"blogen.posts.per.page=3"})
-public class PostServiceImplIT {
+public class PostServiceImplIntTest {
 
     @Autowired
     private PostServiceImpl postService;

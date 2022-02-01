@@ -14,9 +14,9 @@ import com.blogen.repositories.CategoryRepository;
 import com.blogen.repositories.PostRepository;
 import com.blogen.repositories.UserRepository;
 import com.blogen.services.utils.PageRequestBuilder;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -31,10 +31,11 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -84,7 +85,7 @@ public class PostServiceImplTest {
     private static final String CHILD1_POST_URL = PostRestController.BASE_URL + "/" + CHILD1_ID;
     private static final String CHILD1_PARENT_POST_URL = PostRestController.BASE_URL + "/" + POST1_ID;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
         postService = new PostServiceImpl( pageRequestBuilder, postRepository, categoryRepository, userRepository, postMapper );
@@ -98,7 +99,7 @@ public class PostServiceImplTest {
         Post post1 = Builder.buildPost( POST1_ID, null, POST1_TEXT, null, cat1, user1, null );
         List<Post> posts = new ArrayList<>();
         posts.add( post1 );
-        PageRequest pageRequest = new PageRequest( 0,size,Sort.Direction.DESC,"category" );
+        PageRequest pageRequest = PageRequest.of( 0,size,Sort.Direction.DESC,"category" );
         Page<Post> page = new PageImpl<Post>( posts );
 
         given( pageRequestBuilder.buildPageRequest( anyInt(), anyInt(), any( Sort.Direction.class ), anyString() )).willReturn( pageRequest );
@@ -112,7 +113,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void should_getTwoPosts_when_getPostsSizeIsLessThanEqualToZero() {
         int size = -1;
         Category cat1 = Builder.buildCategory( CAT1_ID, CAT1_NAME );
@@ -120,7 +121,7 @@ public class PostServiceImplTest {
         Post post1 = Builder.buildPost( POST1_ID, null, POST1_TEXT, null, cat1, user1, null );
         Post post2 = Builder.buildPost( POST2_ID, null, POST2_TEXT, null, cat1, user1, null );
         List<Post> posts = Arrays.asList( post1, post2 );
-        PageRequest pageRequest = new PageRequest( 0,25,Sort.Direction.DESC,"category" );
+        PageRequest pageRequest = PageRequest.of( 0,25,Sort.Direction.DESC,"category" );
         Page<Post> page = new PageImpl<Post>( posts );
 
         given( pageRequestBuilder.buildPageRequest( anyInt(), anyInt(), any( Sort.Direction.class ), anyString() )).willReturn( pageRequest );
@@ -141,8 +142,8 @@ public class PostServiceImplTest {
         Category cat1 = Builder.buildCategory( CAT1_ID, CAT1_NAME );
         User user1 = Builder.buildUser( USER_ID, USER_NAME, null , null,null,null,null  );
         Post post1 = Builder.buildPost( POST1_ID, null, POST1_TEXT, null, cat1, user1, null );
-        List<Post> posts = Arrays.asList( post1 );
-        PageRequest pageRequest = new PageRequest( 0,25,Sort.Direction.DESC,"category" );
+        List<Post> posts = List.of(post1);
+        PageRequest pageRequest = PageRequest.of( 0,25,Sort.Direction.DESC,"category" );
         Page<Post> page = new PageImpl<Post>( posts );
 
         given( pageRequestBuilder.buildPageRequest( anyInt(), anyInt(), any( Sort.Direction.class ), anyString() )).willReturn( pageRequest );
@@ -156,7 +157,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void should_setParentPostUrl_when_getPostsReturnsChildPost() {
         int size = 5;
         Category cat1 = Builder.buildCategory( CAT1_ID, CAT1_NAME );
@@ -164,8 +165,8 @@ public class PostServiceImplTest {
         Post post1 = Builder.buildPost( POST1_ID, null, POST1_TEXT, null, cat1, user1, null );
         Post child1 = Builder.buildPost( CHILD1_ID, null, CHILD1_TEXT, null, cat1, user1, post1 );
         post1.addChild( child1 );
-        List<Post> posts = Arrays.asList( child1 );
-        PageRequest pageRequest = new PageRequest( 0,10,Sort.Direction.DESC,"category" );
+        List<Post> posts = List.of(child1);
+        PageRequest pageRequest = PageRequest.of( 0,10,Sort.Direction.DESC,"category" );
         Page<Post> page = new PageImpl<Post>( posts );
 
         given( pageRequestBuilder.buildPageRequest( anyInt(), anyInt(), any( Sort.Direction.class ), anyString() )).willReturn( pageRequest );
@@ -180,7 +181,7 @@ public class PostServiceImplTest {
     @Test
     public void should_getOnePostById_when_getPost() {
         Post post1 = buildPost1();
-        List<Post> posts = Arrays.asList( post1 );
+        List<Post> posts = List.of(post1);
 
         given( postRepository.findById(anyLong()) ).willReturn( Optional.of( post1 ) );
 
@@ -191,14 +192,14 @@ public class PostServiceImplTest {
         assertThat( postDTO.getText(), is(POST1_TEXT) );
     }
 
-    @Test(expected = NotFoundException.class )
+    @Test
     public void should_throwNotFoundExceptin_when_getPostWithNonExistantId() {
         Post post1 = buildPost1();
-        List<Post> posts = Arrays.asList( post1 );
+        List<Post> posts = List.of(post1);
 
         given( postRepository.findById(anyLong()) ).willReturn( Optional.empty() );
 
-        PostDTO postDTO = postService.getPost( 5583L );
+        assertThrows(NotFoundException.class, () -> postService.getPost( 5583L ));
     }
 
     @Test
@@ -222,7 +223,7 @@ public class PostServiceImplTest {
         assertThat( postDTO.getCategoryName(), is( dtoToSave.getCategoryName()) );
     }
 
-    @Test(expected = BadRequestException.class )
+    @Test
     public void should_throwBadRequestException_when_postDtoRequestContainsUsernameThatDoesNotExist() {
         Post post1 = buildPost1();
         PostDTO dtoToSave = buildPost1DTO();
@@ -230,10 +231,10 @@ public class PostServiceImplTest {
 
         given( userRepository.findByUserName( anyString() ) ).willReturn( null );
 
-        PostDTO postDTO = postService.createNewPost( dtoToSave );
+        assertThrows(BadRequestException.class, () -> postService.createNewPost( dtoToSave ));
     }
 
-    @Test(expected = BadRequestException.class )
+    @Test
     public void should_throwBadRequestException_when_postDtoRequestContainsCategoryNameThatDoesNotExist() {
         Post post1 = buildPost1();
         PostDTO dtoToSave = buildPost1DTO();
@@ -241,7 +242,7 @@ public class PostServiceImplTest {
 
         given( categoryRepository.findByName( anyString() ) ).willReturn( null );
 
-        PostDTO postDTO = postService.createNewPost( dtoToSave );
+        assertThrows(BadRequestException.class, () -> postService.createNewPost( dtoToSave ));
     }
 
     @Test
@@ -270,7 +271,7 @@ public class PostServiceImplTest {
         assertThat( savedDTO.getChildren().get( 0 ).getParentPostUrl(), is( CHILD1_PARENT_POST_URL) );
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void should_throwException_when_parentPostId_doesNotExist() {
         Post post1 = buildPost1();
         Post child1 = buildChild1();
@@ -280,7 +281,7 @@ public class PostServiceImplTest {
 
         given( postRepository.findById(anyLong()) ).willReturn( Optional.empty() );
 
-        PostDTO savedDTO = postService.createNewChildPost( 45342L, childDTO );
+        assertThrows(BadRequestException.class, () -> postService.createNewChildPost( 45342L, childDTO ));
     }
 
     @Test

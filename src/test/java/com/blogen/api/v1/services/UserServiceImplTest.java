@@ -9,8 +9,8 @@ import com.blogen.domain.User;
 import com.blogen.exceptions.BadRequestException;
 import com.blogen.repositories.UserRepository;
 import com.blogen.services.security.EncryptionService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,14 +19,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 
 /**
  * Unit Tests for the User REST Service
@@ -53,7 +54,7 @@ public class UserServiceImplTest {
     User updatedUser1;
     UserDTO newUserDTO;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
         userService = new UserServiceImpl( userRepository, encryptionService, userMapper );
@@ -92,13 +93,15 @@ public class UserServiceImplTest {
         assertThat( userDTO.getUserUrl(), is(user1Url) );
     }
 
-    @Test( expected = BadRequestException.class )
+    @Test
     public void should_throwBadRequestException_whenGetUserWithInvalidId() {
         given( userRepository.findById(anyLong())).willReturn( Optional.empty() );
 
-        UserDTO userDTO = userService.getUser( 234L );
+        assertThrows(BadRequestException.class, () -> userService.getUser( 234L ));
 
-        then( userRepository ).should().findById(anyLong());
+//        then( userRepository )
+//                .should()
+//                .findById(anyLong());
     }
 
     @Test
@@ -120,13 +123,13 @@ public class UserServiceImplTest {
         assertThat( userDTO.getUserUrl(), is( newUserUrl) );
     }
 
-    @Test( expected = BadRequestException.class )
+    @Test
     public void should_throwBadRequestException_when_userNameAlreadyExists() {
         given( userRepository.save( any(User.class) )).willThrow( DataIntegrityViolationException.class );
 
-        UserDTO userDTO = userService.createNewUser( newUserDTO );
+        assertThrows( BadRequestException.class, () -> userService.createNewUser( newUserDTO ));
 
-        then( userRepository ).should().save( any(User.class) );
+        //then( userRepository ).should().save( any(User.class) );
     }
 
     @Test

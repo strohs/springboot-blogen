@@ -1,13 +1,12 @@
 package com.blogen.api.v1.mappers;
 
-import com.blogen.api.v1.controllers.PostRestController;
 import com.blogen.api.v1.model.PostDTO;
 import com.blogen.builders.Builder;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,7 +15,8 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Unit Test for MapStruct mapping between Post and PostDTO
@@ -57,7 +57,7 @@ public class PostMapperTest {
 
     private Post parent;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         Category cat1 = new Category();
         cat1.setId( CAT1_ID );

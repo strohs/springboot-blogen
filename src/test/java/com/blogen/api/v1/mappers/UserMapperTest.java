@@ -2,13 +2,14 @@ package com.blogen.api.v1.mappers;
 
 import com.blogen.api.v1.model.UserDTO;
 import com.blogen.domain.User;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Unit Test mappings between {@link com.blogen.domain.User} and {@link com.blogen.api.v1.model.UserDTO}
@@ -27,7 +28,7 @@ public class UserMapperTest {
 
     private UserMapper userMapper = UserMapper.INSTANCE;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         user = new User();
         user.setId( ID );

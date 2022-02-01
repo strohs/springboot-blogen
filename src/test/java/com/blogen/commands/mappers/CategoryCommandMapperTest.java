@@ -2,11 +2,12 @@ package com.blogen.commands.mappers;
 
 import com.blogen.commands.CategoryCommand;
 import com.blogen.domain.Category;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Unit Test mapping to/from Category and CategoryCommand
@@ -20,7 +21,7 @@ public class CategoryCommandMapperTest {
 
     CategoryCommandMapper categoryCommandMapper = CategoryCommandMapper.INSTANCE;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
     }
 

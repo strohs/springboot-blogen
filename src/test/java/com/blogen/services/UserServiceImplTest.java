@@ -10,8 +10,8 @@ import com.blogen.domain.User;
 import com.blogen.domain.UserPrefs;
 import com.blogen.repositories.UserRepository;
 import com.blogen.services.security.EncryptionService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 
 /**
  * UnitTests for {@link UserServiceImpl}
@@ -62,7 +62,7 @@ public class UserServiceImplTest {
     private UserProfileCommandMapper userProfileCommandMapper = UserProfileCommandMapper.INSTANCE;
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
         userService = new UserServiceImpl( userRepository, userCommandMapper, userProfileCommandMapper, encryptionService );

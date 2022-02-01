@@ -6,13 +6,13 @@ import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
 import com.blogen.domain.UserPrefs;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import static com.blogen.builders.Builder.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Unit Test mappings from {@link com.blogen.domain.Post} to {@link com.blogen.commands.PostCommand}
@@ -102,7 +102,7 @@ public class PostCommandMapperTest {
     }
 
     @Test
-    @Ignore
+    @Disabled
     //child posts and parent posts map the same way...for now
     public void childPostCommandToPost_shouldMapCorrectly() {
         CategoryCommand cc = buildCategoryCommand( CAT_ID, CAT_NAME );

@@ -2,19 +2,18 @@ package com.blogen.services;
 
 import com.blogen.commands.UserPrefsCommand;
 import com.blogen.commands.mappers.UserPrefsCommandMapper;
-import com.blogen.domain.User;
 import com.blogen.domain.UserPrefs;
 import com.blogen.repositories.UserPrefsRepository;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.anyLong;
 
 /**
  * Unit Tests for {@link UserPrefsServiceImpl}
@@ -37,7 +36,7 @@ public class UserPrefsServiceImplTest {
 
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
         userPrefsService = new UserPrefsServiceImpl( userPrefsCommandMapper, userPrefsRepository );

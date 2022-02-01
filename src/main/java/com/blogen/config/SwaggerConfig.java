@@ -1,59 +1,40 @@
 package com.blogen.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.util.ArrayList;
 
 /**
- * Config for OpenAPI (Swagger)
- * Using this to document the REST API
+ * OpenAPI 3 (Swagger) config for the Blogen REST API.
+ * using the SpringDoc library,
  *
- * @author Cliff
  */
-@EnableSwagger2
 @Configuration
 public class SwaggerConfig {
 
-    @Bean
-    public Docket api() {
-        return new Docket( DocumentationType.SWAGGER_2 )
-        .select()
-        .apis( RequestHandlerSelectors.basePackage( "com.blogen.api" ) )
-        .paths( PathSelectors.any() )
-        .build()
-        .pathMapping( "/" )
-        .apiInfo( metaData() );
-    }
+    // We only have one docket for the Blogen API, so we can do configuration
+    // in application.properties instead of the bean below:
+    // springdoc.packagesToScan=com.blogen.api
+    // springdoc.pathsToMatch=/api/**
 
-    private ApiInfo metaData() {
-        Contact contact = new Contact( "strohs","https://github.com/strohs/springboot-blogen","notreal@zombo.com" );
-
-        return new ApiInfo(
-                "Blogen REST API",
-                "OpenAPI (Swagger) docs for the Blogen REST API",
-                "1.0",
-                "Terms of Service",
-                contact,
-                "Apache License Version 2.0",
-                "https://www.apache.org/licenses/LICENSE-2.0",
-                new ArrayList<>() );
-    }
-
-    // if your not using Spring Boot, gonna need to add resource handlers
-    //    @Override
-//    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("swagger-ui.html")
-//                .addResourceLocations("classpath:/META-INF/resources/");
-//
-//        registry.addResourceHandler("/webjars/**")
-//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+//    @Bean
+//    public GroupedOpenApi api() {
+//        return GroupedOpenApi.builder()
+//                .group("blogen-public")
+//                .pathsToMatch("/api/**")
+//                .build();
 //    }
+
+    @Bean
+    public OpenAPI blogenOpenAPI() {
+        return new OpenAPI()
+                .info(new Info().title("Blogen API")
+                        .description("Blogen sample application")
+                        .version("v0.0.1")
+                        .license(new License().name("Apache 2.0").url("http://github.com/strohs")));
+    }
+
+
 }

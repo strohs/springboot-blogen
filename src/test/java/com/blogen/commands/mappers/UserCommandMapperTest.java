@@ -4,10 +4,11 @@ import com.blogen.commands.UserCommand;
 import com.blogen.commands.UserPrefsCommand;
 import com.blogen.domain.User;
 import com.blogen.domain.UserPrefs;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+
 
 /**
  * Unit Test mapping to/from {@link com.blogen.domain.User} and {@link com.blogen.commands.UserCommand}

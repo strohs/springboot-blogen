@@ -7,11 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 /**
- * UserDetails implementation
- *
- * @author Cliff
+ * UserPrincipal adapts a Blogen user to Spring Framework's UserDetails interface,
+ * so that User information can be used by spring security.
  */
-public class UserDetailsImpl implements UserDetails {
+public class UserPrincipal implements UserDetails {
 
     private Collection<SimpleGrantedAuthority> authorities;
     private String username;

@@ -1,15 +1,13 @@
 package com.blogen.controllers;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -27,10 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @author Cliff
  */
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
 @WebAppConfiguration
-public class UserProfileControllerIT {
+public class UserProfileControllerIntTest {
 
     private static final String AVATAR1          = "avatar1.jpg";
     private static final String AVATAR2          = "avatar2.jpg";
@@ -53,7 +51,7 @@ public class UserProfileControllerIT {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
         mockMvc = MockMvcBuilders

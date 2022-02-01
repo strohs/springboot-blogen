@@ -5,25 +5,23 @@ import com.blogen.api.v1.model.CategoryListDTO;
 import com.blogen.api.v1.services.CategoryService;
 import com.blogen.api.v1.validators.CategoryDtoValidator;
 import com.blogen.exceptions.BadRequestException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 
 import static com.blogen.api.v1.controllers.AbstractRestControllerTest.asJsonString;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -33,8 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration Tests for CategoryRestController
  * @author Cliff
  */
-@RunWith(SpringRunner.class)
-@WebMvcTest( controllers = {CategoryRestController.class}, secure = false)
+@WebMvcTest(controllers = {CategoryRestController.class})
 @Import(CategoryDtoValidator.class)
 public class CategoryRestControllerTest {
 
@@ -49,7 +46,7 @@ public class CategoryRestControllerTest {
     private CategoryDTO catDto_2;
     private CategoryDTO newCatDto;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         catDto_1 = new CategoryDTO( "Category1", CategoryRestController.BASE_URL + "/1" );
         catDto_2 = new CategoryDTO( "Category2",null );

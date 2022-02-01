@@ -1,15 +1,13 @@
 package com.blogen.controllers;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -29,10 +27,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @author Cliff
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @WebAppConfiguration
-public class PostControllerIT {
+public class PostControllerIntTest {
 
     @Autowired
     PostController controller;
@@ -56,7 +53,7 @@ public class PostControllerIT {
     private final SimpleGrantedAuthority AUTH_ADMIN = new SimpleGrantedAuthority( "ADMIN" );
     private final SimpleGrantedAuthority AUTH_USER  = new SimpleGrantedAuthority( "USER" );
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
         mockMvc = MockMvcBuilders
@@ -158,7 +155,7 @@ public class PostControllerIT {
     @Test
     @Transactional
     @Rollback
-    @WithMockUser( username = ADMIN_NAME,password = ADMIN_PW, authorities = {"ADMIN"})
+    @WithMockUser( username = ADMIN_NAME, password = ADMIN_PW, authorities = {"ADMIN"})
     public void should_allowAdminToEditPost_when_updatingExistingPostId() throws Exception {
         //the current page being viewed
         String page = "0";

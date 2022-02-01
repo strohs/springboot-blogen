@@ -6,8 +6,8 @@ import com.blogen.commands.mappers.CategoryCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.repositories.CategoryRepository;
 import com.blogen.services.utils.PageRequestBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.*;
@@ -16,15 +16,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 
 /**
  * Unit Tests for {@link CategoryServiceImpl}
@@ -55,7 +53,7 @@ public class CategoryServiceImplTest {
 
     CategoryCommandMapper categoryCommandMapper = CategoryCommandMapper.INSTANCE;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
         categoryService = new CategoryServiceImpl( categoryRepository, CategoryCommandMapper.INSTANCE, pageRequestBuilder );

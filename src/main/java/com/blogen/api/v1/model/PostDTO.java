@@ -1,6 +1,6 @@
 package com.blogen.api.v1.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,31 +18,31 @@ import java.util.List;
 @AllArgsConstructor
 public class PostDTO {
 
-    @ApiModelProperty( value = "title of the post", required = true, example = "Some Amazing Title")
+    @Schema(description = "title of the post", example = "Some amazing title", required = true)
     private String title;
 
-    @ApiModelProperty( value = "text of the post", required = true, example = "text of the post")
+    @Schema(description = "text of the post", example = "this is a post about cars", required = true)
     private String text;
 
-    @ApiModelProperty( value = "url to an image on the web", example = "http://lorempixe/200/400/abstract")
+    @Schema(description = "URL to an image on the web", example = "http://lorempixe/200/400/abstract")
     private String imageUrl;
 
-    @ApiModelProperty( value = "category that this post belongs to", required = true, example = "Web Development")
+    @Schema(description = "category this post belongs to", example = "Web Development", required = true)
     private String categoryName;
 
-    @ApiModelProperty(value = "the userName of the user creating this post", required = true, example = "coolUserName")
+    @Schema(description = "userName of the user that created the post", example = "jimSmith01", required = true)
     private String userName;
 
-    @ApiModelProperty(value = "ISO8601 date of when this post was created" ,readOnly = true )
+    @Schema(description = "post creation time in ISO-8601", example = "2019-09-26T07:58:30", accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDateTime created;
 
-    @ApiModelProperty(value = "URL that identifies this post", readOnly = true, example = "/api/v1/posts/43")
+    @Schema(description = "URL that identifies this post", example = "/api/v1/posts/43", accessMode = Schema.AccessMode.READ_ONLY)
     private String postUrl;
 
-    @ApiModelProperty(value = "URL that identifies the parent of this post, will be null if the post is a parent", readOnly = true, example = "/api/v1/posts/40")
+    @Schema(description = "URL that identifies the parent of this post, will be null if the post is a parent", example = "/api/v1/posts/40", accessMode = Schema.AccessMode.READ_ONLY)
     private String parentPostUrl;
 
-    @ApiModelProperty(value = "if this is a parent post, contains its child posts", readOnly = true)
+    @Schema(description = "list of child posts", accessMode = Schema.AccessMode.READ_ONLY)
     private List<PostDTO> children;
     
 

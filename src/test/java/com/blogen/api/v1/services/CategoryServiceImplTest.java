@@ -8,8 +8,9 @@ import com.blogen.builders.Builder;
 import com.blogen.domain.Category;
 import com.blogen.exceptions.BadRequestException;
 import com.blogen.repositories.CategoryRepository;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -19,11 +20,13 @@ import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 /**
  * Unit Tests for the Category REST Service
@@ -43,7 +46,7 @@ public class CategoryServiceImplTest {
     private Category newCat;
     private CategoryDTO newCatDTO;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks( this );
         categoryService = new CategoryServiceImpl( categoryRepository, categoryMapper );
@@ -78,17 +81,17 @@ public class CategoryServiceImplTest {
         assertThat( dto.getCategoryUrl(), is( CategoryRestController.BASE_URL + "/1") );
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void should_throwBadRequestException_when_invalidID_getCategory() {
         //id does not exist
         Long catId = 9445L;
         given( categoryRepository.findById(anyLong())).willReturn( Optional.empty() );
 
-        CategoryDTO dto = categoryService.getCategory( catId );
+        assertThrows(BadRequestException.class, () -> categoryService.getCategory(catId));
     }
 
     @Test
-    public void ahould_createNewCategory_when_createNewCategoryWithValidCategoryDTO() {
+    public void should_createNewCategory_when_createNewCategoryWithValidCategoryDTO() {
         given( categoryRepository.save( any( Category.class ) )).willReturn( newCat );
 
         CategoryDTO dto = categoryService.createNewCategory( newCatDTO );

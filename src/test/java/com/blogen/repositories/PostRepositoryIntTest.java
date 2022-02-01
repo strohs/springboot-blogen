@@ -5,23 +5,19 @@ import com.blogen.commands.mappers.PostCommandMapper;
 import com.blogen.domain.Category;
 import com.blogen.domain.Post;
 import com.blogen.domain.User;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Integration test for making sure our CRUD operations on {@link com.blogen.domain.Post}(s) are working.
@@ -29,9 +25,8 @@ import static org.junit.Assert.*;
  * 
  * Author: Cliff
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
-public class PostRepositoryIT {
+public class PostRepositoryIntTest {
     private static final int PARENT_POST_TOTAL = 16;
 
     private static final Long PARENT_POST_ID_WITH_CHILDREN = 1L;
@@ -62,7 +57,7 @@ public class PostRepositoryIT {
 
     PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
     }
