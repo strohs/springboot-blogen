@@ -10,7 +10,7 @@
 
 </head>
 
-<body class="bg-secondary">
+<body class="">
 
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -60,19 +60,24 @@
 </header>
 
 <!-- MAIN PAGE HEADER -->
-<section id="main-header" class="mt-5 bg-secondary text-white">
-    <div class="container">
-        <div class="row">
-            <div class="col-md text-md-center">
-                <h4><i class="fa fa-leaf"></i> Latest Blogens</h4>
-            </div>
-        </div>
-    </div>
-</section>
+<!--<section id="main-header" class="mt-5">-->
+<!--    <div class="container">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md text-md-center">-->
+<!--                <h4><i class="fa fa-leaf"></i> Latest Blogens</h4>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
 
 
 <!-- CARD COLUMNS -->
-<section id="cards">
+<section id="cards" class="my-5 container">
+    <div class="row">
+        <div class="col-md text-md-center">
+            <h4><i class="fa fa-leaf"></i> Latest Blogens from our users...</h4>
+        </div>
+    </div>
     <div class="card-columns">
         <div class="card border-dark text-dark" th:each="post : ${posts}">
             <div class="card-header" th:text="${post.categoryName}">Heath &amp; Wellness</div>
