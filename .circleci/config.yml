@@ -1,6 +1,6 @@
 # Java Maven CircleCI 2.0 configuration file using a maven orb:
 # https://circleci.com/developer/orbs/orb/circleci/maven
-#
+# try it
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2.1
