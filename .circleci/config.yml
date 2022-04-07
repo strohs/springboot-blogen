@@ -5,17 +5,29 @@
 #
 version: 2.1
 
+orbs:
+  maven: circleci/maven@1.3.0
+  codecov: codecov/codecov@3.2.2
+
 executors:
   j12:
     docker:
       - image: 'cimg/openjdk:12.0'
 
-orbs:
-  maven: circleci/maven@1.3.0
+jobs:
+  build:
+    executor: j12
+    steps:
+      - checkout
+      # use maven orb's with_cache command to cache dependencies
+      - maven/with_cache:
+          steps:
+            - run: mvn verify jacoco:report
+      - maven/process_test_results
+#      - codecov/upload:
+#          when: on_success
 
 workflows:
-  maven_test:
+  build:
     jobs:
-      # checkout, build, test, and upload test results
-      - maven/test:
-          executor: j12
+      - build
