@@ -135,7 +135,7 @@ public class PostControllerIntTest {
     @Test
     @Transactional
     @Rollback
-    @WithMockUser( username = USER2_NAME,password = USER2_PW, authorities = {"USER"})
+    @WithMockUser( username = USER2_NAME, password = USER2_PW, authorities = {"USER"})
     public void should_updatedPostDataAndRedirect_when_userThatCreatedPostUpdatesIt() throws Exception {
         //the current page being viewed
         String page = "0";

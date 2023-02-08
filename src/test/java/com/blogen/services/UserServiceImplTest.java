@@ -72,7 +72,7 @@ public class UserServiceImplTest {
     public void should_returnOneUser_when_getUserById() {
         User user = Builder.buildUser( USER1_ID, USER1_USERNAME, USER1_FIRSTNAME, USER1_LASTNANE, USER1_EMAIL, PASSWORD, ENCRYPTED_PASSWORD );
 
-        given( userRepository.findById(anyLong()) ).willReturn( Optional.of(user) );
+        given( userRepository.findById(anyLong())).willReturn( Optional.of(user) );
 
         UserCommand command = userService.getUserById( USER1_ID );
 

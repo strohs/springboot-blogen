@@ -64,11 +64,11 @@ Each user has a public facing "home" page that lets you see all the posts they h
 
 
 ## REST Api
-There is also a REST Api included with the project. The API is not currently secured, but it has been documented
-with OpenAPI (Swagger). Once you have started the project, the docs are available
+There is also a REST Api included with the project. 
+The api been documented with OpenAPI (Swagger). Once you have started the project, the docs are available
 here:  http://localhost:8080/swagger-ui.html#/
-
-The Api lets you perform CRUD operations on Posts,Categories,and Users.
+The swagger page is secured you will need to use one of the blogen user
+ids and passwords from above to access it.
 
 
 

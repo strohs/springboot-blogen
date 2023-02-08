@@ -58,15 +58,11 @@ public class PostRepositoryIntTest {
     PostCommandMapper postCommandMapper = PostCommandMapper.INSTANCE;
 
     @BeforeEach
-    public void setUp() throws Exception {
-
-    }
+    public void setUp() throws Exception {}
 
     @Test
     public void should_findAllParentPosts_when_findAllParentPosts() {
-
         List<Post> parentPosts = postRepository.findAllByParentNull();
-
         assertNotNull( parentPosts );
         assertThat( parentPosts.size(), is( PARENT_POST_TOTAL ) );
     }
